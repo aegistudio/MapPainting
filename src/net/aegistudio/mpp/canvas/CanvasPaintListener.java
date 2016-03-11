@@ -1,6 +1,7 @@
 package net.aegistudio.mpp.canvas;
 
 import java.util.Collection;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -39,7 +40,7 @@ public class CanvasPaintListener implements Listener {
 			MapCanvasRegistry registry = painting.canvas.idCanvasMap.get(mapId);
 			if(registry == null) break;
 			
-			if(manipulate(itemFrame.getLocation(), registry, interact.getPlayer())) 
+			if(manipulate(itemFrame, registry, interact.getPlayer())) 
 				interact.setCancelled(true);
 			break;
 		}
@@ -54,14 +55,15 @@ public class CanvasPaintListener implements Listener {
 			MapCanvasRegistry registry = painting.canvas.idCanvasMap.get(mapId);
 			if(registry == null) return;
 			
-			if(manipulate(itemFrame.getLocation(), registry, interact.getPlayer()))
+			if(manipulate(itemFrame, registry, interact.getPlayer()))
 				interact.setCancelled(true);
 		}
 	}
 	
 	@SuppressWarnings("deprecation")
-	public boolean manipulate(Location itemFrame, MapCanvasRegistry registry, Player player) {
+	public boolean manipulate(ItemFrame itemFrameEntity, MapCanvasRegistry registry, Player player) {
 		// Calculate looking direction.
+		Location itemFrame = itemFrameEntity.getLocation();
 		Location playerEyePos = player.getLocation().add(0, player.getEyeHeight(), 0);
 		
 		double yaw = (playerEyePos.getYaw() + 90) * Math.PI / 180;
@@ -92,8 +94,7 @@ public class CanvasPaintListener implements Listener {
 		double zLook = z0 + miu * c;
 		
 		// Calculate uv coordination.
-		double u, v = 0;
-		v = yLook + 0.5;
+		double u, v = 0;	v = yLook;
 		
 		if(Math.abs(A) > Math.abs(C)) {
 			if(A > 0) 
@@ -106,7 +107,12 @@ public class CanvasPaintListener implements Listener {
 			else u = -xLook;
 		}
 		
-		u += 0.5;
+		// transform uv.
+		EnumRotation rotation = EnumRotation.valueOf(itemFrameEntity.getRotation().name());
+		double up = rotation.u(u, v);
+		double vp = rotation.v(u, v);
+		u = up + 0.5; v = vp + 0.5;
+		
 		int x = (int)Math.round(u * registry.canvas.size());
 		int y = (int)Math.round(v * registry.canvas.size());
 		

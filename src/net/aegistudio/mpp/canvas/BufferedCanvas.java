@@ -1,11 +1,11 @@
 package net.aegistudio.mpp.canvas;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.TreeSet;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
-import java.util.zip.InflaterInputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -64,8 +64,8 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 		File file = new File(painting.getDataFolder(), registry.name.concat(".mpp"));
 		if(!file.exists()) file.createNewFile();
 		else {
-			InflaterInputStream input 
-				= new InflaterInputStream(new FileInputStream(file));
+			GZIPInputStream input 
+				= new GZIPInputStream(new FileInputStream(file));
 			for(int i = 0; i < size; i ++)
 				input.read(this.pixel[i], 0, size);
 			input.close();
@@ -78,13 +78,9 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 		File file = new File(painting.getDataFolder(), registry.name.concat(".mpp"));
 		if(!file.exists()) file.createNewFile();
 		
-		Deflater def = new Deflater();
-		def.setLevel(Deflater.BEST_COMPRESSION);
-		def.setStrategy(Deflater.DEFAULT_STRATEGY);
-		
-		DeflaterOutputStream output
-			= new DeflaterOutputStream(new FileOutputStream(file), def);
-		for(int i = 0; i < size; i ++)
+		GZIPOutputStream output
+			= new GZIPOutputStream(new FileOutputStream(file));
+		for(int i = 0; i < size; i ++) 
 			output.write(this.pixel[i], 0, size);
 		output.close();
 	}

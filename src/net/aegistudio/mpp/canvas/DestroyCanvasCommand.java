@@ -7,8 +7,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
 
-public class UnbindCanvasCommand extends ActualHandle {
-	{ description = "Unbind a map from a canvas, making it a normal map again."; }
+public class DestroyCanvasCommand extends ActualHandle {
+	{ description = "Destroy a canvas, making its underlying map normal again."; }
 	
 	public static final String CANVAS_NOT_EXISTS = "canvasNotExists";
 	public String canvasNotExists = ChatColor.RED + "Cannot unbind " + ChatColor.AQUA + "$canvasName" + ChatColor.RED + 

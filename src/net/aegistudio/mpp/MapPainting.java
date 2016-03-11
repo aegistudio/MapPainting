@@ -8,7 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import net.aegistudio.mpp.brush.Pencil;
 import net.aegistudio.mpp.canvas.CanvasManager;
 import net.aegistudio.mpp.canvas.CreateCanvasCommand;
-import net.aegistudio.mpp.canvas.UnbindCanvasCommand;
+import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
 
 /** Use blackboard pattern in this class. **/
 public class MapPainting extends JavaPlugin {
@@ -33,7 +33,7 @@ public class MapPainting extends JavaPlugin {
 			this.command = new CompositeHandle();
 
 			command.add("create", new CreateCanvasCommand());
-			command.add("unbind", new UnbindCanvasCommand());
+			command.add("destroy", new DestroyCanvasCommand());
 			
 			/*
 			CompositeHandle brush = new CompositeHandle();
