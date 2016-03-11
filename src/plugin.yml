@@ -25,6 +25,12 @@ permissions:
   mpp.create.normal:
     description: Grants player to create canvas of type "normal".
     default: true
+  mpp.chown:
+    description: Grants player to change ownership of canvas he owns.
+    default: true
+  mpp.chmod:
+    description: Grants player to add or remove painters of his canvas.
+    default: true
   mpp.destroy:
     description: Grants player to destroy the canvas he owns.
     default: true

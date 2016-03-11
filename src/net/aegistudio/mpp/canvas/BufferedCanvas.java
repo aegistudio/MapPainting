@@ -67,7 +67,11 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 			GZIPInputStream input 
 				= new GZIPInputStream(new FileInputStream(file));
 			for(int i = 0; i < size; i ++)
-				input.read(this.pixel[i], 0, size);
+				for(int j = 0; j < size; j ++) {
+					int next = input.read();
+					if(next == -1) break;
+					this.pixel[i][j] = (byte) next;
+				}
 			input.close();
 		}
 	}
@@ -82,6 +86,10 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 			= new GZIPOutputStream(new FileOutputStream(file));
 		for(int i = 0; i < size; i ++) 
 			output.write(this.pixel[i], 0, size);
+		
+		output.finish();
+		output.flush();
+		
 		output.close();
 	}
 

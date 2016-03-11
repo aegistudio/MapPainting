@@ -15,7 +15,7 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 	{ description = "Destroy a canvas, making its underlying map normal again."; }
 	
 	public static final String CANVAS_NOT_EXISTS = "canvasNotExists";
-	public String canvasNotExists = ChatColor.RED + "Cannot unbind " + ChatColor.AQUA + "$canvasName" + ChatColor.RED + 
+	public String canvasNotExists = ChatColor.RED + "Cannot destroy " + ChatColor.AQUA + "$canvasName" + ChatColor.RED + 
 			"! Specified canvas " + ChatColor.AQUA + "$canvasName" + ChatColor.RED + " doesn't exist!";
 	
 	public static final String NO_PERMISSION = "noPermission";
