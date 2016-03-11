@@ -18,6 +18,10 @@ public class MapPainting extends JavaPlugin {
 	/** Other modules can register commands to this handle. **/
 	public CompositeHandle command;
 	
+	/** Other modules can issue hazardous command using this. **/
+	public static final String CONFIRM = "confirm";
+	public ConfirmCommand hazard;
+	
 	/** Other modules can invoke painting to this paint tool **/
 	public PaintToolManager tool;
 	
@@ -34,6 +38,7 @@ public class MapPainting extends JavaPlugin {
 
 			command.add("create", new CreateCanvasCommand());
 			command.add("destroy", new DestroyCanvasCommand());
+			command.add(CONFIRM, this.hazard = new ConfirmCommand());
 			
 			/*
 			CompositeHandle brush = new CompositeHandle();
@@ -90,6 +95,9 @@ public class MapPainting extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] arguments) {
 		if(command.getName().equals("mpp")) {
 			sender.sendMessage("");
+			if(arguments.length == 0 || !arguments[0].equalsIgnoreCase(CONFIRM))
+				hazard.remove(sender);
+			
 			return this.command.handle(this, "/mpp", sender, arguments);
 		}
 		return false;

@@ -5,9 +5,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
 import net.aegistudio.mpp.ActualHandle;
+import net.aegistudio.mpp.HazardCommand;
 import net.aegistudio.mpp.MapPainting;
 
-public class DestroyCanvasCommand extends ActualHandle {
+public class DestroyCanvasCommand extends ActualHandle implements HazardCommand {
 	{ description = "Destroy a canvas, making its underlying map normal again."; }
 	
 	public static final String CANVAS_NOT_EXISTS = "canvasNotExists";
@@ -26,7 +27,6 @@ public class DestroyCanvasCommand extends ActualHandle {
 		if(arguments.length != 1)
 			sender.sendMessage(prefix + " <name>");
 		else {
-
 			MapCanvasRegistry canvas = painting.canvas.nameCanvasMap.get(arguments[0]);
 			if(canvas == null) { 
 				sender.sendMessage(canvasNotExists.replace("$canvasName", arguments[0]));
@@ -39,12 +39,7 @@ public class DestroyCanvasCommand extends ActualHandle {
 					return true;
 				}
 			
-			canvas.remove();
-			
-			painting.canvas.idCanvasMap.remove(canvas.binding);
-			painting.canvas.nameCanvasMap.remove(canvas.name);
-			
-			sender.sendMessage(unbound.replace("$canvasName", arguments[0]));
+			painting.hazard.hazard(sender, this, canvas);
 		}
 		return true;
 	}
@@ -55,5 +50,16 @@ public class DestroyCanvasCommand extends ActualHandle {
 		canvasNotExists = super.getLocale(CANVAS_NOT_EXISTS, canvasNotExists, section);
 		noPermission = super.getLocale(NO_PERMISSION, noPermission, section);
 		unbound = super.getLocale(UNBOUND, unbound, section);
+	}
+	
+	@Override
+	public void handle(MapPainting painting, CommandSender sender, Object hazardState) {
+		MapCanvasRegistry canvas = (MapCanvasRegistry) hazardState;
+		canvas.remove();
+		
+		painting.canvas.idCanvasMap.remove(canvas.binding);
+		painting.canvas.nameCanvasMap.remove(canvas.name);
+		
+		sender.sendMessage(unbound.replace("$canvasName", canvas.name));
 	}
 }
