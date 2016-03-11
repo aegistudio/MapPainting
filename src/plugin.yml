@@ -1,0 +1,17 @@
+name: MapPainting
+main: net.aegistudio.mpp.MapPainting
+version: 1.0-beta
+author: aegistudio
+commands:
+  mpp:
+    description: Command service provided by map painting.
+    usage: /mpp [subcommand] [parameters]
+    permission: mpp.command
+    permission-message: You don't have permission to do that!
+permissions:
+  mpp.command:
+    description: Grants player to issue map painting command.
+    default: true
+  mpp.manager:
+    description: Grants player to manage canvas.
+    default: op
