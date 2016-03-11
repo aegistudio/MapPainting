@@ -16,6 +16,10 @@ public class CreateCanvasCommand extends ActualHandle {
 	public static final String ONLY_PLAYER = "onlyPlayer";
 	public String onlyPlayer = ChatColor.RED + "Only player can use create canvas command.";
 	
+	public static final String NO_CREATE_PERMISSION = "noCreatePermission";
+	public String noCreatePermission = ChatColor.RED + "You don't have permission to create canvas of type " 
+			+ ChatColor.GREEN + "$typeName" + ChatColor.RED + "!";
+	
 	public static final String SHOULD_HOLD_MAP = "shouldHoldMap";
 	public String shouldHoldMap = ChatColor.RED + "You should hold a map in your hand to turn it into canvas.";
 	
@@ -71,6 +75,11 @@ public class CreateCanvasCommand extends ActualHandle {
 				String[] subArguments = new String[arguments.length - 2];
 				System.arraycopy(arguments, 2, subArguments, 0, arguments.length - 2);
 				canvas.canvas = factory.create(player, subArguments);
+				if(canvas.canvas == null) {
+					sender.sendMessage(noCreatePermission.replace("$typeName", arguments[0]));
+					return true;
+				}
+				
 				canvas.owner = player.getName();
 				canvas.painter.add(player.getName());
 				canvas.view = painting.getServer().getMap(map);
@@ -92,6 +101,7 @@ public class CreateCanvasCommand extends ActualHandle {
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception{
 		super.load(painting, section);
 		onlyPlayer = this.getLocale(ONLY_PLAYER, onlyPlayer, section);
+		noCreatePermission = this.getLocale(NO_CREATE_PERMISSION, noCreatePermission, section);
 		shouldHoldMap = this.getLocale(SHOULD_HOLD_MAP, shouldHoldMap, section);
 		mapAlreadyBound = this.getLocale(MAP_ALREADY_BOUND, mapAlreadyBound, section);
 		canvasAlreadyExisted = this.getLocale(CANVAS_ALREADY_EXISTED, canvasAlreadyExisted, section);

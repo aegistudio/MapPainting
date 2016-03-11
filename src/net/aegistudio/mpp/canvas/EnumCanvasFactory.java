@@ -11,6 +11,8 @@ public enum EnumCanvasFactory implements CanvasFactory {
 
 		@Override
 		public Canvas create(CommandSender sender, String[] arguments) {
+			if(!sender.hasPermission("mpp.create.normal")) return null;
+			
 			BufferedCanvas canvas = new BufferedCanvas();
 			canvas.pixel = new byte[canvas.size][canvas.size];
 			for(int i = 0; i < canvas.size; i ++)

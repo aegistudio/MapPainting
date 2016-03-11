@@ -9,8 +9,21 @@ commands:
     permission: mpp.command
     permission-message: You don't have permission to do that!
 permissions:
+  mpp.paint:
+    description: Grants player to paint on canvas he owns.
+    default: true
   mpp.command:
     description: Grants player to issue map painting command.
+    default: true
+  mpp.create.*:
+    description: Grants player to create any canvas.
+    children:
+      mpp.create.normal: true
+  mpp.create.normal:
+    description: Grants player to create canvas of type "normal".
+    default: true
+  mpp.destroy:
+    description: Grants player to destroy the canvas he owns.
     default: true
   mpp.manager:
     description: Grants player to manage canvas.

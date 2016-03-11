@@ -1,8 +1,11 @@
 package net.aegistudio.mpp.canvas;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.HazardCommand;
@@ -22,10 +25,32 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 	public static final String UNBOUND = "unbound";
 	public String unbound = "The canvas " + ChatColor.AQUA + "$canvasName" + ChatColor.RESET + " has been unbound.";
 	
+	public static final String HOLDING = "holding";
+	public String holding = "You're holding the canvas " + ChatColor.AQUA + "$canvasName" + ChatColor.RESET 
+			+ " in your hand. Please confirm if you want to destroy it, or just use $prefix <name> to specify a map.";
+	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
-		if(arguments.length != 1)
+		if(arguments.length != 1) {
+			MapCanvasRegistry canvas = null;
+			if(sender instanceof Player) {
+				Player player = (Player)sender;
+				ItemStack item = player.getItemInHand();
+				if(item.getType() == Material.MAP)
+					canvas = painting.canvas.idCanvasMap.get(item.getDurability());
+			}
+			
+			if(canvas != null) 
+				if(this.hasPermission(sender, canvas)) {
+					sender.sendMessage(holding
+							.replace("$canvasName", canvas.name)
+							.replace("$prefix", prefix));
+					painting.hazard.hazard(sender, this, canvas);
+					return true;
+				}
 			sender.sendMessage(prefix + " <name>");
+		}
 		else {
 			MapCanvasRegistry canvas = painting.canvas.nameCanvasMap.get(arguments[0]);
 			if(canvas == null) { 
@@ -33,15 +58,21 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 				return true;
 			}
 
-			if(!sender.hasPermission("mpp.manager")) 
-				if(!canvas.owner.equals(sender.getName())) {
-					sender.sendMessage(noPermission.replace("$canvasName", arguments[0]));
-					return true;
-				}
+			if(!this.hasPermission(sender, canvas)) {
+				sender.sendMessage(noPermission.replace("$canvasName", arguments[0]));
+				return true;
+			}
 			
 			painting.hazard.hazard(sender, this, canvas);
 		}
 		return true;
+	}
+	
+	public boolean hasPermission(CommandSender sender, MapCanvasRegistry canvas) {
+		if(sender.hasPermission("mpp.manager")) return true;
+		if(sender.hasPermission("mpp.destroy"))
+			if(canvas.owner.equals(sender.getName())) return true;
+		return false;
 	}
 	
 	@Override
