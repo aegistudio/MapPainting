@@ -5,12 +5,15 @@ author: aegistudio
 commands:
   mpp:
     description: Command service provided by map painting.
-    usage: /mpp [subcommand] [parameters]
+    usage: /mpp <subcommand> [<parameters>]
     permission: mpp.command
     permission-message: You don't have permission to do that!
 permissions:
   mpp.paint:
     description: Grants player to paint on canvas he owns.
+    default: true
+  mpp.interact:
+    description: Grants player to interact with a canvas.
     default: true
   mpp.command:
     description: Grants player to issue map painting command.

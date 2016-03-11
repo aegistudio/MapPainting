@@ -27,7 +27,8 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 	
 	public static final String HOLDING = "holding";
 	public String holding = "You're holding the canvas " + ChatColor.AQUA + "$canvasName" + ChatColor.RESET 
-			+ " in your hand. Please confirm if you want to destroy it, or just use $prefix <name> to specify a map.";
+			+ " in your hand. Please confirm if you want to destroy it, or just use " 
+			+ ChatColor.YELLOW + "$prefix <name>" + ChatColor.RESET + " to specify a map.";
 	
 	@SuppressWarnings("deprecation")
 	@Override
