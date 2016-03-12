@@ -13,7 +13,7 @@ public class CompositeHandle extends ActualHandle {
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
 		if(arguments.length == 0) {
-			sender.sendMessage("Show " + ChatColor.BOLD + "subcommands" + ChatColor.RESET 
+			sender.sendMessage("Showing " + ChatColor.BOLD + "subcommands" + ChatColor.RESET 
 					+ " for " + ChatColor.YELLOW + prefix + ChatColor.RESET + ":");
 			for(int i = 0; i < name.size(); i ++) {
 				StringBuilder builder = new StringBuilder();

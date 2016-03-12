@@ -7,6 +7,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import net.aegistudio.mpp.brush.Pencil;
 import net.aegistudio.mpp.canvas.CanvasManager;
+import net.aegistudio.mpp.canvas.ChangeModeCommand;
 import net.aegistudio.mpp.canvas.ChangeOwnerCommand;
 import net.aegistudio.mpp.canvas.CreateCanvasCommand;
 import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
@@ -40,6 +41,7 @@ public class MapPainting extends JavaPlugin {
 			command.add("create", new CreateCanvasCommand());
 			command.add("destroy", new DestroyCanvasCommand());
 			command.add("chown", new ChangeOwnerCommand());
+			command.add("chmod", new ChangeModeCommand());
 			command.add(CONFIRM, this.hazard = new ConfirmCommand());
 			
 			/*

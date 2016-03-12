@@ -33,7 +33,7 @@ public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
 	public static final String NOT_HOLDING = "notHolding";
 	public String notHolding = ChatColor.RED + "You should either hold a canvas in hand or specify the canvas name!";
 	
-	public static final String NO_CREATE_PERMISSION = "noChownPermission";
+	public static final String NO_CHOWN_PERMISSION = "noChownPermission";
 	public String noChownPermission = ChatColor.RED + "You don't have permission to transfer ownership of " 
 			+ ChatColor.AQUA + "$canvasName" + ChatColor.RED + "!";
 	
@@ -44,7 +44,7 @@ public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
 		this.ownershipChanged = this.getLocale(OWNERSHIP_CHANGED, ownershipChanged, section);
 		this.ownershipGained = this.getLocale(OWNERSHIP_GAINED, ownershipGained, section);
 		this.notHolding = this.getLocale(NOT_HOLDING, notHolding, section);
-		this.noChownPermission = this.getLocale(NO_CREATE_PERMISSION, noChownPermission, section);
+		this.noChownPermission = this.getLocale(NO_CHOWN_PERMISSION, noChownPermission, section);
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -107,6 +107,8 @@ public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
 	public void handle(MapPainting painting, CommandSender sender, Object hazardState) {
 		ChownState state = (ChownState) hazardState;
 		state.registry.owner = state.newOwner;
+		state.registry.painter.add(state.newOwner);
+		
 		sender.sendMessage(ownershipChanged
 				.replace("$canvasName", state.registry.name)
 				.replace("$newOwner", state.newOwner));
