@@ -11,6 +11,8 @@ import net.aegistudio.mpp.canvas.ChangeModeCommand;
 import net.aegistudio.mpp.canvas.ChangeOwnerCommand;
 import net.aegistudio.mpp.canvas.CreateCanvasCommand;
 import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
+import net.aegistudio.mpp.palette.PaletteManager;
+import net.aegistudio.mpp.palette.PigmentCommand;
 
 /** Use blackboard pattern in this class. **/
 public class MapPainting extends JavaPlugin {
@@ -27,10 +29,14 @@ public class MapPainting extends JavaPlugin {
 	/** Other modules can invoke painting to this paint tool **/
 	public PaintToolManager tool;
 	
+	/** Other modules can invoke palette if you have coloured information **/
+	public PaletteManager palette;
+	
 	/** Keyword for configurations **/
 	public static final String CANVAS = "canvas";
 	public static final String COMMAND_LOCALE = "command";
 	public static final String PAINT_TOOL = "tool";
+	public static final String PALETTE = "palette";
 	
 	public void onEnable() {
 		try {
@@ -42,6 +48,7 @@ public class MapPainting extends JavaPlugin {
 			command.add("destroy", new DestroyCanvasCommand());
 			command.add("chown", new ChangeOwnerCommand());
 			command.add("chmod", new ChangeModeCommand());
+			command.add("pigment", new PigmentCommand());
 			command.add(CONFIRM, this.hazard = new ConfirmCommand());
 			
 			/*
@@ -64,6 +71,11 @@ public class MapPainting extends JavaPlugin {
 			if(!config.contains(PAINT_TOOL)) config.createSection(PAINT_TOOL);
 			this.tool.load(this, config.getConfigurationSection(PAINT_TOOL));
 			
+			// Load palette.
+			palette = new PaletteManager();
+			if(!config.contains(PALETTE)) config.createSection(PALETTE);
+			palette.load(this, config.getConfigurationSection(PALETTE));
+			
 			// Load map.
 			this.canvas = new CanvasManager();
 			if(!config.contains(CANVAS)) config.createSection(CANVAS);
@@ -82,12 +94,15 @@ public class MapPainting extends JavaPlugin {
 			this.reloadConfig();
 			
 			Configuration config = this.getConfig();
+			if(!config.contains(PAINT_TOOL)) config.createSection(PAINT_TOOL);
+			tool.save(this, config.getConfigurationSection(PAINT_TOOL));
+			
+			if(!config.contains(PALETTE)) config.createSection(PALETTE);
+			palette.save(this, config.getConfigurationSection(PALETTE));
+			
 			config.set(CANVAS, null);
 			if(!config.contains(CANVAS)) config.createSection(CANVAS);
 			canvas.save(this, config.getConfigurationSection(CANVAS));
-			
-			if(!config.contains(PAINT_TOOL)) config.createSection(PAINT_TOOL);
-			tool.save(this, config.getConfigurationSection(PAINT_TOOL));
 			
 			this.saveConfig();
 		}

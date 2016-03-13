@@ -1,6 +1,6 @@
 name: MapPainting
 main: net.aegistudio.mpp.MapPainting
-version: 1.1-beta
+version: 1.2-beta
 author: aegistudio
 commands:
   mpp:
@@ -34,6 +34,9 @@ permissions:
   mpp.destroy:
     description: Grants player to destroy the canvas he owns.
     default: true
+  mpp.pigment:
+    description: Grants player to obtain a pigment by RGB color directly.
+    default: op
   mpp.manager:
     description: Grants player to manage canvas.
     default: op

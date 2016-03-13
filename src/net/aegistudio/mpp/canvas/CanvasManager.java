@@ -13,6 +13,8 @@ public class CanvasManager implements Module {
 	
 	public static final String MAP = "map";
 	
+	public CanvasColor color = new CanvasColor();
+	
 	@Override
 	public void load(MapPainting painting, ConfigurationSection canvas) throws Exception {
 		if(!canvas.contains(MAP)) canvas.createSection(MAP);

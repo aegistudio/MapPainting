@@ -4,12 +4,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.map.MapPalette;
 
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.PaintTool;
@@ -18,12 +15,15 @@ import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 public class Pencil implements PaintTool {
 	public HashMap<MapCanvasRegistry, PencilTickCounter> lastStroke 
 		= new HashMap<MapCanvasRegistry, PencilTickCounter>();
+	public MapPainting painting;
 	
 	long interval = 1;
 	int initCount = 7;
 	
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
+		this.painting = painting;
+		
 		painting.getServer().getScheduler().scheduleSyncRepeatingTask(painting, new Runnable() {
 			@Override
 			public void run() {
@@ -42,12 +42,11 @@ public class Pencil implements PaintTool {
 	@Override
 	public void save(MapPainting painting, ConfigurationSection section) throws Exception {	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, int x, int y) {
 		if(itemStack.getType() == Material.INK_SACK) {
-			Color color = DyeColor.getByDyeData((byte) itemStack.getDurability()).getColor();
-			byte colorValue = MapPalette.matchColor(new java.awt.Color(color.getRed(), color.getGreen(), color.getBlue()));
+			byte colorValue = (byte)painting.canvas.color
+					.getIndex(painting.palette.dye.getColor(itemStack));
 			canvas.canvas.paint(x, y, colorValue);
 			PencilTickCounter last = lastStroke.get(canvas);
 			if(last != null) {
@@ -97,5 +96,4 @@ public class Pencil implements PaintTool {
 		}
 		return false;
 	}
-
 }
