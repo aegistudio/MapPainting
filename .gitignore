@@ -1,4 +1,5 @@
 bin
-/nbproject/private/
-/build/
-/dist/
+nbproject/
+build/
+dist/
+build.xml
