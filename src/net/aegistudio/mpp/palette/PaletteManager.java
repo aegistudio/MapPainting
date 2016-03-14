@@ -5,11 +5,13 @@ import java.util.ArrayList;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.Module;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 
 public class PaletteManager implements Module {
 	public static final String IDENTIFIER = "identifier";
@@ -72,6 +74,7 @@ public class PaletteManager implements Module {
 		return null;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		// Load configuration.
@@ -87,7 +90,25 @@ public class PaletteManager implements Module {
 		if(section.contains(YELLOW)) yellow = section.getString(YELLOW);
 		else section.set(YELLOW, yellow);
 		
+		// Add dye item consulter.
 		this.dye = new DyeItem(painting);
+		
+		// Add naive pigment recipes and listener.
+		for(int i = 2; i <= 9; i ++) {
+			ShapelessRecipe shapeless = new ShapelessRecipe(new ItemStack(Material.INK_SACK, i));
+			shapeless.addIngredient(i, Material.INK_SACK, -1);
+			painting.getServer().addRecipe(shapeless);
+			
+			if(i >= 3) {
+				ShapelessRecipe blend = new ShapelessRecipe(new ItemStack(Material.INK_SACK));
+				blend.addIngredient(i - 1, Material.INK_SACK, -1);
+				blend.addIngredient(Material.WATER_BUCKET);
+				painting.getServer().addRecipe(blend);
+			}
+		}
+		
+		painting.getServer().getPluginManager()
+			.registerEvents(new NaivePigmentListener(this), painting);
 	}
 
 	@Override

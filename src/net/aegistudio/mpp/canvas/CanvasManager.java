@@ -13,7 +13,7 @@ public class CanvasManager implements Module {
 	
 	public static final String MAP = "map";
 	
-	public CanvasColor color = new CanvasColor();
+	public CanvasColor color = new CachedCanvasColor(5);
 	
 	@Override
 	public void load(MapPainting painting, ConfigurationSection canvas) throws Exception {
