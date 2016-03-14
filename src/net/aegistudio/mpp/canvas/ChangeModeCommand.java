@@ -43,13 +43,13 @@ public class ChangeModeCommand extends ActualHandle {
 	
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		super.load(painting, section);
-		this.onlyPlayer = this.getLocale(ONLY_PLAYER, onlyPlayer, section);
-		this.canvasNotExists = this.getLocale(CANVAS_NOT_EXISTS, canvasNotExists, section);
-		this.painterModified = this.getLocale(PAINTER_MODIFIED, painterModified, section);
-		this.painterAdded = this.getLocale(PAINTER_ADDED, painterAdded, section);
-		this.painterRemoved = this.getLocale(PAINTER_REMOVED, painterRemoved, section);
-		this.notHolding = this.getLocale(NOT_HOLDING, notHolding, section);
-		this.noChmodPermission = this.getLocale(NO_CHMOD_PERMISSION, noChmodPermission, section);
+		this.onlyPlayer = painting.getLocale(ONLY_PLAYER, onlyPlayer, section);
+		this.canvasNotExists = painting.getLocale(CANVAS_NOT_EXISTS, canvasNotExists, section);
+		this.painterModified = painting.getLocale(PAINTER_MODIFIED, painterModified, section);
+		this.painterAdded = painting.getLocale(PAINTER_ADDED, painterAdded, section);
+		this.painterRemoved = painting.getLocale(PAINTER_REMOVED, painterRemoved, section);
+		this.notHolding = painting.getLocale(NOT_HOLDING, notHolding, section);
+		this.noChmodPermission = painting.getLocale(NO_CHMOD_PERMISSION, noChmodPermission, section);
 	}
 	
 	@SuppressWarnings("deprecation")

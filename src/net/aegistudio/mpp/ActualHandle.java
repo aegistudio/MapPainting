@@ -18,16 +18,7 @@ public abstract class ActualHandle implements CommandHandle{
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception{
 		if(description != null) 
-			description = this.getLocale(DESCRIPTION, description, section);
-	}
-	
-	protected String getLocale(String name, String defaultLocale, ConfigurationSection section) {
-		if(section.contains(name))
-			return section.getString(name);
-		else {
-			section.set(name, defaultLocale);
-			return defaultLocale;
-		}
+			description = painting.getLocale(DESCRIPTION, description, section);
 	}
 	
 	@Override

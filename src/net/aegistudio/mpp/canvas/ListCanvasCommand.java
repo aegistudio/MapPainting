@@ -22,9 +22,9 @@ public class ListCanvasCommand extends ActualHandle {
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		super.load(painting, section);
-		this.noPossess = this.getLocale(NO_POSSESS, noPossess, section);
-		this.entry = this.getLocale(ENTRY, entry, section);
-		this.possess = this.getLocale(POSSESS, possess, section);
+		this.noPossess = painting.getLocale(NO_POSSESS, noPossess, section);
+		this.entry = painting.getLocale(ENTRY, entry, section);
+		this.possess = painting.getLocale(POSSESS, possess, section);
 	}
 
 	@Override

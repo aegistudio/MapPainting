@@ -100,12 +100,12 @@ public class CreateCanvasCommand extends ActualHandle {
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception{
 		super.load(painting, section);
-		onlyPlayer = this.getLocale(ONLY_PLAYER, onlyPlayer, section);
-		noCreatePermission = this.getLocale(NO_CREATE_PERMISSION, noCreatePermission, section);
-		shouldHoldMap = this.getLocale(SHOULD_HOLD_MAP, shouldHoldMap, section);
-		mapAlreadyBound = this.getLocale(MAP_ALREADY_BOUND, mapAlreadyBound, section);
-		canvasAlreadyExisted = this.getLocale(CANVAS_ALREADY_EXISTED, canvasAlreadyExisted, section);
-		typeUnsupported = this.getLocale(TYPE_UNSUPPORTED, typeUnsupported, section);
-		bound = this.getLocale(BOUND, bound, section);
+		onlyPlayer = painting.getLocale(ONLY_PLAYER, onlyPlayer, section);
+		noCreatePermission = painting.getLocale(NO_CREATE_PERMISSION, noCreatePermission, section);
+		shouldHoldMap = painting.getLocale(SHOULD_HOLD_MAP, shouldHoldMap, section);
+		mapAlreadyBound = painting.getLocale(MAP_ALREADY_BOUND, mapAlreadyBound, section);
+		canvasAlreadyExisted = painting.getLocale(CANVAS_ALREADY_EXISTED, canvasAlreadyExisted, section);
+		typeUnsupported = painting.getLocale(TYPE_UNSUPPORTED, typeUnsupported, section);
+		bound = painting.getLocale(BOUND, bound, section);
 	}
 }

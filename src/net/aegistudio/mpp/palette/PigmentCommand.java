@@ -26,9 +26,9 @@ public class PigmentCommand extends ActualHandle {
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception{
 		super.load(painting, section);
-		onlyPlayer = this.getLocale(ONLY_PLAYER, onlyPlayer, section);
-		noPigmentPermission = this.getLocale(NO_PIGMENT_PERMISSION, noPigmentPermission, section);
-		invalidFormat = this.getLocale(INVALID_FORMAT, invalidFormat, section);
+		onlyPlayer = painting.getLocale(ONLY_PLAYER, onlyPlayer, section);
+		noPigmentPermission = painting.getLocale(NO_PIGMENT_PERMISSION, noPigmentPermission, section);
+		invalidFormat = painting.getLocale(INVALID_FORMAT, invalidFormat, section);
 	}
 	
 	@Override

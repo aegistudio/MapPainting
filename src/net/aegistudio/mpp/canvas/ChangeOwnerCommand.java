@@ -39,12 +39,12 @@ public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
 	
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		super.load(painting, section);
-		this.onlyPlayer = this.getLocale(ONLY_PLAYER, onlyPlayer, section);
-		this.canvasNotExists = this.getLocale(CANVAS_NOT_EXISTS, canvasNotExists, section);
-		this.ownershipChanged = this.getLocale(OWNERSHIP_CHANGED, ownershipChanged, section);
-		this.ownershipGained = this.getLocale(OWNERSHIP_GAINED, ownershipGained, section);
-		this.notHolding = this.getLocale(NOT_HOLDING, notHolding, section);
-		this.noChownPermission = this.getLocale(NO_CHOWN_PERMISSION, noChownPermission, section);
+		this.onlyPlayer = painting.getLocale(ONLY_PLAYER, onlyPlayer, section);
+		this.canvasNotExists = painting.getLocale(CANVAS_NOT_EXISTS, canvasNotExists, section);
+		this.ownershipChanged = painting.getLocale(OWNERSHIP_CHANGED, ownershipChanged, section);
+		this.ownershipGained = painting.getLocale(OWNERSHIP_GAINED, ownershipGained, section);
+		this.notHolding = painting.getLocale(NOT_HOLDING, notHolding, section);
+		this.noChownPermission = painting.getLocale(NO_CHOWN_PERMISSION, noChownPermission, section);
 	}
 	
 	@SuppressWarnings("deprecation")

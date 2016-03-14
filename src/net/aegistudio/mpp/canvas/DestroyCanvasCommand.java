@@ -79,9 +79,9 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception{
 		super.load(painting, section);
-		canvasNotExists = super.getLocale(CANVAS_NOT_EXISTS, canvasNotExists, section);
-		noPermission = super.getLocale(NO_PERMISSION, noPermission, section);
-		unbound = super.getLocale(UNBOUND, unbound, section);
+		canvasNotExists = painting.getLocale(CANVAS_NOT_EXISTS, canvasNotExists, section);
+		noPermission = painting.getLocale(NO_PERMISSION, noPermission, section);
+		unbound = painting.getLocale(UNBOUND, unbound, section);
 	}
 	
 	@Override

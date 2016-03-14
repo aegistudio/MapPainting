@@ -41,7 +41,7 @@ public class ConfirmCommand extends ActualHandle {
 	
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		super.load(painting, section);
-		nothingToConfirm = super.getLocale(NOTHING_TO_CONFIRM, nothingToConfirm, section);
-		pleaseConfirm = super.getLocale(PLEASE_CONFIRM, pleaseConfirm, section);
+		nothingToConfirm = painting.getLocale(NOTHING_TO_CONFIRM, nothingToConfirm, section);
+		pleaseConfirm = painting.getLocale(PLEASE_CONFIRM, pleaseConfirm, section);
 	}
 }

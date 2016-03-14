@@ -87,7 +87,7 @@ public class CanvasPaintListener implements Listener {
 		// Do intersection.
 		double v1 = A * x0 + C * z0;
 		double v0 = A * a + C * c;
-		double miu = (-v1 / v0) * 0.92;
+		double miu = (-v1 / v0) - 0.04;
 		
 		double xLook = x0 + miu * a;
 		double yLook = y0 + miu * b;

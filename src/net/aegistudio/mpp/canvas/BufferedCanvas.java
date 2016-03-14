@@ -36,7 +36,7 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 	@Override
 	public void paint(int x, int y, Color color) {
 		if(x >= size || x < 0) return;
-		y = size - y;
+		y = size - 1 - y;
 		if(y >= size || y < 0) return;
 		
 		pixel[x][y] = (byte) painting.canvas.color.getIndex(color);
@@ -45,6 +45,10 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 	
 	@Override
 	public Color look(int x, int y) {
+		if(x >= size || x < 0) return null;
+		y = size - 1 - y;
+		if(y >= size || y < 0) return null;
+		
 		return painting.canvas.color.getColor(pixel[x][y]);
 	}
 

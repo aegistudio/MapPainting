@@ -7,6 +7,7 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.aegistudio.mpp.brush.PaintBucket;
 import net.aegistudio.mpp.brush.Pencil;
 import net.aegistudio.mpp.canvas.CanvasManager;
 import net.aegistudio.mpp.canvas.ChangeModeCommand;
@@ -87,9 +88,9 @@ public class MapPainting extends JavaPlugin {
 			
 			// Load unified locale.
 			ConfigurationSection locale = config.getConfigurationSection(COMMAND_LOCALE);
-			listing = this.command.getLocale(LISTING_TITLE, listing, locale);
-			nextPage = this.command.getLocale(NEXT_PAGE, nextPage, locale);
-			lastPage = this.command.getLocale(LAST_PAGE, lastPage, locale);
+			listing = this.getLocale(LISTING_TITLE, listing, locale);
+			nextPage = this.getLocale(NEXT_PAGE, nextPage, locale);
+			lastPage = this.getLocale(LAST_PAGE, lastPage, locale);
 			if(locale.contains(COMMANDS_PER_PAGE))
 				this.commandsPerPage = locale.getInt(COMMANDS_PER_PAGE);
 			else locale.set(COMMANDS_PER_PAGE, this.commandsPerPage);
@@ -97,6 +98,7 @@ public class MapPainting extends JavaPlugin {
 			// Load paint tools.
 			tool = new PaintToolManager();
 			tool.toolMap.put("pencil", new Pencil());
+			tool.toolMap.put("paintBucket", new PaintBucket());
 			if(!config.contains(PAINT_TOOL)) config.createSection(PAINT_TOOL);
 			this.tool.load(this, config.getConfigurationSection(PAINT_TOOL));
 			
@@ -115,6 +117,15 @@ public class MapPainting extends JavaPlugin {
 		catch(Exception e) {
 			e.printStackTrace();
 			this.setEnabled(false);
+		}
+	}
+	
+	public String getLocale(String name, String defaultLocale, ConfigurationSection section) {
+		if(section.contains(name))
+			return section.getString(name);
+		else {
+			section.set(name, defaultLocale);
+			return defaultLocale;
 		}
 	}
 	

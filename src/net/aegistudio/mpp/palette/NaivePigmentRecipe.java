@@ -3,16 +3,15 @@ package net.aegistudio.mpp.palette;
 import java.awt.Color;
 
 import org.bukkit.DyeColor;
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapelessRecipe;
 
 import net.aegistudio.mpp.MapPainting;
+import net.aegistudio.mpp.Module;
 
-public class DyeItem {
-	public MapPainting painting;
-	public DyeItem(MapPainting painting) {
-		this.painting = painting;
-	}
-	
+public class NaivePigmentRecipe implements Module {
 	@SuppressWarnings("deprecation")
 	public Color getColor(ItemStack dye) {
 		java.awt.Color awtColor = painting.palette.getColor(dye);
@@ -39,4 +38,30 @@ public class DyeItem {
 		}
 		dye.setDurability(damage);
 	}
+
+	public MapPainting painting;
+	@SuppressWarnings("deprecation")
+	@Override
+	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
+		this.painting = painting;
+		
+		for(int i = 2; i <= 9; i ++) {
+			ShapelessRecipe shapeless = new ShapelessRecipe(new ItemStack(Material.INK_SACK, i));
+			shapeless.addIngredient(i, Material.INK_SACK, -1);
+			painting.getServer().addRecipe(shapeless);
+			
+			if(i >= 3) {
+				ShapelessRecipe blend = new ShapelessRecipe(new ItemStack(Material.INK_SACK));
+				blend.addIngredient(i - 1, Material.INK_SACK, -1);
+				blend.addIngredient(Material.WATER_BUCKET);
+				painting.getServer().addRecipe(blend);
+			}
+		}
+		
+		painting.getServer().getPluginManager()
+			.registerEvents(new NaivePigmentListener(painting.palette), painting);
+	}
+
+	@Override
+	public void save(MapPainting painting, ConfigurationSection section) throws Exception {	}
 }

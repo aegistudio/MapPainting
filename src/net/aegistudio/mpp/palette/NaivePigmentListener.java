@@ -5,13 +5,11 @@ import java.awt.Color;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 
 public class NaivePigmentListener implements Listener {
-	
 	private final PaletteManager palette;
 	public NaivePigmentListener(PaletteManager palette) {
 		this.palette = palette;
@@ -53,22 +51,6 @@ public class NaivePigmentListener implements Listener {
 			
 			this.palette.dye.setColor(result, new Color(red, green, blue));
 			e.getInventory().setResult(result);
-		}
-	}
-	
-	public void postCraftItem(CraftItemEvent e) {
-		if(e.getRecipe() instanceof ShapelessRecipe) {
-			// Check if it is a naive pigment recipe.
-			ItemStack result = e.getInventory().getResult();
-			if(result.getType() != Material.INK_SACK) return;
-			int buckets = 0;
-			for(ItemStack item : e.getInventory().getMatrix())
-				if(item != null) if(item.getType() != Material.AIR)
-					if(item.getType() == Material.WATER_BUCKET) buckets ++;
-					else if(item.getType() != Material.INK_SACK) return;
-			
-			if(buckets > 0) e.getWhoClicked().getInventory()
-				.addItem(new ItemStack(Material.BUCKET, buckets));
 		}
 	}
 }
