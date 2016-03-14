@@ -2,6 +2,8 @@ package net.aegistudio.mpp.canvas;
 
 import org.bukkit.command.CommandSender;
 
+import net.aegistudio.mpp.MapPainting;
+
 public enum EnumCanvasFactory implements CanvasFactory {
 	NORMAL(BufferedCanvas.class){
 		@Override
@@ -10,10 +12,11 @@ public enum EnumCanvasFactory implements CanvasFactory {
 		}
 
 		@Override
-		public Canvas create(CommandSender sender, String[] arguments) {
+		public Canvas create(MapPainting painting, CommandSender sender, String[] arguments) {
 			if(!sender.hasPermission("mpp.create.normal")) return null;
 			
 			BufferedCanvas canvas = new BufferedCanvas();
+			canvas.painting = painting;
 			canvas.pixel = new byte[canvas.size][canvas.size];
 			for(int i = 0; i < canvas.size; i ++)
 				for(int j = 0; j < canvas.size; j ++)

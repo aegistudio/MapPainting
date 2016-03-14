@@ -1,4 +1,4 @@
-package net.aegistudio.mpp.brush;
+package net.aegistudio.mpp.tool;
 
 public class PencilTickCounter {
 	public int x, y, count;

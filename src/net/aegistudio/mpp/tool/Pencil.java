@@ -1,4 +1,4 @@
-package net.aegistudio.mpp.brush;
+package net.aegistudio.mpp.tool;
 
 import java.awt.Color;
 import java.util.HashMap;

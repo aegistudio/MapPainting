@@ -7,8 +7,6 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.aegistudio.mpp.brush.PaintBucket;
-import net.aegistudio.mpp.brush.Pencil;
 import net.aegistudio.mpp.canvas.CanvasManager;
 import net.aegistudio.mpp.canvas.ChangeModeCommand;
 import net.aegistudio.mpp.canvas.ChangeOwnerCommand;
@@ -17,6 +15,8 @@ import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
 import net.aegistudio.mpp.canvas.ListCanvasCommand;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
+import net.aegistudio.mpp.tool.PaintBucket;
+import net.aegistudio.mpp.tool.Pencil;
 
 /** Use blackboard pattern in this class. **/
 public class MapPainting extends JavaPlugin {

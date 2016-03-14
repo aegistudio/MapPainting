@@ -74,7 +74,7 @@ public class CreateCanvasCommand extends ActualHandle {
 				
 				String[] subArguments = new String[arguments.length - 2];
 				System.arraycopy(arguments, 2, subArguments, 0, arguments.length - 2);
-				canvas.canvas = factory.create(player, subArguments);
+				canvas.canvas = factory.create(painting, player, subArguments);
 				if(canvas.canvas == null) {
 					sender.sendMessage(noCreatePermission.replace("$typeName", arguments[0]));
 					return true;
