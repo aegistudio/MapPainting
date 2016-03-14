@@ -10,12 +10,14 @@ public class CompositeHandle extends ActualHandle {
 	public final ArrayList<String> name = new ArrayList<String>();
 	public final ArrayList<CommandHandle> subcommand = new ArrayList<CommandHandle>();
 
-	@Override
-	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
-		if(arguments.length == 0) {
-			sender.sendMessage("Showing " + ChatColor.BOLD + "subcommands" + ChatColor.RESET 
-					+ " for " + ChatColor.YELLOW + prefix + ChatColor.RESET + ":");
-			for(int i = 0; i < name.size(); i ++) {
+	public void listCommand(MapPainting painting, String prefix, CommandSender sender, int page) {
+		sender.sendMessage(painting.listing.replace("$prefix", prefix));
+		int beginIndex = (page - 1) * painting.commandsPerPage; 	// page start from 1 rather than 0, caution!
+		if(beginIndex >= subcommand.size() || beginIndex < 0) 
+			sender.sendMessage(painting.lastPage.replace("$prefix", prefix));
+		else {
+			int endIndex = Math.min(name.size(), beginIndex + painting.commandsPerPage);
+			for(int i = beginIndex; i < endIndex; i ++) {
 				StringBuilder builder = new StringBuilder();
 				builder.append(ChatColor.YELLOW);
 				builder.append(prefix);
@@ -27,6 +29,17 @@ public class CompositeHandle extends ActualHandle {
 				builder.append(subcommand.get(i).description());
 				sender.sendMessage(new String(builder));
 			}
+			if(endIndex == name.size()) 
+				sender.sendMessage(painting.lastPage.replace("$prefix", prefix));
+			else sender.sendMessage(painting.nextPage.replace("$prefix", prefix)
+					.replace("$nextPage", Integer.toString(page + 1)));
+		}
+	}
+	
+	@Override
+	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
+		if(arguments.length == 0) {
+			this.listCommand(painting, prefix, sender, 1);
 			return true;
 		}
 		else {
@@ -37,7 +50,16 @@ public class CompositeHandle extends ActualHandle {
 					break;
 				}
 
-			if(handle == null) return false;
+			if(handle == null) {
+				try {
+					int page = Integer.parseInt(arguments[0]);
+					this.listCommand(painting, prefix, sender, page);
+					return true;
+				}
+				catch(Throwable t) {
+					return false;
+				}
+			}
 			String[] passUnder = new String[arguments.length - 1];
 			System.arraycopy(arguments, 1, passUnder, 0, arguments.length - 1);
 			return handle.handle(painting, prefix.concat(" ")

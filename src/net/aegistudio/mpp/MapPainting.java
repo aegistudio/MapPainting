@@ -1,8 +1,10 @@
 package net.aegistudio.mpp;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.aegistudio.mpp.brush.Pencil;
@@ -11,6 +13,7 @@ import net.aegistudio.mpp.canvas.ChangeModeCommand;
 import net.aegistudio.mpp.canvas.ChangeOwnerCommand;
 import net.aegistudio.mpp.canvas.CreateCanvasCommand;
 import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
+import net.aegistudio.mpp.canvas.ListCanvasCommand;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
 
@@ -21,6 +24,22 @@ public class MapPainting extends JavaPlugin {
 	
 	/** Other modules can register commands to this handle. **/
 	public CompositeHandle command;
+	
+	public static final String LISTING_TITLE = "listing";
+	public String listing = "Listing " + ChatColor.BOLD + "subcommands" + ChatColor.RESET 
+			+ " for " + ChatColor.YELLOW + "$prefix" + ChatColor.RESET + ":";
+	
+	public static final String NEXT_PAGE = "nextPage";
+	public String nextPage = "Please issue " + ChatColor.YELLOW + "$prefix $nextPage"
+			+ ChatColor.RESET + " for more " + ChatColor.BOLD + "subcommands" + ChatColor.RESET + ".";
+	
+	public static final String LAST_PAGE = "lastPage";
+	public String lastPage = "This is the last page of " + ChatColor.BOLD 
+			+ "subcommands" + ChatColor.RESET + " for " + ChatColor.YELLOW 
+			+ "$prefix" + ChatColor.RESET + ".";
+	
+	public static final String COMMANDS_PER_PAGE = "commandsPerPage";
+	public int commandsPerPage = 5;
 	
 	/** Other modules can issue hazardous command using this. **/
 	public static final String CONFIRM = "confirm";
@@ -48,6 +67,7 @@ public class MapPainting extends JavaPlugin {
 			command.add("destroy", new DestroyCanvasCommand());
 			command.add("chown", new ChangeOwnerCommand());
 			command.add("chmod", new ChangeModeCommand());
+			command.add("list", new ListCanvasCommand());
 			command.add("pigment", new PigmentCommand());
 			command.add(CONFIRM, this.hazard = new ConfirmCommand());
 			
@@ -64,7 +84,16 @@ public class MapPainting extends JavaPlugin {
 			if(!config.contains(COMMAND_LOCALE))
 				config.createSection(COMMAND_LOCALE);
 			this.command.load(this, config.getConfigurationSection(COMMAND_LOCALE));
-						
+			
+			// Load unified locale.
+			ConfigurationSection locale = config.getConfigurationSection(COMMAND_LOCALE);
+			listing = this.command.getLocale(LISTING_TITLE, listing, locale);
+			nextPage = this.command.getLocale(NEXT_PAGE, nextPage, locale);
+			lastPage = this.command.getLocale(LAST_PAGE, lastPage, locale);
+			if(locale.contains(COMMANDS_PER_PAGE))
+				this.commandsPerPage = locale.getInt(COMMANDS_PER_PAGE);
+			else locale.set(COMMANDS_PER_PAGE, this.commandsPerPage);
+			
 			// Load paint tools.
 			tool = new PaintToolManager();
 			tool.toolMap.put("pencil", new Pencil());

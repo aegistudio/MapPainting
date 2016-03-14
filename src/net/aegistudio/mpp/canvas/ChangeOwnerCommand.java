@@ -12,7 +12,7 @@ import net.aegistudio.mpp.HazardCommand;
 import net.aegistudio.mpp.MapPainting;
 
 public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
-	{	description = "Transfer the ownership of a specified or your holding canvas."; 	}
+	{	description = "Transfer the ownership of a canvas."; 	}
 	
 	public static final String ONLY_PLAYER = "onlyPlayer";
 	public String onlyPlayer = ChatColor.RED + "Only player can use tranfer ownership command without specifying canvas name!";

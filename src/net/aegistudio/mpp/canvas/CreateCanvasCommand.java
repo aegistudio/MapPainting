@@ -11,7 +11,7 @@ import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
 
 public class CreateCanvasCommand extends ActualHandle {
-	{ description = "Create a completely new canvas based on specific arguments."; }
+	{ description = "Create a new canvas based on arguments."; }
 	
 	public static final String ONLY_PLAYER = "onlyPlayer";
 	public String onlyPlayer = ChatColor.RED + "Only player can use create canvas command.";
@@ -88,7 +88,7 @@ public class CreateCanvasCommand extends ActualHandle {
 				
 				painting.canvas.nameCanvasMap.put(canvas.name, canvas);
 				painting.canvas.idCanvasMap.put(canvas.binding, canvas);
-				sender.sendMessage(bound.replace("$canvasName", name));;
+				sender.sendMessage(bound.replace("$canvasName", name));
 			}
 		}
 		else 

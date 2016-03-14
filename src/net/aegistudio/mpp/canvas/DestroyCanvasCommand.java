@@ -12,7 +12,7 @@ import net.aegistudio.mpp.HazardCommand;
 import net.aegistudio.mpp.MapPainting;
 
 public class DestroyCanvasCommand extends ActualHandle implements HazardCommand {
-	{ description = "Destroy a canvas, making its underlying map normal again."; }
+	{ description = "Destroy a canvas, making bound map normal."; }
 	
 	public static final String CANVAS_NOT_EXISTS = "canvasNotExists";
 	public String canvasNotExists = ChatColor.RED + "Cannot destroy " + ChatColor.AQUA + "$canvasName" + ChatColor.RED + 

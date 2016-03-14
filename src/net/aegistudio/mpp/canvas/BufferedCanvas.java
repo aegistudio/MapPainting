@@ -1,5 +1,6 @@
 package net.aegistudio.mpp.canvas;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -16,6 +17,7 @@ import org.bukkit.map.MapView;
 import net.aegistudio.mpp.MapPainting;
 
 public class BufferedCanvas extends MapRenderer implements Canvas {
+	public MapPainting painting;
 	public byte[][] pixel;
 	public int size = 128;
 	public final TreeSet<Integer> viewed 
@@ -32,18 +34,18 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 	}
 	
 	@Override
-	public void paint(int x, int y, byte color) {
+	public void paint(int x, int y, Color color) {
 		if(x >= size || x < 0) return;
 		y = size - y;
 		if(y >= size || y < 0) return;
 		
-		pixel[x][y] = color;
+		pixel[x][y] = (byte) painting.canvas.color.getIndex(color);
 		viewed.clear();
 	}
 	
 	@Override
-	public byte look(int x, int y) {
-		return pixel[x][y];
+	public Color look(int x, int y) {
+		return painting.canvas.color.getColor(pixel[x][y]);
 	}
 
 	@Override
@@ -60,6 +62,7 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 	public void load(MapPainting painting, MapCanvasRegistry registry, 
 			ConfigurationSection config) throws Exception {
 		this.pixel = new byte[size][size];
+		this.painting = painting;
 		
 		File file = new File(painting.getDataFolder(), registry.name.concat(".mpp"));
 		if(!file.exists()) file.createNewFile();

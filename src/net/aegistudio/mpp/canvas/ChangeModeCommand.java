@@ -13,7 +13,7 @@ import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
 
 public class ChangeModeCommand extends ActualHandle {
-	{	description = "Manage the painters of a specified or your holding canvas."; 	}
+	{	description = "Manage the painters of a canvas."; 	}
 
 	public static final String ONLY_PLAYER = "onlyPlayer";
 	public String onlyPlayer = ChatColor.RED + "Only player can use change mode command without specifying canvas name!";

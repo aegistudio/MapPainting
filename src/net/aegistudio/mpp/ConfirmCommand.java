@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class ConfirmCommand extends ActualHandle {
-	{	 description = "Confirm when you're to use a hazardous command."; 		}
+	{	 description = "Confirm before using a hazardous command."; 		}
 	public HashMap<CommandSender, Object> status = new HashMap<CommandSender, Object>();
 	public HashMap<CommandSender, HazardCommand> command = new HashMap<CommandSender, HazardCommand>();
 	

@@ -1,5 +1,6 @@
 package net.aegistudio.mpp.brush;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -45,9 +46,8 @@ public class Pencil implements PaintTool {
 	@Override
 	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, int x, int y) {
 		if(itemStack.getType() == Material.INK_SACK) {
-			byte colorValue = (byte)painting.canvas.color
-					.getIndex(painting.palette.dye.getColor(itemStack));
-			canvas.canvas.paint(x, y, colorValue);
+			Color color = painting.palette.dye.getColor(itemStack);
+			canvas.canvas.paint(x, y, color);
 			PencilTickCounter last = lastStroke.get(canvas);
 			if(last != null) {
 				double dy = y - last.y;
@@ -70,7 +70,7 @@ public class Pencil implements PaintTool {
 						double diff = dx / dy;
 						for(int i = 0; i < Math.abs(dy); i ++) 
 							canvas.canvas.paint((int) Math.round(beginX + 
-									diff * i), beginY + i, colorValue);
+									diff * i), beginY + i, color);
 					}
 					else {
 						int beginX, beginY;
@@ -87,7 +87,7 @@ public class Pencil implements PaintTool {
 						double diff = dy / dx;
 						for(int i = 0; i < Math.abs(dx); i ++) 
 							canvas.canvas.paint(beginX + i, 
-									(int) Math.round(beginY + diff * i),  colorValue);
+									(int) Math.round(beginY + diff * i),  color);
 					}
 			}
 			this.lastStroke.put(canvas, new PencilTickCounter(x, y, initCount));

@@ -13,7 +13,7 @@ import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
 
 public class PigmentCommand extends ActualHandle {
-	{ description = "Give the player a pigment with specified color directly."; }
+	{ description = "Give the player a pigment of specified color."; }
 	public static final String ONLY_PLAYER = "onlyPlayer";
 	public String onlyPlayer = ChatColor.RED + "Only player can use pigment command.";
 	
