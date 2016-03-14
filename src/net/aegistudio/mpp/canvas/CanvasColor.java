@@ -9,7 +9,7 @@ public class CanvasColor {
 	
 	@SuppressWarnings("deprecation")
 	public CanvasColor() {
-		ArrayList<Color> colorLookup = new ArrayList<Color>();
+		ArrayList<Color> colorLookup = new ArrayList<>();
 		try {
 			for(int i = 0; i < 256; i ++) {
 				Color color = MapPalette.getColor((byte) i);

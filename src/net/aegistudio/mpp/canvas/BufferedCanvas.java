@@ -19,7 +19,7 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 	public byte[][] pixel;
 	public int size = 128;
 	public final TreeSet<Integer> viewed 
-		= new TreeSet<Integer>();
+		= new TreeSet<>();
 	
 	@Override
 	public void render(MapView view, MapCanvas canvas, Player player) {
@@ -64,15 +64,14 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 		File file = new File(painting.getDataFolder(), registry.name.concat(".mpp"));
 		if(!file.exists()) file.createNewFile();
 		else {
-			GZIPInputStream input 
-				= new GZIPInputStream(new FileInputStream(file));
-			for(int i = 0; i < size; i ++)
-				for(int j = 0; j < size; j ++) {
-					int next = input.read();
-					if(next == -1) break;
-					this.pixel[i][j] = (byte) next;
-				}
-			input.close();
+			try (GZIPInputStream input = new GZIPInputStream(new FileInputStream(file))) {
+				for(int i = 0; i < size; i ++)
+					for(int j = 0; j < size; j ++) {
+						int next = input.read();
+						if(next == -1) break;
+						this.pixel[i][j] = (byte) next;
+					}
+			}
 		}
 	}
 
@@ -82,15 +81,13 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 		File file = new File(painting.getDataFolder(), registry.name.concat(".mpp"));
 		if(!file.exists()) file.createNewFile();
 		
-		GZIPOutputStream output
-			= new GZIPOutputStream(new FileOutputStream(file));
-		for(int i = 0; i < size; i ++) 
-			output.write(this.pixel[i], 0, size);
-		
-		output.finish();
-		output.flush();
-		
-		output.close();
+		try (GZIPOutputStream output = new GZIPOutputStream(new FileOutputStream(file))) {
+			for(int i = 0; i < size; i ++)
+				output.write(this.pixel[i], 0, size);
+			
+			output.finish();
+			output.flush();
+		}
 	}
 
 	@Override

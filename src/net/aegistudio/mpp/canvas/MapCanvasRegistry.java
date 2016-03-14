@@ -1,6 +1,7 @@
 package net.aegistudio.mpp.canvas;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.TreeSet;
 
 import org.bukkit.configuration.ConfigurationSection;
@@ -19,7 +20,7 @@ public class MapCanvasRegistry implements Module {
 	
 	public MapCanvasRegistry(String name) {
 		this.name = name;
-		this.painter = new TreeSet<String>();
+		this.painter = new TreeSet<>();
 	}
 	
 	public static final String BINDING = "id";
@@ -28,17 +29,19 @@ public class MapCanvasRegistry implements Module {
 	public static final String PAINTER = "painter";
 	
 	@SuppressWarnings("deprecation")
+	@Override
 	public void load(MapPainting map, ConfigurationSection canvas) throws Exception {
 		binding = (short) canvas.getInt(BINDING);
 		view = map.getServer().getMap(binding);
 		this.canvas = EnumCanvasFactory.getFactory(canvas.getString(TYPE)).create();
 		this.canvas.load(map, this, canvas);
 		this.owner = canvas.getString(OWNER);
-		this.painter = new TreeSet<String>(canvas.getStringList(PAINTER));
+		this.painter = new TreeSet<>(canvas.getStringList(PAINTER));
 		
 		this.add();
 	}
 	
+	@Override
 	public void save(MapPainting map, ConfigurationSection canvas) throws Exception{
 		canvas.set(BINDING, binding);
 		canvas.set(TYPE, EnumCanvasFactory.getFactory(this.canvas));
@@ -56,5 +59,35 @@ public class MapCanvasRegistry implements Module {
 	
 	public void remove() {
 		view.removeRenderer(this.canvas.getRenderer());
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final MapCanvasRegistry other = (MapCanvasRegistry) obj;
+		if (this.binding != other.binding) {
+			return false;
+		}
+		if (!Objects.equals(this.name, other.name)) {
+			return false;
+		}
+		return Objects.equals(this.owner, other.owner);
+	}
+
+	@Override
+	public int hashCode() {
+		int hash = 3;
+		hash = 97 * hash + Objects.hashCode(this.name);
+		hash = 97 * hash + this.binding;
+		hash = 97 * hash + Objects.hashCode(this.owner);
+		return hash;
 	}
 }

@@ -11,10 +11,12 @@ import org.bukkit.inventory.ItemStack;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.PaintTool;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
+import org.apache.commons.math3.util.FastMath;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class Pencil implements PaintTool {
 	public HashMap<MapCanvasRegistry, PencilTickCounter> lastStroke 
-		= new HashMap<MapCanvasRegistry, PencilTickCounter>();
+		= new HashMap<>();
 	public MapPainting painting;
 	
 	long interval = 1;
@@ -24,10 +26,10 @@ public class Pencil implements PaintTool {
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		this.painting = painting;
 		
-		painting.getServer().getScheduler().scheduleSyncRepeatingTask(painting, new Runnable() {
-			@Override
-			public void run() {
-				Iterator<Entry<MapCanvasRegistry, PencilTickCounter>> 
+                new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                                Iterator<Entry<MapCanvasRegistry, PencilTickCounter>> 
 					counter = lastStroke.entrySet().iterator();
 				while(counter.hasNext()) {
 					Entry<MapCanvasRegistry, PencilTickCounter> current = counter.next();
@@ -35,8 +37,8 @@ public class Pencil implements PaintTool {
 					if(current.getValue().count <= 0)
 						counter.remove();
 				}
-			}
-		}, interval, interval);
+                        }
+                }.runTaskTimerAsynchronously(painting, interval, interval);
 	}
 
 	@Override
@@ -55,7 +57,7 @@ public class Pencil implements PaintTool {
 				
 				// Using dda.
 				if(dx != 0 || dy != 0) 
-					if(Math.abs(dy) >= Math.abs(dx)) {
+					if(FastMath.abs(dy) >= FastMath.abs(dx)) {
 						int beginX, beginY;
 						
 						if(dy <= 0) {
@@ -68,8 +70,8 @@ public class Pencil implements PaintTool {
 						}
 						
 						double diff = dx / dy;
-						for(int i = 0; i < Math.abs(dy); i ++) 
-							canvas.canvas.paint((int) Math.round(beginX + 
+						for(int i = 0; i < FastMath.abs(dy); i ++) 
+							canvas.canvas.paint((int) FastMath.round(beginX + 
 									diff * i), beginY + i, colorValue);
 					}
 					else {
@@ -85,9 +87,9 @@ public class Pencil implements PaintTool {
 						}
 						
 						double diff = dy / dx;
-						for(int i = 0; i < Math.abs(dx); i ++) 
+						for(int i = 0; i < FastMath.abs(dx); i ++) 
 							canvas.canvas.paint(beginX + i, 
-									(int) Math.round(beginY + diff * i),  colorValue);
+									(int) FastMath.round(beginY + diff * i),  colorValue);
 					}
 			}
 			this.lastStroke.put(canvas, new PencilTickCounter(x, y, initCount));
