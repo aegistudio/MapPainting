@@ -17,6 +17,8 @@ import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
 import net.aegistudio.mpp.tool.PaintBucket;
 import net.aegistudio.mpp.tool.Pencil;
+import net.aegistudio.mpp.tool.RedoCommand;
+import net.aegistudio.mpp.tool.UndoCommand;
 
 /** Use blackboard pattern in this class. **/
 public class MapPainting extends JavaPlugin {
@@ -69,6 +71,8 @@ public class MapPainting extends JavaPlugin {
 			command.add("chown", new ChangeOwnerCommand());
 			command.add("chmod", new ChangeModeCommand());
 			command.add("list", new ListCanvasCommand());
+			command.add("undo", new UndoCommand());
+			command.add("redo", new RedoCommand());
 			command.add("pigment", new PigmentCommand());
 			command.add(CONFIRM, this.hazard = new ConfirmCommand());
 			

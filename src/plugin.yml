@@ -37,6 +37,12 @@ permissions:
   mpp.pigment:
     description: Grants player to obtain a pigment by RGB color directly.
     default: op
+  mpp.undo:
+    description: Grants player to perform undo on his canvas.
+    default: true
+  mpp.redo:
+    description: Grants player to perform redo on his canvas.
+    default: true
   mpp.manager:
     description: Grants player to manage canvas.
     default: op

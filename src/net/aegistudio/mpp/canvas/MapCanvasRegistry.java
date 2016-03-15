@@ -6,6 +6,7 @@ import java.util.TreeSet;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.map.MapView;
 
+import net.aegistudio.mpp.History;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.Module;
 
@@ -16,10 +17,12 @@ public class MapCanvasRegistry implements Module {
 	public Canvas canvas;
 	public String owner;
 	public TreeSet<String> painter;
+	public History history;
 	
 	public MapCanvasRegistry(String name) {
 		this.name = name;
 		this.painter = new TreeSet<String>();
+		this.history = new History();
 	}
 	
 	public static final String BINDING = "id";

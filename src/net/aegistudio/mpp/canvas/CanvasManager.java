@@ -8,12 +8,19 @@ import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.Module;
 
 public class CanvasManager implements Module {
+	/**
+	 * Stores the relation between mapId / canvas and  name / canvas.
+	 */
 	public final TreeMap<Short, MapCanvasRegistry> idCanvasMap = new TreeMap<Short, MapCanvasRegistry>();
 	public final TreeMap<String, MapCanvasRegistry> nameCanvasMap = new TreeMap<String, MapCanvasRegistry>();
 	
 	public static final String MAP = "map";
-	
 	public CanvasColor color = new CachedCanvasColor(5);
+	
+	/**
+	 * Stores what the player's latest modification made on which canvas.
+	 */
+	public final TreeMap<String, String> latest = new TreeMap<String, String>();
 	
 	@Override
 	public void load(MapPainting painting, ConfigurationSection canvas) throws Exception {
