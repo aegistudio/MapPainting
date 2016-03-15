@@ -39,7 +39,9 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 		y = size - 1 - y;
 		if(y >= size || y < 0) return;
 		
-		pixel[x][y] = (byte) painting.canvas.color.getIndex(color);
+		if(color == null) pixel[x][y] = 0;
+		else pixel[x][y] = (byte) painting.canvas.color.getIndex(color);
+		
 		viewed.clear();
 	}
 	
@@ -49,6 +51,7 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 		y = size - 1 - y;
 		if(y >= size || y < 0) return null;
 		
+		if(pixel[x][y] == 0) return null;
 		return painting.canvas.color.getColor(pixel[x][y]);
 	}
 

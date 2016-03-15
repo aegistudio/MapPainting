@@ -1,6 +1,7 @@
 package net.aegistudio.mpp.tool;
 
 import java.awt.Color;
+import java.util.ArrayList;
 
 import net.aegistudio.mpp.Memoto;
 import net.aegistudio.mpp.canvas.Canvas;
@@ -9,36 +10,50 @@ public class PaintFillMemoto implements Memoto {
 	private final Canvas canvas;
 	private final int i, j;
 	private final Color fillColor;
-	private final String undoMessage;
-	public PaintFillMemoto(Canvas canvas, int i, int j, Color c, String undoMessage) {
+	private final String fillMessage;
+	public PaintFillMemoto(Canvas canvas, int i, int j, Color c, String fillMessage) {
 		this.canvas = canvas;
 		this.i = i; this.j = j;
 		this.fillColor = c;
-		this.undoMessage = undoMessage.replace("$x", Integer.toString(i))
-				.replace("$y", Integer.toString(j))
-				.replace("$r", Integer.toString(c.getRed()))
-				.replace("$g", Integer.toString(c.getGreen()))
-				.replace("$b", Integer.toString(c.getBlue()));
+		this.fillMessage = fillMessage;
 	}
 	
 	private Color lookColor;
+	
+	private ArrayList<Integer> borderX, borderY;
+	
 	@Override
 	public void exec() {
 		lookColor = this.canvas.look(i, j);
-		this.seedFill(canvas, i, j, fillColor, lookColor);
+		if(borderX == null || borderY == null) {
+			this.borderX = new ArrayList<Integer>();
+			this.borderY = new ArrayList<Integer>();
+			this.seedFill(canvas, i, j, fillColor, lookColor, true);
+		}
+		else this.seedFill(canvas, i, j, fillColor, lookColor, false);
 	}
 
 	public String toString() {
-		return undoMessage;
+		if(this.fillMessage == null) return null;
+		return fillMessage.replace("$x", Integer.toString(i))
+				.replace("$y", Integer.toString(j))
+				.replace("$r", Integer.toString(fillColor.getRed()))
+				.replace("$g", Integer.toString(fillColor.getGreen()))
+				.replace("$b", Integer.toString(fillColor.getBlue()));
 	}
 	
 	@Override
 	public void undo() {
 		Color fillColor = this.canvas.look(i, j);
-		this.seedFill(canvas, i, j, lookColor, fillColor);
+		
+		for(int n = 0; n < borderX.size(); n ++) 
+			if(borderX.get(n) != i && borderY.get(n) != j)
+				canvas.paint(borderX.get(n), borderY.get(n), fillColor);
+		
+		this.seedFill(canvas, i, j, lookColor, fillColor, false);
 	}
 	
-	private void seedFill(Canvas canvas, int i, int j, Color c, Color seed) {
+	private void seedFill(Canvas canvas, int i, int j, Color c, Color seed, boolean updateBorder) {
 		if(c == null || seed == null) return;
 		if(c.getRGB() == seed.getRGB()) return;
 		if(!inRange(canvas, i, j)) return;
@@ -61,17 +76,30 @@ public class PaintFillMemoto implements Memoto {
 			canvas.paint(xmax, j, c);
 		}
 		
+		if(updateBorder) {
+			borderX.add(xmin + 1);
+			borderY.add(j);
+			borderX.add(xmax - 1);
+			borderY.add(j);
+		}
+		
 		for(int p = xmin + 1; p < xmax; p ++) {
 			Color up = canvas.look(p, j + 1);
 			if(up != null) {
 				if(up.getRGB() == seed.getRGB())
-					seedFill(canvas, p, j + 1, c, seed);
+					seedFill(canvas, p, j + 1, c, seed, updateBorder);
+			}
+			else if(updateBorder) {
+				borderX.add(p); borderY.add(j);
 			}
 			
 			Color down = canvas.look(p, j - 1);
 			if(down != null) {
 				if(down.getRGB() == seed.getRGB()) 
-					seedFill(canvas, p, j - 1, c, seed);
+					seedFill(canvas, p, j - 1, c, seed, updateBorder);
+			}
+			else if(updateBorder) {
+				borderX.add(p); borderY.add(j);
 			}
 		}
 	}
