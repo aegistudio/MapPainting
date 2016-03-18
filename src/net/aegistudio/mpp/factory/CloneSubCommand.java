@@ -20,6 +20,11 @@ public class CloneSubCommand extends ConcreteCreateSubCommand{
 	
 	@Override
 	protected Canvas create(MapPainting painting, CommandSender sender, String[] arguments) {
+		if(!sender.hasPermission("mpp.create.clone")){
+			sender.sendMessage(painting.create.noCreatePermission);
+			return null;
+		}
+		
 		if(arguments.length == 0) {
 			sender.sendMessage(clonedUnspecified);
 			return null;

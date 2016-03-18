@@ -22,8 +22,12 @@ permissions:
     description: Grants player to create any canvas.
     children:
       mpp.create.normal: true
+      mpp.create.clone: true
   mpp.create.normal:
     description: Grants player to create canvas of type "normal".
+    default: true
+  mpp.create.clone:
+    description: Grants player to create a canvas by cloning existed one.
     default: true
   mpp.chown:
     description: Grants player to change ownership of canvas he owns.
