@@ -1,10 +1,16 @@
 package net.aegistudio.mpp.tool;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 import net.aegistudio.mpp.Memoto;
 import net.aegistudio.mpp.canvas.Canvas;
+
+/**
+ * The paint memoto is not fully revertable.
+ * Will be fixed in the follow versions.
+ * 
+ * @author aegistudio
+ */
 
 public class PaintFillMemoto implements Memoto {
 	private final Canvas canvas;
@@ -18,19 +24,12 @@ public class PaintFillMemoto implements Memoto {
 		this.fillMessage = fillMessage;
 	}
 	
-	private Color lookColor;
-	
-	private ArrayList<Integer> borderX, borderY;
+	private Color seedColor;
 	
 	@Override
 	public void exec() {
-		lookColor = this.canvas.look(i, j);
-		if(borderX == null || borderY == null) {
-			this.borderX = new ArrayList<Integer>();
-			this.borderY = new ArrayList<Integer>();
-			this.seedFill(canvas, i, j, fillColor, lookColor, true);
-		}
-		else this.seedFill(canvas, i, j, fillColor, lookColor, false);
+		seedColor = this.canvas.look(i, j);
+		this.seedFill(canvas, i, j, fillColor, seedColor);
 	}
 
 	public String toString() {
@@ -44,62 +43,44 @@ public class PaintFillMemoto implements Memoto {
 	
 	@Override
 	public void undo() {
-		Color fillColor = this.canvas.look(i, j);
-		
-		for(int n = 0; n < borderX.size(); n ++) 
-			if(borderX.get(n) != i && borderY.get(n) != j)
-				canvas.paint(borderX.get(n), borderY.get(n), fillColor);
-		
-		this.seedFill(canvas, i, j, lookColor, fillColor, false);
+		Color postColor = this.canvas.look(i, j);
+		this.seedFill(canvas, i, j, seedColor, postColor);
 	}
 	
-	private void seedFill(Canvas canvas, int i, int j, Color c, Color seed, boolean updateBorder) {
-		if(c == null || seed == null) return;
-		if(c.getRGB() == seed.getRGB()) return;
-		if(!inRange(canvas, i, j)) return;
+	private void seedFill(Canvas canvas, int x, int y, Color fill, Color seed) {
+		if(fill == null || seed == null) return;
+		if(fill.getRGB() == seed.getRGB()) return;
+		if(!inRange(canvas, x, y)) return;
 		
-		canvas.paint(i, j, c);
+		canvas.paint(x, y, fill);
 		
-		int xmin = i - 1;
+		int xmin = x - 1;
 		for(; xmin >= 0; xmin --) {
-			Color color = canvas.look(xmin, j);
+			Color color = canvas.look(xmin, y);
 			if(color == null) break;
 			if(color.getRGB() != seed.getRGB()) break;
-			canvas.paint(xmin, j, c);
+			canvas.paint(xmin, y, fill);
 		}
 		
-		int xmax = i + 1;
+		int xmax = x + 1;
 		for(; xmax <= canvas.size(); xmax ++) {
-			Color color = canvas.look(xmax, j);
+			Color color = canvas.look(xmax, y);
 			if(color == null) break;
 			if(color.getRGB() != seed.getRGB()) break;
-			canvas.paint(xmax, j, c);
-		}
-		
-		if(updateBorder) {
-			borderX.add(xmin + 1);
-			borderY.add(j);
-			borderX.add(xmax - 1);
-			borderY.add(j);
+			canvas.paint(xmax, y, fill);
 		}
 		
 		for(int p = xmin + 1; p < xmax; p ++) {
-			Color up = canvas.look(p, j + 1);
+			Color up = canvas.look(p, y + 1);
 			if(up != null) {
-				if(up.getRGB() == seed.getRGB())
-					seedFill(canvas, p, j + 1, c, seed, updateBorder);
-			}
-			else if(updateBorder) {
-				borderX.add(p); borderY.add(j);
+				if(up.getRGB() == seed.getRGB()) 
+					seedFill(canvas, p, y + 1, fill, seed);
 			}
 			
-			Color down = canvas.look(p, j - 1);
+			Color down = canvas.look(p, y - 1);
 			if(down != null) {
-				if(down.getRGB() == seed.getRGB()) 
-					seedFill(canvas, p, j - 1, c, seed, updateBorder);
-			}
-			else if(updateBorder) {
-				borderX.add(p); borderY.add(j);
+				if(down.getRGB() == seed.getRGB())
+					seedFill(canvas, p, y - 1, fill, seed);
 			}
 		}
 	}

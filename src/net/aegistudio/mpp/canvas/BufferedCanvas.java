@@ -1,14 +1,14 @@
 package net.aegistudio.mpp.canvas;
 
 import java.awt.Color;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.TreeSet;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
@@ -19,16 +19,29 @@ import net.aegistudio.mpp.MapPainting;
 public class BufferedCanvas extends MapRenderer implements Canvas {
 	public MapPainting painting;
 	public byte[][] pixel;
-	public int size = 128;
+	public int size;
 	public final TreeSet<Integer> viewed 
 		= new TreeSet<Integer>();
+	
+	public BufferedCanvas clone() {
+		BufferedCanvas canvas = new BufferedCanvas();
+		canvas.painting = painting;
+		canvas.size = this.size;
+		canvas.pixel = new byte[size][size];
+		for(int i = 0; i < size; i ++)
+			System.arraycopy(this.pixel[i], 0, canvas.pixel[i], 0, size);
+		return canvas;
+	}
 	
 	@Override
 	public void render(MapView view, MapCanvas canvas, Player player) {
 		if(!viewed.contains(player.getEntityId())) {
-			for(int i = 0; i < size; i ++)
-				for(int j = 0; j < size; j ++)
-					canvas.setPixel(i, j, pixel[i][j]);
+			for(int i = 0; i < 128; i ++)
+				for(int j = 0; j < 128; j ++) {
+					canvas.setPixel(i, j, pixel
+							[(int)(1.0 * i / 128 * size)]
+							[(int)(1.0 * j / 128 * size)]);
+				}
 			viewed.add(player.getEntityId());
 		}
 	}
@@ -66,41 +79,33 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 	}
 	
 	@Override
-	public void load(MapPainting painting, MapCanvasRegistry registry, 
-			ConfigurationSection config) throws Exception {
+	public void load(MapPainting painting, MapCanvasRegistry registry, InputStream file) throws Exception {
+		DataInputStream din = new DataInputStream(file);
+		this.size = din.readShort();
+		
 		this.pixel = new byte[size][size];
 		this.painting = painting;
 		
-		File file = new File(painting.getDataFolder(), registry.name.concat(".mpp"));
-		if(!file.exists()) file.createNewFile();
-		else {
-			GZIPInputStream input 
-				= new GZIPInputStream(new FileInputStream(file));
-			for(int i = 0; i < size; i ++)
-				for(int j = 0; j < size; j ++) {
-					int next = input.read();
-					if(next == -1) break;
-					this.pixel[i][j] = (byte) next;
-				}
-			input.close();
-		}
+		GZIPInputStream input = new GZIPInputStream(file);
+		for(int i = 0; i < size; i ++)
+			for(int j = 0; j < size; j ++) {
+				int next = input.read();
+				if(next == -1) break;
+				this.pixel[i][j] = (byte) next;
+			}
 	}
 
 	@Override
-	public void save(MapPainting painting, MapCanvasRegistry registry, 
-			ConfigurationSection config) throws Exception {
-		File file = new File(painting.getDataFolder(), registry.name.concat(".mpp"));
-		if(!file.exists()) file.createNewFile();
+	public void save(MapPainting painting, MapCanvasRegistry registry, OutputStream file) throws Exception {
+		DataOutputStream dout = new DataOutputStream(file);
+		dout.writeShort(size);
 		
-		GZIPOutputStream output
-			= new GZIPOutputStream(new FileOutputStream(file));
+		GZIPOutputStream output = new GZIPOutputStream(file);
 		for(int i = 0; i < size; i ++) 
 			output.write(this.pixel[i], 0, size);
 		
 		output.finish();
 		output.flush();
-		
-		output.close();
 	}
 
 	@Override

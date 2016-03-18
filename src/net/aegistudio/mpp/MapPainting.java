@@ -13,6 +13,8 @@ import net.aegistudio.mpp.canvas.ChangeOwnerCommand;
 import net.aegistudio.mpp.canvas.CreateCanvasCommand;
 import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
 import net.aegistudio.mpp.canvas.ListCanvasCommand;
+import net.aegistudio.mpp.factory.CloneSubCommand;
+import net.aegistudio.mpp.factory.NormalSubCommand;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
 import net.aegistudio.mpp.tool.PaintBucket;
@@ -28,6 +30,7 @@ public class MapPainting extends JavaPlugin {
 	/** Other modules can register commands to this handle. **/
 	public CompositeHandle command;
 	
+	/** These configurations are used when composite commands need. **/
 	public static final String LISTING_TITLE = "listing";
 	public String listing = "Listing " + ChatColor.BOLD + "subcommands" + ChatColor.RESET 
 			+ " for " + ChatColor.YELLOW + "$prefix" + ChatColor.RESET + ":";
@@ -48,6 +51,9 @@ public class MapPainting extends JavaPlugin {
 	public static final String CONFIRM = "confirm";
 	public ConfirmCommand hazard;
 	
+	/** Other create sub-commands can register and get common configuration from create. **/
+	public CreateCanvasCommand create;
+	
 	/** Other modules can invoke painting to this paint tool **/
 	public PaintToolManager tool;
 	
@@ -66,7 +72,7 @@ public class MapPainting extends JavaPlugin {
 			Configuration config = this.getConfig();
 			this.command = new CompositeHandle();
 
-			command.add("create", new CreateCanvasCommand());
+			command.add("create", create = new CreateCanvasCommand());
 			command.add("destroy", new DestroyCanvasCommand());
 			command.add("chown", new ChangeOwnerCommand());
 			command.add("chmod", new ChangeModeCommand());
@@ -75,6 +81,10 @@ public class MapPainting extends JavaPlugin {
 			command.add("redo", new RedoCommand());
 			command.add("pigment", new PigmentCommand());
 			command.add(CONFIRM, this.hazard = new ConfirmCommand());
+			
+			// Load create commands.
+			this.create.add("normal", new NormalSubCommand());
+			this.create.add("clone", new CloneSubCommand());
 			
 			/*
 			CompositeHandle brush = new CompositeHandle();
