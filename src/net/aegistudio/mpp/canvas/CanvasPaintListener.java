@@ -113,8 +113,8 @@ public class CanvasPaintListener implements Listener {
 		double vp = rotation.v(u, v);
 		u = up + 0.5; v = vp + 0.5;
 		
-		int x = (int)Math.round(u * registry.canvas.size());
-		int y = (int)Math.round(v * registry.canvas.size());
+		int x = (int)(u * registry.canvas.size());
+		int y = (int)(v * registry.canvas.size());
 		
 		// Paint on canvas.
 		if(player.hasPermission("mpp.paint"))
