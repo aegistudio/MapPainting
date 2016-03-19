@@ -9,7 +9,7 @@ import org.bukkit.map.MapRenderer;
 import net.aegistudio.mpp.MapPainting;
 
 public interface Canvas extends Cloneable {
-	public void load(MapPainting painting, MapCanvasRegistry registry, InputStream mppFile) throws Exception;
+	public void load(MapPainting painting, InputStream mppFile) throws Exception;
 	
 	public void paint(int x, int y, Color color);
 	
@@ -21,7 +21,7 @@ public interface Canvas extends Cloneable {
 	
 	public int size();
 	
-	public void save(MapPainting painting, MapCanvasRegistry registry, OutputStream mppFile) throws Exception;
+	public void save(MapPainting painting, OutputStream mppFile) throws Exception;
 	
 	public Canvas clone();
 }

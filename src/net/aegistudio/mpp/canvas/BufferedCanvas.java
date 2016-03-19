@@ -79,7 +79,7 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 	}
 	
 	@Override
-	public void load(MapPainting painting, MapCanvasRegistry registry, InputStream file) throws Exception {
+	public void load(MapPainting painting, InputStream file) throws Exception {
 		DataInputStream din = new DataInputStream(file);
 		this.size = din.readShort();
 		
@@ -96,7 +96,7 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 	}
 
 	@Override
-	public void save(MapPainting painting, MapCanvasRegistry registry, OutputStream file) throws Exception {
+	public void save(MapPainting painting, OutputStream file) throws Exception {
 		DataOutputStream dout = new DataOutputStream(file);
 		dout.writeShort(size);
 		

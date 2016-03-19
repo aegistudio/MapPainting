@@ -1,7 +1,5 @@
 package net.aegistudio.mpp.canvas;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -43,15 +41,8 @@ public class MapCanvasRegistry implements Module {
 		
 		File file = new File(map.getDataFolder(), name.concat(".mpp"));
 		try(FileInputStream input = new FileInputStream(file);
-			DataInputStream din = new DataInputStream(input);) {
-			
-			if(din.readByte() != 'P') throw new Exception("Wrecked file!");
-			if(din.readByte() != 'P') throw new Exception("Wrecked file!");
-			if(din.readByte() != 'M') throw new Exception("Wrecked file!");
-			
-			String canvasClass = din.readUTF();
-			this.canvas = (Canvas) Class.forName(canvasClass).newInstance();
-			this.canvas.load(map, this, input);
+			CanvasMppInputStream cin = new CanvasMppInputStream(input);) {
+			this.canvas = cin.readCanvas(map);
 		}
 		this.add();
 	}
@@ -64,15 +55,8 @@ public class MapCanvasRegistry implements Module {
 		File file = new File(map.getDataFolder(), name.concat(".mpp"));
 		if(!file.exists()) file.createNewFile();
 		try(FileOutputStream output = new FileOutputStream(file);
-			DataOutputStream dout = new DataOutputStream(output);) {
-		
-			dout.writeByte('P');
-			dout.writeByte('P');
-			dout.writeByte('M');
-			dout.writeUTF(this.canvas.getClass().getName());
-			dout.flush();
-			
-			this.canvas.save(map, this, output);
+			CanvasMppOutputStream cout = new CanvasMppOutputStream(output);) {
+			cout.writeCanvas(map, this.canvas);
 		}
 		this.remove();
 	}

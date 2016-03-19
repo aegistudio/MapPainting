@@ -15,10 +15,10 @@ import net.aegistudio.mpp.MapPainting;
 public class WrapCanvas extends MapRenderer implements Canvas {
 	
 	@Override
-	public void load(MapPainting painting, MapCanvasRegistry registry, InputStream input) throws Exception {	}
+	public void load(MapPainting painting, InputStream input) throws Exception {	}
 	
 	@Override
-	public void save(MapPainting painting, MapCanvasRegistry registry, OutputStream output) throws Exception {	}
+	public void save(MapPainting painting, OutputStream output) throws Exception {	}
 	
 	public Canvas underlyingCanvas;
 	
