@@ -8,13 +8,12 @@ import java.io.OutputStream;
 
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
-import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
 import net.aegistudio.mpp.InteractInfo;
 import net.aegistudio.mpp.MapPainting;
 
-public class WrapCanvas extends MapRenderer implements Canvas {
+public class WrapCanvas extends Canvas {
 	
 	@Override
 	public void load(MapPainting painting, InputStream input) throws Exception {
@@ -29,13 +28,13 @@ public class WrapCanvas extends MapRenderer implements Canvas {
 		dout.writeUTF(this.wrapping);
 	}
 	
-	public String wrapping = "";
+	private String wrapping = "";
 	public MapPainting painting;
 	
 	@Override
 	public void paint(InteractInfo interact, Color color) {
 		MapCanvasRegistry wrapped = painting.canvas.nameCanvasMap.get(wrapping);
-		if(wrapped == null) return ;
+		if(wrapped == null) return;
 		if(interact.player != null)
 			if(!wrapped.painter.contains(interact.player.getName())) return;
 		wrapped.canvas.paint(interact, color);
@@ -57,11 +56,6 @@ public class WrapCanvas extends MapRenderer implements Canvas {
 	}
 
 	@Override
-	public MapRenderer getRenderer() {
-		return this;
-	}
-
-	@Override
 	public int size() {
 		MapCanvasRegistry wrapped = painting.canvas.nameCanvasMap.get(wrapping);
 		if(wrapped == null) return 0;
@@ -69,10 +63,12 @@ public class WrapCanvas extends MapRenderer implements Canvas {
 	}
 
 	@Override
-	public void render(MapView arg0, MapCanvas arg1, Player arg2) {
+	public void render(MapView view, MapCanvas canvas, Player player) {
 		MapCanvasRegistry wrapped = painting.canvas.nameCanvasMap.get(wrapping);
-		if(wrapped != null)
-			wrapped.canvas.getRenderer().render(arg0, arg1, arg2);
+		if(wrapped != null) 
+			if(!wrapped.canvas.hasObserver(this)) 
+				repaint();
+		super.render(view, canvas, player);
 	}
 	
 	public WrapCanvas clone() {
@@ -80,5 +76,17 @@ public class WrapCanvas extends MapRenderer implements Canvas {
 		newCanvas.painting = painting;
 		newCanvas.wrapping = wrapping;
 		return newCanvas;
+	}
+	
+	public void setWrapping(String newWrapping) {
+		this.wrapping = newWrapping;
+		this.repaint();
+	}
+
+	@Override
+	protected void subrender(MapView view, MapCanvas canvas, Player player) {
+		MapCanvasRegistry wrapped = painting.canvas.nameCanvasMap.get(wrapping);
+		if(wrapped == null) return;
+		wrapped.canvas.subrender(view, canvas, player);
 	}
 }

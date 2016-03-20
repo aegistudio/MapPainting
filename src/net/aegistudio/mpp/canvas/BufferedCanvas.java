@@ -5,24 +5,20 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.TreeSet;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
-import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
 import net.aegistudio.mpp.InteractInfo;
 import net.aegistudio.mpp.MapPainting;
 
-public class BufferedCanvas extends MapRenderer implements Canvas {
+public class BufferedCanvas extends Canvas {
 	public MapPainting painting;
 	public byte[][] pixel;
 	public int size;
-	public final TreeSet<Integer> viewed 
-		= new TreeSet<Integer>();
 	
 	public BufferedCanvas clone() {
 		BufferedCanvas canvas = new BufferedCanvas();
@@ -35,16 +31,13 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 	}
 	
 	@Override
-	public void render(MapView view, MapCanvas canvas, Player player) {
-		if(!viewed.contains(player.getEntityId())) {
-			for(int i = 0; i < 128; i ++)
-				for(int j = 0; j < 128; j ++) {
-					canvas.setPixel(i, j, pixel
-							[(int)(1.0 * i / 128 * size)]
-							[(int)(1.0 * j / 128 * size)]);
-				}
-			viewed.add(player.getEntityId());
-		}
+	public void subrender(MapView view, MapCanvas canvas, Player player) {
+		for(int i = 0; i < 128; i ++)
+			for(int j = 0; j < 128; j ++) {
+				canvas.setPixel(i, j, pixel
+						[(int)(1.0 * i / 128 * size)]
+						[(int)(1.0 * j / 128 * size)]);
+			}
 	}
 	
 	@Override
@@ -54,10 +47,13 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 		int y = size - 1 - interact.y;
 		if(y >= size || y < 0) return;
 		
+		byte precolor = pixel[x][y];
+		
 		if(color == null) pixel[x][y] = 0;
 		else pixel[x][y] = (byte) painting.canvas.color.getIndex(color);
 		
-		viewed.clear();
+		if(pixel[x][y] != precolor)
+			repaint();
 	}
 	
 	@Override
@@ -73,11 +69,6 @@ public class BufferedCanvas extends MapRenderer implements Canvas {
 	@Override
 	public int size() {
 		return size;
-	}
-
-	@Override
-	public MapRenderer getRenderer() {
-		return this;
 	}
 	
 	@Override

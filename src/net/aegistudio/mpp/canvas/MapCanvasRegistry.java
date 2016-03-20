@@ -62,10 +62,10 @@ public class MapCanvasRegistry implements Module {
 	}
 	
 	public void add() {
-		view.addRenderer(this.canvas.getRenderer());
+		view.addRenderer(this.canvas);
 	}
 	
 	public void remove() {
-		view.removeRenderer(this.canvas.getRenderer());
+		view.removeRenderer(this.canvas);
 	}
 }

@@ -14,7 +14,7 @@ public class WrapSubCommand extends ConcreteCreateSubCommand {
 		WrapCanvas canvas = new WrapCanvas();
 		canvas.painting = painting;
 		if(arguments.length > 0)
-			canvas.wrapping = arguments[0];
+			canvas.setWrapping(arguments[0]);
 		return canvas;
 	}
 }
