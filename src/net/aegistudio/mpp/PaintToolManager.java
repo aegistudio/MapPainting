@@ -35,9 +35,9 @@ public class PaintToolManager implements PaintTool {
 	}
 
 	@Override
-	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, int x, int y) {
+	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, InteractInfo interact) {
 		for(PaintTool tool : toolMap.values()) 
-			if(tool.paint(itemStack, canvas, x, y)) 
+			if(tool.paint(itemStack, canvas, interact)) 
 				return true;
 		return false;
 	}

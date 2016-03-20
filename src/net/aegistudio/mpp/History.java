@@ -8,10 +8,10 @@ import java.util.Stack;
  */
 
 public class History {
-	public Stack<Memoto> backward = new Stack<Memoto>();
-	public Stack<Memoto> forward = new Stack<Memoto>();
+	public Stack<Memento> backward = new Stack<Memento>();
+	public Stack<Memento> forward = new Stack<Memento>();
 	
-	public void add(Memoto memoto) {
+	public void add(Memento memoto) {
 		memoto.exec();
 		this.backward.push(memoto);
 		this.forward.clear();
@@ -24,7 +24,7 @@ public class History {
 	
 	public String undo() {
 		if(backward.isEmpty()) return null;
-		Memoto memoto = backward.pop();
+		Memento memoto = backward.pop();
 		memoto.undo();
 		forward.push(memoto);
 		return memoto.toString();
@@ -32,7 +32,7 @@ public class History {
 	
 	public String redo() {
 		if(forward.isEmpty()) return null;
-		Memoto memoto = forward.pop();
+		Memento memoto = forward.pop();
 		memoto.exec();
 		backward.push(memoto);
 		return memoto.toString();

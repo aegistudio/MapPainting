@@ -43,8 +43,8 @@ public class MapCanvasRegistry implements Module {
 		try(FileInputStream input = new FileInputStream(file);
 			CanvasMppInputStream cin = new CanvasMppInputStream(input);) {
 			this.canvas = cin.readCanvas(map);
+			this.add();
 		}
-		this.add();
 	}
 	
 	public void save(MapPainting map, ConfigurationSection canvas) throws Exception{
@@ -57,8 +57,8 @@ public class MapCanvasRegistry implements Module {
 		try(FileOutputStream output = new FileOutputStream(file);
 			CanvasMppOutputStream cout = new CanvasMppOutputStream(output);) {
 			cout.writeCanvas(map, this.canvas);
+			this.remove();
 		}
-		this.remove();
 	}
 	
 	public void add() {

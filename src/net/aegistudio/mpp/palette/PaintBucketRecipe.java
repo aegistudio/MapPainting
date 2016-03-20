@@ -8,10 +8,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.ChatColor;
 
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.Module;
-import net.md_5.bungee.api.ChatColor;
 
 public class PaintBucketRecipe implements Module {
 	public Color getColor(ItemStack fillBucket) {

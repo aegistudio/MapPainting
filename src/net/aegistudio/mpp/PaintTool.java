@@ -10,5 +10,5 @@ import net.aegistudio.mpp.canvas.MapCanvasRegistry;
  */
 
 public interface PaintTool extends Module {
-	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, int x, int y);
+	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, InteractInfo interact);
 }

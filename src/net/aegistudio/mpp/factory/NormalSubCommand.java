@@ -2,11 +2,11 @@ package net.aegistudio.mpp.factory;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.ChatColor;
 
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.canvas.BufferedCanvas;
 import net.aegistudio.mpp.canvas.Canvas;
-import net.md_5.bungee.api.ChatColor;
 
 public class NormalSubCommand extends ConcreteCreateSubCommand{
 	{ description = "square canvas fully covering the map."; paramList = "[<1~128>]"; }

@@ -2,10 +2,10 @@ package net.aegistudio.mpp.canvas;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.ChatColor;
 
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
-import net.md_5.bungee.api.ChatColor;
 
 public class ListCanvasCommand extends ActualHandle {
 	{	 description = "Listing all canvases you possess."; 	}

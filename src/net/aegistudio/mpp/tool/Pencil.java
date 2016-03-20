@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
+import net.aegistudio.mpp.InteractInfo;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.PaintTool;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
@@ -21,8 +22,8 @@ public class Pencil implements PaintTool {
 	long interval = 1;
 	int initCount = 7;
 	
-	public static final String TIP_MESSAGE = "tipMessage";
-	public String tipMessage = "Tip on pixel [$x, $y] with color ($r, $g, $b).";
+	public static final String TAP_MESSAGE = "tapMessage";
+	public String tapMessage = "Tap on pixel [$x, $y] with color ($r, $g, $b).";
 	
 	public static final String LINE_MESSAGE = "lineMessage";
 	public String lineMessage = "Draw a line from [$x1, $y1] to [$x2, $y2] with color ($r, $g, $b).";
@@ -45,7 +46,7 @@ public class Pencil implements PaintTool {
 			}
 		}, interval, interval);
 		
-		this.tipMessage = painting.getLocale(TIP_MESSAGE, tipMessage, section);
+		this.tapMessage = painting.getLocale(TAP_MESSAGE, tapMessage, section);
 		this.lineMessage = painting.getLocale(LINE_MESSAGE, lineMessage, section);
 	}
 
@@ -53,14 +54,14 @@ public class Pencil implements PaintTool {
 	public void save(MapPainting painting, ConfigurationSection section) throws Exception {	}
 
 	@Override
-	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, int x, int y) {
+	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, InteractInfo interact) {
 		if(itemStack.getType() == Material.INK_SACK) {
 			Color color = painting.palette.dye.getColor(itemStack);
 			PencilTickCounter last = lastStroke.get(canvas);
-			if(last != null) canvas.history.add(new LineDrawingMemoto(canvas.canvas,
-					last.x, last.y, x, y, color, this.lineMessage));
-			else canvas.history.add(new PixelTipMemoto(canvas.canvas, x, y, color, this.tipMessage));
-			this.lastStroke.put(canvas, new PencilTickCounter(x, y, initCount));
+			if(last != null) canvas.history.add(new LineDrawingMemento(canvas.canvas,
+					last.x, last.y, interact.x, interact.y, color, this.lineMessage, interact));
+			else canvas.history.add(new PixelTapMemento(canvas.canvas, interact, color, this.tapMessage));
+			this.lastStroke.put(canvas, new PencilTickCounter(interact.x, interact.y, initCount));
 			
 			return true;
 		}

@@ -1,6 +1,6 @@
 package net.aegistudio.mpp;
 
-public interface Memoto {
+public interface Memento {
 	public void exec();
 	public void undo();
 }

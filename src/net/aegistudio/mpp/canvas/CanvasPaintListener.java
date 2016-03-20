@@ -13,6 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import net.aegistudio.mpp.InteractInfo;
 import net.aegistudio.mpp.MapPainting;
 
 public class CanvasPaintListener implements Listener {
@@ -116,16 +117,20 @@ public class CanvasPaintListener implements Listener {
 		int x = (int)(u * registry.canvas.size());
 		int y = (int)(v * registry.canvas.size());
 		
+		// Calculate block location
+		Location blockLocation = itemFrame.clone().add(-A / 2, 0, -C / 2);
+		
+		InteractInfo interact = new InteractInfo(x, y, player, blockLocation);
+		
 		// Paint on canvas.
 		if(player.hasPermission("mpp.paint"))
 			if(registry.painter.contains(player.getName()))
-				if(painting.tool.paint(player.getItemInHand(), registry, 
-						x, y)) {
+				if(painting.tool.paint(player.getItemInHand(), registry, interact)) {
 					painting.canvas.latest.put(player.getName(), registry.name);
 					return true;
 				}
 		if(player.hasPermission("mpp.interact"))
-			return registry.canvas.interact(x, y, player);
+			return registry.canvas.interact(interact);
 		return false;
 	}
 }

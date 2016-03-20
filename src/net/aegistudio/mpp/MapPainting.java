@@ -15,6 +15,7 @@ import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
 import net.aegistudio.mpp.canvas.ListCanvasCommand;
 import net.aegistudio.mpp.factory.CloneSubCommand;
 import net.aegistudio.mpp.factory.NormalSubCommand;
+import net.aegistudio.mpp.factory.WrapSubCommand;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
 import net.aegistudio.mpp.tool.PaintBucket;
@@ -84,6 +85,7 @@ public class MapPainting extends JavaPlugin {
 			
 			// Load create commands.
 			this.create.add("normal", new NormalSubCommand());
+			this.create.add("wrap", new WrapSubCommand());
 			this.create.add("clone", new CloneSubCommand());
 			
 			/*

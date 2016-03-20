@@ -2,11 +2,11 @@ package net.aegistudio.mpp.tool;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.ChatColor;
 
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
-import net.md_5.bungee.api.ChatColor;
 
 public class UndoCommand extends ActualHandle {
 	{ description = "Undo a unexpected action when you regret."; }

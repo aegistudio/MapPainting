@@ -2,7 +2,8 @@ package net.aegistudio.mpp.tool;
 
 import java.awt.Color;
 
-import net.aegistudio.mpp.Memoto;
+import net.aegistudio.mpp.InteractInfo;
+import net.aegistudio.mpp.Memento;
 import net.aegistudio.mpp.canvas.Canvas;
 
 /**
@@ -12,30 +13,31 @@ import net.aegistudio.mpp.canvas.Canvas;
  * @author aegistudio
  */
 
-public class PaintFillMemoto implements Memoto {
+public class PaintFillMemento implements Memento {
 	private final Canvas canvas;
-	private final int i, j;
 	private final Color fillColor;
 	private final String fillMessage;
-	public PaintFillMemoto(Canvas canvas, int i, int j, Color c, String fillMessage) {
+	private final InteractInfo interact;
+	
+	public PaintFillMemento(Canvas canvas, InteractInfo interact, Color c, String fillMessage) {
 		this.canvas = canvas;
-		this.i = i; this.j = j;
 		this.fillColor = c;
 		this.fillMessage = fillMessage;
+		this.interact = interact;
 	}
 	
 	private Color seedColor;
 	
 	@Override
 	public void exec() {
-		seedColor = this.canvas.look(i, j);
-		this.seedFill(canvas, i, j, fillColor, seedColor);
+		seedColor = this.canvas.look(interact.x, interact.y);
+		this.seedFill(canvas, interact.x, interact.y, fillColor, seedColor);
 	}
 
 	public String toString() {
 		if(this.fillMessage == null) return null;
-		return fillMessage.replace("$x", Integer.toString(i))
-				.replace("$y", Integer.toString(j))
+		return fillMessage.replace("$x", Integer.toString(interact.x))
+				.replace("$y", Integer.toString(interact.y))
 				.replace("$r", Integer.toString(fillColor.getRed()))
 				.replace("$g", Integer.toString(fillColor.getGreen()))
 				.replace("$b", Integer.toString(fillColor.getBlue()));
@@ -43,8 +45,8 @@ public class PaintFillMemoto implements Memoto {
 	
 	@Override
 	public void undo() {
-		Color postColor = this.canvas.look(i, j);
-		this.seedFill(canvas, i, j, seedColor, postColor);
+		Color postColor = this.canvas.look(interact.x, interact.y);
+		this.seedFill(canvas, interact.x, interact.y, seedColor, postColor);
 	}
 	
 	private void seedFill(Canvas canvas, int x, int y, Color fill, Color seed) {
@@ -52,14 +54,14 @@ public class PaintFillMemoto implements Memoto {
 		if(fill.getRGB() == seed.getRGB()) return;
 		if(!inRange(canvas, x, y)) return;
 		
-		canvas.paint(x, y, fill);
+		canvas.paint(interact.reCoordinate(x, y), fill);
 		
 		int xmin = x - 1;
 		for(; xmin >= 0; xmin --) {
 			Color color = canvas.look(xmin, y);
 			if(color == null) break;
 			if(color.getRGB() != seed.getRGB()) break;
-			canvas.paint(xmin, y, fill);
+			canvas.paint(interact.reCoordinate(xmin, y), fill);
 		}
 		
 		int xmax = x + 1;
@@ -67,7 +69,7 @@ public class PaintFillMemoto implements Memoto {
 			Color color = canvas.look(xmax, y);
 			if(color == null) break;
 			if(color.getRGB() != seed.getRGB()) break;
-			canvas.paint(xmax, y, fill);
+			canvas.paint(interact.reCoordinate(xmax, y), fill);
 		}
 		
 		for(int p = xmin + 1; p < xmax; p ++) {
