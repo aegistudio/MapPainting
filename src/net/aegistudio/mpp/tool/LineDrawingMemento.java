@@ -10,7 +10,7 @@ import net.aegistudio.mpp.canvas.Canvas;
 public class LineDrawingMemento implements Memento {
 	private final Canvas canvas;
 	private final int x1, y1, x2, y2;
-	private final Color fillColor;
+	private final Color lineColor;
 	private final String undoMessage;
 	private final Interaction interact;
 	
@@ -18,7 +18,7 @@ public class LineDrawingMemento implements Memento {
 			Color c, String undoMessage, Interaction interact) {
 		this.canvas = canvas;
 		this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
-		this.fillColor = c;
+		this.lineColor = c;
 		this.undoMessage = undoMessage;
 		this.interact = interact;
 	}
@@ -29,9 +29,9 @@ public class LineDrawingMemento implements Memento {
 				.replace("$y1", Integer.toString(y1))
 				.replace("$x2", Integer.toString(x2))
 				.replace("$y2", Integer.toString(y2))
-				.replace("$r", Integer.toString(fillColor.getRed()))
-				.replace("$g", Integer.toString(fillColor.getGreen()))
-				.replace("$b", Integer.toString(fillColor.getBlue()));
+				.replace("$r", Integer.toString(lineColor == null? -1 : lineColor.getRed()))
+				.replace("$g", Integer.toString(lineColor == null? -1 : lineColor.getGreen()))
+				.replace("$b", Integer.toString(lineColor == null? -1 : lineColor.getBlue()));
 	}
 
 	ArrayList<PixelTapMemento> subMemoto;
@@ -60,7 +60,7 @@ public class LineDrawingMemento implements Memento {
 					double diff = dx / dy;
 					for(int i = 0; i < Math.abs(dy); i ++) 
 						this.subMemoto.add(new PixelTapMemento(canvas, interact.reCoordinate((int) Math.round(beginX + 
-								diff * i), beginY + i), fillColor, null));
+								diff * i), beginY + i), lineColor, null));
 				}
 				else {
 					int beginX, beginY;
@@ -77,7 +77,7 @@ public class LineDrawingMemento implements Memento {
 					double diff = dy / dx;
 					for(int i = 0; i < Math.abs(dx); i ++) 
 						this.subMemoto.add(new PixelTapMemento(canvas, interact.reCoordinate(beginX + i,
-								(int) Math.round(beginY + diff * i)), fillColor, null));
+								(int) Math.round(beginY + diff * i)), lineColor, null));
 				}
 		}
 		

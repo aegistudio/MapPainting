@@ -22,9 +22,10 @@ public class CanvasColor {
 	
 	// Actually it can sometimes use some caching control.
 	public int getIndex(Color color) {
+		if(color == null) return 0;
 		int distance = Integer.MAX_VALUE;
 		int picked = 0;
-		for(int i = 0; i < mapColorLookup.length; i ++) {
+		for(int i = 4; i < mapColorLookup.length; i ++) {
 			Color oldColor = mapColorLookup[i];
 			int red = color.getRed() - oldColor.getRed();
 			int green = color.getGreen() - oldColor.getGreen();

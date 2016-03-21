@@ -23,6 +23,7 @@ import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
 import net.aegistudio.mpp.tool.PaintBucket;
 import net.aegistudio.mpp.tool.Pencil;
+import net.aegistudio.mpp.tool.Razor;
 import net.aegistudio.mpp.tool.RedoCommand;
 import net.aegistudio.mpp.tool.UndoCommand;
 
@@ -116,6 +117,7 @@ public class MapPainting extends JavaPlugin {
 			tool = new PaintToolManager();
 			tool.toolMap.put("pencil", new Pencil());
 			tool.toolMap.put("paintBucket", new PaintBucket());
+			tool.toolMap.put("razor", new Razor());
 			if(!config.contains(PAINT_TOOL)) config.createSection(PAINT_TOOL);
 			this.tool.load(this, config.getConfigurationSection(PAINT_TOOL));
 			

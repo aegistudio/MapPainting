@@ -28,16 +28,15 @@ public class PixelTapMemento implements Memento {
 
 	@Override
 	public void undo() {
-		if(oldColor != null)
-			canvas.paint(interact, oldColor);
+		canvas.paint(interact, oldColor);
 	}
 	
 	public String toString() {
 		if(this.undoMessage == null) return null;
 		return undoMessage.replace("$x", Integer.toString(interact.x))
 				.replace("$y", Integer.toString(interact.y))
-				.replace("$r", Integer.toString(newColor.getRed()))
-				.replace("$g", Integer.toString(newColor.getGreen()))
-				.replace("$b", Integer.toString(newColor.getBlue()));
+				.replace("$r", Integer.toString(newColor == null? -1 : newColor.getRed()))
+				.replace("$g", Integer.toString(newColor == null? -1 : newColor.getGreen()))
+				.replace("$b", Integer.toString(newColor == null? -1 : newColor.getBlue()));
 	}
 }
