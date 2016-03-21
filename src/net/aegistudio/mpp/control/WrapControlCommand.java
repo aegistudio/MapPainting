@@ -1,7 +1,10 @@
 package net.aegistudio.mpp.control;
 
+import java.util.TreeSet;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.canvas.CanvasWrapper;
@@ -10,12 +13,21 @@ import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 public class WrapControlCommand extends ConcreteControlCommand {
 	{	description = "change the wrapped canvas of a wrapper.";	paramList = "<newWrapped> [<layer>]";  }
 	public static final String NOT_WRAPPER = "notWrapper";
-	public String notWrapper = ChatColor.RED + "The specified cavas " + ChatColor.AQUA + "$canvasName" 
+	public String notWrapper = ChatColor.RED + "The specified canvas " + ChatColor.AQUA + "$canvasName" 
 			+ ChatColor.RED + " is not a wrapper!";
+	
+	public static final String CANNOT_WRAP = "canontWrap";
+	public String cannotWrap = ChatColor.RED + "Cannot wrap canvas " + ChatColor.AQUA + "$canvasName"
+			+ ChatColor.RED + "! The wrapper will wrap itself!";
+	
+	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
+		super.load(painting, section);
+		this.notWrapper = painting.getLocale(NOT_WRAPPER, notWrapper, section);
+		this.cannotWrap = painting.getLocale(CANNOT_WRAP, cannotWrap, section);
+	}
 	
 	@Override
 	protected void subhandle(MapPainting painting, MapCanvasRegistry canvas, CommandSender sender, String[] arguments) {
-		
 		if(!sender.hasPermission("mpp.control.wrap")) {
 			sender.sendMessage(painting.control.noControlPermission.replace("$canvasName", canvas.name));
 			return;
@@ -36,9 +48,25 @@ public class WrapControlCommand extends ConcreteControlCommand {
 		}
 		
 		if(!(canvas.canvas instanceof CanvasWrapper)) {
-			sender.sendMessage(notWrapper.replace("$canvas", canvas.name));
+			sender.sendMessage(notWrapper.replace("$canvasName", canvas.name));
 			return;
 		}
-		else ((CanvasWrapper)(canvas.canvas)).setWrapping(layer, arguments[0]);
+		else {
+			if(arguments[0].equals(canvas.name)) {
+				sender.sendMessage(cannotWrap.replace("$canvasName", canvas.name));
+				return;
+			}
+			
+			MapCanvasRegistry target = painting.canvas.nameCanvasMap.get(arguments[0]);
+			if(target != null && (target.canvas instanceof CanvasWrapper)) {
+				TreeSet<String> wrapping = new TreeSet<String>();
+				((CanvasWrapper)(target.canvas)).showWrapped(wrapping);
+				if(wrapping.contains(canvas.name)) {
+					sender.sendMessage(cannotWrap.replace("$canvasName", canvas.name));
+					return;
+				}
+			}
+			((CanvasWrapper)(canvas.canvas)).setWrapping(layer, arguments[0]);
+		}
 	}
 }

@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Set;
 
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
@@ -126,5 +127,15 @@ public class WrapCanvas extends Canvas implements CanvasWrapper {
 	protected void subrender(MapView view, MapCanvas canvas, Player player) {
 		if(wrappedCanvas == null) return;
 		wrappedCanvas.canvas.subrender(view, canvas, player);
+	}
+
+	@Override
+	public void showWrapped(Set<String> container) {
+		container.add(wrapping);
+		
+		retrieve();
+		if(this.wrappedCanvas != null && !this.wrappedCanvas.removed())
+			if(this.wrappedCanvas.canvas instanceof CanvasWrapper)
+				((CanvasWrapper) this.wrappedCanvas.canvas).showWrapped(container);
 	}
 }

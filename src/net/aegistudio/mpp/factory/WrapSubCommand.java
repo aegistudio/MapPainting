@@ -13,8 +13,6 @@ public class WrapSubCommand extends ConcreteCreateSubCommand {
 	protected Canvas create(MapPainting painting, CommandSender sender, String[] arguments) {
 		WrapCanvas canvas = new WrapCanvas();
 		canvas.painting = painting;
-		if(arguments.length > 0)
-			canvas.setWrapping(0, arguments[0]);
 		return canvas;
 	}
 }
