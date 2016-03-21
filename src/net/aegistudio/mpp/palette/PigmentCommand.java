@@ -1,7 +1,5 @@
 package net.aegistudio.mpp.palette;
 
-import java.awt.Color;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -11,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
+import net.aegistudio.mpp.color.PseudoColor;
 
 public class PigmentCommand extends ActualHandle {
 	{ description = "Give the player a pigment of specified color."; }
@@ -21,7 +20,7 @@ public class PigmentCommand extends ActualHandle {
 	public String noPigmentPermission = ChatColor.RED + "You don't have permission to issue pigment command.";
 	
 	public static final String INVALID_FORMAT = "invalidFormat";
-	public String invalidFormat = ChatColor.RED + "The color you input is not right! Please enter a integer!";
+	public String invalidFormat = ChatColor.RED + "The color you input is undefined!";
 	
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception{
@@ -33,8 +32,8 @@ public class PigmentCommand extends ActualHandle {
 	
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
-		if(arguments.length != 3) {
-			sender.sendMessage(prefix + " <red> <green> <blue>");
+		if(arguments.length != 1) {
+			sender.sendMessage(prefix + " <color>");
 			return true;
 		}
 		else {
@@ -47,20 +46,25 @@ public class PigmentCommand extends ActualHandle {
 				sender.sendMessage(noPigmentPermission);
 				return true;
 			}
-			int red, green, blue;
+			
+			PseudoColor color = null;
 			try {
-				red = Integer.parseInt(arguments[0]);
-				green = Integer.parseInt(arguments[1]);
-				blue = Integer.parseInt(arguments[2]);
+				color = painting.color.parseColor(arguments[0]);
+				if(color == null) throw new RuntimeException();
 			}
-			catch(Throwable t) {
+			catch(RuntimeException e) {
 				sender.sendMessage(invalidFormat);
-				return true;		
+				return true;
 			}
 			
 			Player player = (Player) sender;
-			ItemStack item = new ItemStack(Material.INK_SACK);
-			painting.palette.dye.setColor(item, new Color(red, green, blue));
+			ItemStack item = null;
+			
+			if(color.color != null) {
+				item = new ItemStack(Material.INK_SACK);
+				painting.palette.dye.setColor(item, color.color);
+			}
+			else item = new ItemStack(Material.SHEARS);
 			player.getInventory().addItem(item);
 			
 			return true;

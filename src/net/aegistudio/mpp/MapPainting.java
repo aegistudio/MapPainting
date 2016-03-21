@@ -13,6 +13,9 @@ import net.aegistudio.mpp.canvas.ChangeOwnerCommand;
 import net.aegistudio.mpp.canvas.CreateCanvasCommand;
 import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
 import net.aegistudio.mpp.canvas.ListCanvasCommand;
+import net.aegistudio.mpp.color.ColorManager;
+import net.aegistudio.mpp.color.ExpertColorParser;
+import net.aegistudio.mpp.color.RgbColorParser;
 import net.aegistudio.mpp.control.ControlCommand;
 import net.aegistudio.mpp.control.TapControlCommand;
 import net.aegistudio.mpp.control.WrapControlCommand;
@@ -68,11 +71,15 @@ public class MapPainting extends JavaPlugin {
 	/** Other modules can invoke palette if you have coloured information **/
 	public PaletteManager palette;
 	
+	/** Other modules can invoke color to parse color expressions.**/
+	public ColorManager color;
+	
 	/** Keyword for configurations **/
 	public static final String CANVAS = "canvas";
 	public static final String COMMAND_LOCALE = "command";
 	public static final String PAINT_TOOL = "tool";
 	public static final String PALETTE = "palette";
+	public static final String COLOR = "color";
 	
 	public void onEnable() {
 		try {
@@ -126,6 +133,13 @@ public class MapPainting extends JavaPlugin {
 			if(!config.contains(PALETTE)) config.createSection(PALETTE);
 			palette.load(this, config.getConfigurationSection(PALETTE));
 			
+			// Load color parsers.
+			color = new ColorManager();
+			color.parsers.put("expert", new ExpertColorParser());
+			color.parsers.put("rgb", new RgbColorParser());
+			if(!config.contains(COLOR)) config.createSection(COLOR);
+			color.load(this, config.getConfigurationSection(COLOR));
+			
 			// Load map.
 			this.canvas = new CanvasManager();
 			if(!config.contains(CANVAS)) config.createSection(CANVAS);
@@ -158,6 +172,9 @@ public class MapPainting extends JavaPlugin {
 			
 			if(!config.contains(PALETTE)) config.createSection(PALETTE);
 			palette.save(this, config.getConfigurationSection(PALETTE));
+			
+			if(!config.contains(COLOR)) config.createSection(COLOR);
+			color.load(this, config.getConfigurationSection(COLOR));
 			
 			config.set(CANVAS, null);
 			if(!config.contains(CANVAS)) config.createSection(CANVAS);
