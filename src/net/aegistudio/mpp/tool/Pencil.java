@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
-import net.aegistudio.mpp.InteractInfo;
+import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.PaintTool;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
@@ -54,7 +54,7 @@ public class Pencil implements PaintTool {
 	public void save(MapPainting painting, ConfigurationSection section) throws Exception {	}
 
 	@Override
-	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, InteractInfo interact) {
+	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, Interaction interact) {
 		if(itemStack.getType() == Material.INK_SACK) {
 			Color color = painting.palette.dye.getColor(itemStack);
 			PencilTickCounter last = lastStroke.get(canvas);

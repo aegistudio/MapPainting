@@ -3,7 +3,7 @@ package net.aegistudio.mpp.tool;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import net.aegistudio.mpp.InteractInfo;
+import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.Memento;
 import net.aegistudio.mpp.canvas.Canvas;
 
@@ -12,10 +12,10 @@ public class LineDrawingMemento implements Memento {
 	private final int x1, y1, x2, y2;
 	private final Color fillColor;
 	private final String undoMessage;
-	private final InteractInfo interact;
+	private final Interaction interact;
 	
 	public LineDrawingMemento(Canvas canvas, int x1, int y1, int x2, int y2, 
-			Color c, String undoMessage, InteractInfo interact) {
+			Color c, String undoMessage, Interaction interact) {
 		this.canvas = canvas;
 		this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
 		this.fillColor = c;

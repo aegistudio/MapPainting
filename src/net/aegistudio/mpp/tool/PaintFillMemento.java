@@ -2,7 +2,7 @@ package net.aegistudio.mpp.tool;
 
 import java.awt.Color;
 
-import net.aegistudio.mpp.InteractInfo;
+import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.Memento;
 import net.aegistudio.mpp.canvas.Canvas;
 
@@ -17,9 +17,9 @@ public class PaintFillMemento implements Memento {
 	private final Canvas canvas;
 	private final Color fillColor;
 	private final String fillMessage;
-	private final InteractInfo interact;
+	private final Interaction interact;
 	
-	public PaintFillMemento(Canvas canvas, InteractInfo interact, Color c, String fillMessage) {
+	public PaintFillMemento(Canvas canvas, Interaction interact, Color c, String fillMessage) {
 		this.canvas = canvas;
 		this.fillColor = c;
 		this.fillMessage = fillMessage;

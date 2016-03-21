@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
 
-import net.aegistudio.mpp.InteractInfo;
+import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 
 public class BufferedCanvas extends Canvas {
@@ -41,7 +41,7 @@ public class BufferedCanvas extends Canvas {
 	}
 	
 	@Override
-	public void paint(InteractInfo interact, Color color) {
+	public void paint(Interaction interact, Color color) {
 		int x = interact.x;
 		if(x >= size || x < 0) return;
 		int y = size - 1 - interact.y;
@@ -102,7 +102,7 @@ public class BufferedCanvas extends Canvas {
 	}
 
 	@Override
-	public boolean interact(InteractInfo info) {
+	public boolean interact(Interaction info) {
 		return false;
 	}
 }

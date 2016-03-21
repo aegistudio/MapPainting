@@ -5,7 +5,7 @@ import java.awt.Color;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
-import net.aegistudio.mpp.InteractInfo;
+import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.PaintTool;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
@@ -26,7 +26,7 @@ public class PaintBucket implements PaintTool {
 	public void save(MapPainting painting, ConfigurationSection section) throws Exception {		}
 
 	@Override
-	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, InteractInfo interact) {
+	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, Interaction interact) {
 		Color color = painting.palette.paintBucket.getColor(itemStack);
 		if(color == null) return false;
 		canvas.history.add(new PaintFillMemento(canvas.canvas, interact, color, fillMessage));

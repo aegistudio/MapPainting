@@ -41,10 +41,10 @@ public class MapCanvasRegistry implements Module {
 		
 		File file = new File(map.getDataFolder(), name.concat(".mpp"));
 		try(FileInputStream input = new FileInputStream(file);
-			CanvasMppInputStream cin = new CanvasMppInputStream(input);) {
+		CanvasMppInputStream cin = new CanvasMppInputStream(input);) {
 			this.canvas = cin.readCanvas(map);
-			this.add();
 		}
+		this.add();
 	}
 	
 	public void save(MapPainting map, ConfigurationSection canvas) throws Exception{
@@ -55,10 +55,10 @@ public class MapCanvasRegistry implements Module {
 		File file = new File(map.getDataFolder(), name.concat(".mpp"));
 		if(!file.exists()) file.createNewFile();
 		try(FileOutputStream output = new FileOutputStream(file);
-			CanvasMppOutputStream cout = new CanvasMppOutputStream(output);) {
+		CanvasMppOutputStream cout = new CanvasMppOutputStream(output);) {
 			cout.writeCanvas(map, this.canvas);
-			this.remove();
 		}
+		this.remove();
 	}
 	
 	public void add() {

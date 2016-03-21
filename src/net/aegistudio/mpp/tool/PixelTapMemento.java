@@ -2,7 +2,7 @@ package net.aegistudio.mpp.tool;
 
 import java.awt.Color;
 
-import net.aegistudio.mpp.InteractInfo;
+import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.Memento;
 import net.aegistudio.mpp.canvas.Canvas;
 
@@ -10,9 +10,9 @@ public class PixelTapMemento implements Memento {
 	private final Canvas canvas;
 	private final Color newColor;
 	private final String undoMessage;
-	private final InteractInfo interact;
+	private final Interaction interact;
 	
-	public PixelTapMemento(Canvas canvas, InteractInfo interact, Color c, String undoMessage) {
+	public PixelTapMemento(Canvas canvas, Interaction interact, Color c, String undoMessage) {
 		this.canvas = canvas;
 		this.newColor = c;
 		this.undoMessage = undoMessage;

@@ -13,6 +13,8 @@ import net.aegistudio.mpp.canvas.ChangeOwnerCommand;
 import net.aegistudio.mpp.canvas.CreateCanvasCommand;
 import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
 import net.aegistudio.mpp.canvas.ListCanvasCommand;
+import net.aegistudio.mpp.control.ControlCommand;
+import net.aegistudio.mpp.control.TapControlCommand;
 import net.aegistudio.mpp.factory.CloneSubCommand;
 import net.aegistudio.mpp.factory.NormalSubCommand;
 import net.aegistudio.mpp.factory.WrapSubCommand;
@@ -55,6 +57,9 @@ public class MapPainting extends JavaPlugin {
 	/** Other create sub-commands can register and get common configuration from create. **/
 	public CreateCanvasCommand create;
 	
+	/** Other control sub-commands can register and get common configuration from control **/
+	public ControlCommand control;
+	
 	/** Other modules can invoke painting to this paint tool **/
 	public PaintToolManager tool;
 	
@@ -80,6 +85,7 @@ public class MapPainting extends JavaPlugin {
 			command.add("list", new ListCanvasCommand());
 			command.add("undo", new UndoCommand());
 			command.add("redo", new RedoCommand());
+			command.add("control", control = new ControlCommand());
 			command.add("pigment", new PigmentCommand());
 			command.add(CONFIRM, this.hazard = new ConfirmCommand());
 			
@@ -88,16 +94,9 @@ public class MapPainting extends JavaPlugin {
 			this.create.add("wrap", new WrapSubCommand());
 			this.create.add("clone", new CloneSubCommand());
 			
-			/*
-			CompositeHandle brush = new CompositeHandle();
-			brush.description = "Control brushes that is to paint strokes on canvas.";
-			this.command.subcommand.put("brush", brush);
+			// Load control commands.
+			this.control.add("tap", new TapControlCommand());
 			
-			CompositeHandle stamp = new CompositeHandle();
-			stamp.description = "Handle stamp which is special tool to paint external images on canvas.";
-			this.command.subcommand.put("stamp", stamp);
-			*/
-
 			if(!config.contains(COMMAND_LOCALE))
 				config.createSection(COMMAND_LOCALE);
 			this.command.load(this, config.getConfigurationSection(COMMAND_LOCALE));

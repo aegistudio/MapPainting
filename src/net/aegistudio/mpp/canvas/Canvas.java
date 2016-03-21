@@ -11,17 +11,17 @@ import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
-import net.aegistudio.mpp.InteractInfo;
+import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 
 public abstract class Canvas extends MapRenderer implements Cloneable {
 	public abstract void load(MapPainting painting, InputStream mppFile) throws Exception;
 
-	public abstract void paint(InteractInfo interact, Color color);
+	public abstract void paint(Interaction interact, Color color);
 
 	public abstract Color look(int x, int y);
 
-	public abstract boolean interact(InteractInfo interact);
+	public abstract boolean interact(Interaction interact);
 
 	public abstract int size();
 

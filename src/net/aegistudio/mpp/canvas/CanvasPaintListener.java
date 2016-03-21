@@ -13,7 +13,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import net.aegistudio.mpp.InteractInfo;
+import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 
 public class CanvasPaintListener implements Listener {
@@ -120,7 +120,7 @@ public class CanvasPaintListener implements Listener {
 		// Calculate block location
 		Location blockLocation = itemFrame.clone().add(-A / 2, 0, -C / 2);
 		
-		InteractInfo interact = new InteractInfo(x, y, player, blockLocation);
+		Interaction interact = new Interaction(x, y, player, blockLocation, itemFrame);
 		
 		// Paint on canvas.
 		if(player.hasPermission("mpp.paint"))

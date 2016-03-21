@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
 
-import net.aegistudio.mpp.InteractInfo;
+import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 
 public class WrapCanvas extends Canvas {
@@ -32,11 +32,11 @@ public class WrapCanvas extends Canvas {
 	public MapPainting painting;
 	
 	@Override
-	public void paint(InteractInfo interact, Color color) {
+	public void paint(Interaction interact, Color color) {
 		MapCanvasRegistry wrapped = painting.canvas.nameCanvasMap.get(wrapping);
 		if(wrapped == null) return;
-		if(interact.player != null)
-			if(!wrapped.painter.contains(interact.player.getName())) return;
+		if(interact.sender != null)
+			if(!wrapped.painter.contains(interact.sender.getName())) return;
 		wrapped.canvas.paint(interact, color);
 	}
 
@@ -48,10 +48,10 @@ public class WrapCanvas extends Canvas {
 	}
 
 	@Override
-	public boolean interact(InteractInfo interact) {
+	public boolean interact(Interaction interact) {
 		MapCanvasRegistry wrapped = painting.canvas.nameCanvasMap.get(wrapping);
 		if(wrapped == null) return false;
-		if(!interact.player.hasPermission("mpp.interact")) return false;
+		if(!interact.sender.hasPermission("mpp.interact")) return false;
 		return wrapped.canvas.interact(interact);
 	}
 
