@@ -21,7 +21,8 @@ public class CanvasMppInputStream extends InputStream implements AutoCloseable {
 		if(din.readByte() != 'M') throw new Exception("Wrecked file!");
 		
 		String canvasClass = din.readUTF();
-		Canvas canvas = (Canvas) Class.forName(canvasClass).newInstance();
+		Canvas canvas = (Canvas) Class.forName(canvasClass)
+				.getConstructor(MapPainting.class).newInstance(painting);
 		canvas.load(painting, this.inputStream);
 		
 		return canvas;

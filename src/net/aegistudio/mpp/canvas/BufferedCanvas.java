@@ -16,13 +16,15 @@ import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 
 public class BufferedCanvas extends Canvas {
-	public MapPainting painting;
+	public BufferedCanvas(MapPainting painting) {
+		super(painting);
+	}
+
 	public byte[][] pixel;
 	public int size;
 	
 	public BufferedCanvas clone() {
-		BufferedCanvas canvas = new BufferedCanvas();
-		canvas.painting = painting;
+		BufferedCanvas canvas = new BufferedCanvas(this.painting);
 		canvas.size = this.size;
 		canvas.pixel = new byte[size][size];
 		for(int i = 0; i < size; i ++)
@@ -77,8 +79,6 @@ public class BufferedCanvas extends Canvas {
 		this.size = din.readShort();
 		
 		this.pixel = new byte[size][size];
-		this.painting = painting;
-		
 		GZIPInputStream input = new GZIPInputStream(file);
 		for(int i = 0; i < size; i ++)
 			for(int j = 0; j < size; j ++) {

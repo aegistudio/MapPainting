@@ -21,6 +21,7 @@ import net.aegistudio.mpp.control.TapControlCommand;
 import net.aegistudio.mpp.control.WrapControlCommand;
 import net.aegistudio.mpp.factory.CloneSubCommand;
 import net.aegistudio.mpp.factory.NormalSubCommand;
+import net.aegistudio.mpp.factory.ScriptSubCommand;
 import net.aegistudio.mpp.factory.WrapSubCommand;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
@@ -102,6 +103,7 @@ public class MapPainting extends JavaPlugin {
 			this.create.add("normal", new NormalSubCommand());
 			this.create.add("wrap", new WrapSubCommand());
 			this.create.add("clone", new CloneSubCommand());
+			this.create.add("script", new ScriptSubCommand());
 			
 			// Load control commands.
 			this.control.add("tap", new TapControlCommand());

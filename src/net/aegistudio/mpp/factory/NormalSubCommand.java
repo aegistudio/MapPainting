@@ -51,9 +51,8 @@ public class NormalSubCommand extends ConcreteCreateSubCommand{
 		
 		byte canvasColor = (byte) painting.canvas.color.getIndex(color);
 				
-		BufferedCanvas canvas = new BufferedCanvas();
+		BufferedCanvas canvas = new BufferedCanvas(painting);
 		canvas.size = size;
-		canvas.painting = painting;
 		canvas.pixel = new byte[canvas.size][canvas.size];
 		for(int i = 0; i < canvas.size; i ++)
 			for(int j = 0; j < canvas.size; j ++)

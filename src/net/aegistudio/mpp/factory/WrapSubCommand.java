@@ -11,8 +11,7 @@ public class WrapSubCommand extends ConcreteCreateSubCommand {
 	
 	@Override
 	protected Canvas create(MapPainting painting, CommandSender sender, String[] arguments) {
-		WrapCanvas canvas = new WrapCanvas();
-		canvas.painting = painting;
+		WrapCanvas canvas = new WrapCanvas(painting);
 		return canvas;
 	}
 }

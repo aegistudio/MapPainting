@@ -15,6 +15,11 @@ import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 
 public abstract class Canvas extends MapRenderer implements Cloneable {
+	public final MapPainting painting;
+	public Canvas(MapPainting painting) {
+		this.painting = painting;
+	}
+	
 	public abstract void load(MapPainting painting, InputStream mppFile) throws Exception;
 
 	public abstract void paint(Interaction interact, Color color);
@@ -28,7 +33,11 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 	public abstract void save(MapPainting painting, OutputStream mppFile) throws Exception;
 	
 	public abstract Canvas clone();
-	
+
+	public void add() {}
+
+	public void remove() {}
+
 	@Override
 	public void render(MapView view, MapCanvas canvas, Player player) {
 		if(!hasViewed(player))

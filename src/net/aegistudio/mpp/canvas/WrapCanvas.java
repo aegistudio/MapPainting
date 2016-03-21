@@ -22,10 +22,12 @@ import net.aegistudio.mpp.MapPainting;
  */
 
 public class WrapCanvas extends Canvas implements CanvasWrapper {
-	
+	public WrapCanvas(MapPainting painting) {
+		super(painting);
+	}
+
 	@Override
 	public void load(MapPainting painting, InputStream input) throws Exception {
-		this.painting = painting;
 		DataInputStream din = new DataInputStream(input);
 		this.setWrapping(0, din.readUTF());
 	}
@@ -35,8 +37,6 @@ public class WrapCanvas extends Canvas implements CanvasWrapper {
 		DataOutputStream dout = new DataOutputStream(output);
 		dout.writeUTF(this.wrapping);
 	}
-	
-	public MapPainting painting;
 	
 	@Override
 	public void paint(Interaction interact, Color color) {
@@ -83,13 +83,12 @@ public class WrapCanvas extends Canvas implements CanvasWrapper {
 	private MapCanvasRegistry wrappedCanvas;
 	
 	public WrapCanvas clone() {
-		WrapCanvas newCanvas = new WrapCanvas();
+		WrapCanvas newCanvas = new WrapCanvas(painting);
 		this.copy(newCanvas);
 		return newCanvas;
 	}
 	
 	protected void copy(WrapCanvas another) {
-		another.painting = painting;
 		another.wrapping = wrapping;
 		another.wrappedCanvas = wrappedCanvas;
 		another.currentCount = currentCount;
