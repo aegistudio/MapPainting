@@ -15,6 +15,7 @@ import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
 import net.aegistudio.mpp.canvas.ListCanvasCommand;
 import net.aegistudio.mpp.control.ControlCommand;
 import net.aegistudio.mpp.control.TapControlCommand;
+import net.aegistudio.mpp.control.WrapControlCommand;
 import net.aegistudio.mpp.factory.CloneSubCommand;
 import net.aegistudio.mpp.factory.NormalSubCommand;
 import net.aegistudio.mpp.factory.WrapSubCommand;
@@ -96,6 +97,7 @@ public class MapPainting extends JavaPlugin {
 			
 			// Load control commands.
 			this.control.add("tap", new TapControlCommand());
+			this.control.add("wrap", new WrapControlCommand());
 			
 			if(!config.contains(COMMAND_LOCALE))
 				config.createSection(COMMAND_LOCALE);

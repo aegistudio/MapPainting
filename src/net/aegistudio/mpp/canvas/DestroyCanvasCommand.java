@@ -91,6 +91,7 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 		
 		painting.canvas.idCanvasMap.remove(canvas.binding);
 		painting.canvas.nameCanvasMap.remove(canvas.name);
+		painting.canvas.count --;
 		
 		sender.sendMessage(unbound.replace("$canvasName", canvas.name));
 	}

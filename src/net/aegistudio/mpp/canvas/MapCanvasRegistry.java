@@ -47,7 +47,8 @@ public class MapCanvasRegistry implements Module {
 		this.add();
 	}
 	
-	public void save(MapPainting map, ConfigurationSection canvas) throws Exception{
+	public void save(MapPainting map, ConfigurationSection canvas) throws Exception {
+		if(removed()) return;
 		canvas.set(BINDING, binding);
 		canvas.set(OWNER, owner);
 		canvas.set(PAINTER, new ArrayList<String>(this.painter));
@@ -65,7 +66,13 @@ public class MapCanvasRegistry implements Module {
 		view.addRenderer(this.canvas);
 	}
 	
+	private boolean removed = false;
 	public void remove() {
 		view.removeRenderer(this.canvas);
+		this.removed = true;
+	}
+	
+	public boolean removed() {
+		return removed;
 	}
 }

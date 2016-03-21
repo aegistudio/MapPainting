@@ -78,6 +78,8 @@ public abstract class ConcreteCreateSubCommand extends ActualHandle implements H
 		
 		painting.canvas.nameCanvasMap.put(canvas.name, canvas);
 		painting.canvas.idCanvasMap.put(canvas.binding, canvas);
+		painting.canvas.count ++;
+		
 		sender.sendMessage(painting.create.bound.replace("$canvasName", canvas.name));
 	}
 	

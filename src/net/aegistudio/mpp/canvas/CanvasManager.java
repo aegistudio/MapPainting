@@ -13,6 +13,7 @@ public class CanvasManager implements Module {
 	 */
 	public final TreeMap<Short, MapCanvasRegistry> idCanvasMap = new TreeMap<Short, MapCanvasRegistry>();
 	public final TreeMap<String, MapCanvasRegistry> nameCanvasMap = new TreeMap<String, MapCanvasRegistry>();
+	public int count = 0;
 	
 	public static final String MAP = "map";
 	public CanvasColor color = new CachedCanvasColor(5);
@@ -34,6 +35,7 @@ public class CanvasManager implements Module {
 			
 			idCanvasMap.put(entry.binding, entry);
 			nameCanvasMap.put(entry.name, entry);
+			count ++;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
