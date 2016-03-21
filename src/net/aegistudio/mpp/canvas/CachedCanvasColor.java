@@ -15,6 +15,7 @@ public class CachedCanvasColor extends CanvasColor {
 	}
 	
 	public int getIndex(Color color) {
+		if(color == null) return 0;
 		int rgbValue = color.getRGB();
 		int hashed = Math.abs(rgbValue % this.color.length);
 		if(this.color[hashed] == rgbValue)	{

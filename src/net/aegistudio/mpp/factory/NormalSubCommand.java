@@ -2,6 +2,9 @@ package net.aegistudio.mpp.factory;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+
+import java.awt.Color;
+
 import org.bukkit.ChatColor;
 
 import net.aegistudio.mpp.MapPainting;
@@ -9,11 +12,10 @@ import net.aegistudio.mpp.canvas.BufferedCanvas;
 import net.aegistudio.mpp.canvas.Canvas;
 
 public class NormalSubCommand extends ConcreteCreateSubCommand{
-	{ description = "square canvas fully covering the map."; paramList = "[<1~128>]"; }
+	{ description = "square canvas fully covering the map."; paramList = "[<1~128>] [<background>]"; }
 	
 	public static final String INVALID_FORMAT = "invalidFormat";
-	public String invalidFormat = ChatColor.RED + 
-			"The canvas size you input is not in valid format, please input an integer!";
+	public String invalidFormat = ChatColor.RED + "You input is not in valid format!";
 	
 	public static final String OUT_OF_RANGE = "outOfRange";
 	public String outOfRange = ChatColor.RED + 
@@ -29,23 +31,33 @@ public class NormalSubCommand extends ConcreteCreateSubCommand{
 		int size = 128;
 		if(arguments.length > 0) 
 			try { size = Integer.parseInt(arguments[0]); }
-		catch(Throwable e) {
-			sender.sendMessage(invalidFormat);
-			return null;
-		}
+			catch(Throwable e) {
+				sender.sendMessage(invalidFormat);
+				return null;
+			}
 		
 		if(size < 1 || size > 128) {
 			sender.sendMessage(outOfRange);
 			return null;
 		}
 		
+		Color color = Color.WHITE;
+		if(arguments.length > 1) 
+			try { color = painting.color.parseColor(arguments[1]).color; }
+			catch(Throwable e) {
+				sender.sendMessage(invalidFormat);
+				return null;
+			}
+		
+		byte canvasColor = (byte) painting.canvas.color.getIndex(color);
+				
 		BufferedCanvas canvas = new BufferedCanvas();
 		canvas.size = size;
 		canvas.painting = painting;
 		canvas.pixel = new byte[canvas.size][canvas.size];
 		for(int i = 0; i < canvas.size; i ++)
 			for(int j = 0; j < canvas.size; j ++)
-				canvas.pixel[i][j] = (byte)0x22;
+				canvas.pixel[i][j] = canvasColor;
 		return canvas;
 	}
 	
