@@ -76,6 +76,7 @@ public class ScriptCanvas extends Canvas {
 		
 		filename = din.readUTF();
 		language = din.readUTF();
+		graphic.read(din);
 		callback.read(din);
 		cassette = (TreeMap<String, Object>) Token.COMPOSITE.parse(din, engine);
 		
@@ -89,6 +90,7 @@ public class ScriptCanvas extends Canvas {
 		
 		dout.writeUTF(filename);
 		dout.writeUTF(language);
+		graphic.write(dout);
 		callback.write(dout);
 		Token.COMPOSITE.persist(dout, engine, cassette);
 		

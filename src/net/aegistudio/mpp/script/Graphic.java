@@ -1,6 +1,9 @@
 package net.aegistudio.mpp.script;
 
 import java.awt.Color;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
@@ -40,5 +43,15 @@ public class Graphic {
 	
 	public void repaint() {
 		this.canvas.repaint();
+	}
+	
+	public void read(DataInputStream din) throws IOException {
+		for(int i = 0; i < 128; i ++) din.readFully(this.pixel[i]);
+		din.readByte();	// Inteded for extension.
+	}
+	
+	public void write(DataOutputStream dout) throws IOException {
+		for(int i = 0; i < 128; i ++) dout.write(this.pixel[i]);
+		dout.writeByte(Token.UNDEFINED.ordinal()); // Intended for extension.
 	}
 }
