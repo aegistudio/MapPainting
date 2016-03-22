@@ -1,5 +1,7 @@
 package net.aegistudio.mpp.script;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import javax.script.Invocable;
@@ -36,14 +38,14 @@ public class Callback {
 	 * Where x, y is the point that the player touches, while player who touches the canvas.
 	 */
 	public void hotspot(String group, String handle, int x1, int y1, int x2, int y2) {
-		this.group(group).hotspot.put(handle, new Region(x1, y1, x2, y2));
+		this.group(group).hotspot(handle, x1, y1, x2, y2);
 	}
 
 	/**
 	 * Functions registered to tick should match the parameter list of ().
 	 */
 	public void tick(String group, String handle) {
-		this.group(group).tick.add(handle);
+		this.group(group).tick(handle);
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class Callback {
 	 * Where out is the former state, and in is the new state.
 	 */
 	public void entry(String group, String handle) {
-		this.group(group).entry.add(handle);
+		this.group(group).entry(handle);
 	}
 
 	/**
@@ -59,7 +61,7 @@ public class Callback {
 	 * Where out is the former state, and in is the new state.
 	 */
 	public void exit(String group, String handle) {
-		this.group(group).exit.add(handle);
+		this.group(group).exit(handle);
 	}
 	
 	/**
@@ -110,29 +112,45 @@ public class Callback {
 		else if(prestate.equals(poststate)) return;
 		
 		if(this.script != null) {
-			for(String exit : this.currentCallback.exit) try {
-				this.script.invokeFunction(exit, prestate, poststate);
-			} catch(Throwable t) { t.printStackTrace(); }
-			
-			for(String entry : this.currentCallback.entry) try {
-				this.script.invokeFunction(entry, prestate, poststate);
-			} catch(Throwable t) { t.printStackTrace(); }
+			this.currentCallback.exitTrigger(script, prestate, poststate);
+			this.currentCallback = this.group(poststate);
+			this.currentCallback.entryTrigger(script, prestate, poststate);
 		}
 	}
 	
-	public void tickTrigger() {
-		if(this.script != null) {
-			for(String tick : this.currentCallback.tick) try {
-				this.script.invokeFunction(tick);
-			} catch(Throwable t) { t.printStackTrace(); }
-		}
+	void tickTrigger() {
+		this.currentCallback.tickTrigger(script);
 	}
 	
-	public void tapTrigger(int x, int y, CommandSender who) {
-		if(this.script != null) {
-			for(Entry<String, Region> tap : this.currentCallback.hotspot.entrySet()) try {
-				if(tap.getValue().inside(x, y)) this.script.invokeFunction(tap.getKey(), x, y, who);
-			} catch(Throwable t) { t.printStackTrace(); }
+	void tapTrigger(int x, int y, CommandSender who) {
+		this.currentCallback.tapTrigger(script, x, y, who);
+	}
+	
+	public void read(DataInputStream input) throws Exception {
+		this.nullCallback.read(input);
+		
+		this.groupCallback.clear();
+		int entryCount = input.readInt();
+		for(int i = 0; i < entryCount; i ++) {
+			String entry = input.readUTF();
+			this.group(entry).read(input);
 		}
+		
+		this.currentState = null;
+		if(input.readBoolean()) this.currentState = input.readUTF();
+		this.currentCallback = this.group(currentState);
+	}
+	
+	public void write(DataOutputStream output) throws Exception {
+		this.nullCallback.write(output);
+		
+		output.writeInt(this.groupCallback.size());
+		for(Entry<String, SubCallback> engine : this.groupCallback.entrySet()) {
+			output.writeUTF(engine.getKey());
+			engine.getValue().write(output);
+		}
+		
+		output.writeBoolean(currentState != null);
+		if(currentState != null) output.writeUTF(currentState);
 	}
 }

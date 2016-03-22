@@ -19,7 +19,7 @@ public enum Token {
 	},
 	BOOLEAN {
 		@Override
-		public Object parse(DataInputStream input, ScriptEngine engine) throws IOException {
+		public Boolean parse(DataInputStream input, ScriptEngine engine) throws IOException {
 			return input.readBoolean();
 		}
 
@@ -30,7 +30,7 @@ public enum Token {
 	},
 	INTEGER {
 		@Override
-		public Object parse(DataInputStream input, ScriptEngine engine) throws IOException {
+		public Integer parse(DataInputStream input, ScriptEngine engine) throws IOException {
 			return input.readInt();
 		}
 
@@ -41,7 +41,7 @@ public enum Token {
 	},
 	LONG {
 		@Override
-		public Object parse(DataInputStream input, ScriptEngine engine) throws IOException {
+		public Long parse(DataInputStream input, ScriptEngine engine) throws IOException {
 			return input.readLong();
 		}
 
@@ -52,7 +52,7 @@ public enum Token {
 	},
 	DOUBLE {
 		@Override
-		public Object parse(DataInputStream input, ScriptEngine engine) throws Exception {
+		public Double parse(DataInputStream input, ScriptEngine engine) throws Exception {
 			return input.readDouble();
 		}
 
@@ -63,7 +63,7 @@ public enum Token {
 	},
 	STRING {
 		@Override
-		public Object parse(DataInputStream input, ScriptEngine engine) throws Exception {
+		public String parse(DataInputStream input, ScriptEngine engine) throws Exception {
 			return input.readUTF();
 		}
 
@@ -86,7 +86,7 @@ public enum Token {
 	},
 	COMPOSITE {
 		@Override
-		public Object parse(DataInputStream input, ScriptEngine engine) throws Exception {
+		public Map<String, Object> parse(DataInputStream input, ScriptEngine engine) throws Exception {
 			Map<String, Object> composite = new TreeMap<String, Object>();
 			int size = input.readInt();
 			for(int i = 0; i < size; i ++) {

@@ -1,17 +1,22 @@
 package net.aegistudio.mpp.script;
 
 import java.awt.Color;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.TreeMap;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import javax.script.Bindings;
+import javax.script.Compilable;
 import javax.script.Invocable;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
-import javax.script.ScriptEngineManager;
 
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
@@ -32,44 +37,63 @@ public class ScriptCanvas extends Canvas {
 		super(painting);
 	}
 
+	public String filename;
+	public String language;
+	
 	public Graphic graphic = new Graphic(this);
 	public Callback callback = new Callback();
-	public Cassette casette = new Cassette();
+	public TreeMap<String, Object> cassette = new TreeMap<String, Object>();
 	
 	public static ScriptEngineFactory factory;
 	public ScriptEngine engine;
 	
-	public void setScript(String filename) throws Exception {
-		if(factory == null) {
-			for(ScriptEngineFactory sf : new ScriptEngineManager().getEngineFactories())
-				if(sf.getLanguageName().equals("ECMAScript")) {
-					factory = sf;
-					break;
-				}
-		}
-		this.engine = factory.getScriptEngine();
+	public void setScript() throws Exception {
+		this.engine = ScriptEnginePool.factories.get(language).getScriptEngine();
 		
 		Bindings binding = engine.createBindings();
 		binding.put("graphic", this.graphic); binding.put("g", this.graphic);
 		binding.put("callback", this.callback); binding.put("i", this.callback);
-		binding.put("casette", this.casette); binding.put("c", this.casette);
+		binding.put("casette", this.cassette); binding.put("c", this.cassette);
 		
 		binding.put("plugin", this.painting);
 		binding.put("server", this.painting.getServer());
 		engine.setBindings(binding, ScriptContext.ENGINE_SCOPE);
-		engine.eval(new FileReader(new File(painting.getDataFolder(), filename)));
+		
+		FileReader reader = new FileReader(new File(painting.getDataFolder(), filename));
+		
+		if(engine instanceof Compilable)
+			((Compilable) engine).compile(reader).eval();
+		else engine.eval(reader);
 		
 		callback.setScript((Invocable)engine);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void load(MapPainting painting, InputStream mppFile) throws Exception {
+		GZIPInputStream gzip = new GZIPInputStream(mppFile);
+		DataInputStream din = new DataInputStream(gzip);
 		
+		filename = din.readUTF();
+		language = din.readUTF();
+		callback.read(din);
+		cassette = (TreeMap<String, Object>) Token.COMPOSITE.parse(din, engine);
+		
+		this.setScript();
 	}
 	
 	@Override
 	public void save(MapPainting painting, OutputStream mppFile) throws Exception {
+		GZIPOutputStream gzip = new GZIPOutputStream(mppFile);
+		DataOutputStream dout = new DataOutputStream(gzip);
 		
+		dout.writeUTF(filename);
+		dout.writeUTF(language);
+		callback.write(dout);
+		Token.COMPOSITE.persist(dout, engine, cassette);
+		
+		gzip.finish();
+		gzip.flush();
 	}
 
 	public void reboot() throws Exception {

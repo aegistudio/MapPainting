@@ -7,17 +7,18 @@ import net.aegistudio.mpp.canvas.Canvas;
 import net.aegistudio.mpp.script.ScriptCanvas;
 
 public class ScriptSubCommand extends ConcreteCreateSubCommand {
-	{ description = "create a javascript-based canvas."; paramList = "<js>"; }
+	{ description = "a incredible canvas run on a script."; paramList = "<script> [<language>]"; }
 	@Override
 	protected Canvas create(MapPainting painting, CommandSender sender, String[] arguments) {
 		if(arguments.length == 0) {
 			return null;
 		}
 		else {
-			String script = arguments[0];
 			try {
 				ScriptCanvas canvas = new ScriptCanvas(painting);
-				canvas.setScript(script);
+				canvas.filename = arguments[0];
+				canvas.language = arguments.length > 1? arguments[1] : "ECMAScript";
+				canvas.setScript();
 				canvas.reboot();
 				return canvas;
 			}
