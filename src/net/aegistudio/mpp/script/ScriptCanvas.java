@@ -34,7 +34,7 @@ public class ScriptCanvas extends Canvas {
 
 	public Graphic graphic = new Graphic(this);
 	public Callback callback = new Callback();
-	public Casette casette = new Casette();
+	public Cassette casette = new Cassette();
 	
 	public static ScriptEngineFactory factory;
 	public ScriptEngine engine;
