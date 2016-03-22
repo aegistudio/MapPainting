@@ -22,7 +22,7 @@ public class EcmaArrayToken implements ArrayToken {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object index(ScriptEngine engine, Object array, int index) {
-		return ((Map<Integer, Object>)array).get(index);
+		return ((Map<Integer, Object>)array).get(Integer.toString(index));
 	}
 
 	@Override

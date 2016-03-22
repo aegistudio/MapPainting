@@ -47,9 +47,12 @@ public class ScriptCanvas extends Canvas {
 	public static ScriptEngineFactory factory;
 	public ScriptEngine engine;
 	
+	public void setLanguage(String language) {
+		this.language = language;
+		this.engine = ScriptEnginePool.factories.get(language).getScriptEngine();		
+	}
+	
 	public void setScript() throws Exception {
-		this.engine = ScriptEnginePool.factories.get(language).getScriptEngine();
-		
 		Bindings binding = engine.createBindings();
 		binding.put("graphic", this.graphic); binding.put("g", this.graphic);
 		binding.put("callback", this.callback); binding.put("i", this.callback);
@@ -76,6 +79,8 @@ public class ScriptCanvas extends Canvas {
 		
 		filename = din.readUTF();
 		language = din.readUTF();
+		this.setLanguage(language);
+		
 		graphic.read(din);
 		callback.read(din);
 		cassette = (TreeMap<String, Object>) Token.COMPOSITE.parse(din, engine);

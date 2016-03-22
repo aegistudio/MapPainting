@@ -17,7 +17,7 @@ public class ScriptSubCommand extends ConcreteCreateSubCommand {
 			try {
 				ScriptCanvas canvas = new ScriptCanvas(painting);
 				canvas.filename = arguments[0];
-				canvas.language = arguments.length > 1? arguments[1] : "ECMAScript";
+				canvas.setLanguage(arguments.length > 1? arguments[1] : "ECMAScript");
 				canvas.setScript();
 				canvas.reboot();
 				return canvas;

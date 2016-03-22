@@ -38,7 +38,7 @@ public class Graphic {
 	public void subrender(MapView view, MapCanvas canvas, Player player) {
 		for(int i = 0; i < 128; i ++)
 			for(int j = 0; j < 128; j ++)
-				canvas.setPixel(i, j, pixel[i][j]);
+				canvas.setPixel(i, 127 - j, pixel[i][j]);
 	}
 	
 	public void repaint() {
