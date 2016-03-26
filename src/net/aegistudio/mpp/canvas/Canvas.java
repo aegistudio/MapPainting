@@ -23,7 +23,7 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 	public abstract void load(MapPainting painting, InputStream mppFile) throws Exception;
 
 	public abstract void paint(Interaction interact, Color color);
-
+	
 	public abstract Color look(int x, int y);
 
 	public abstract boolean interact(Interaction interact);
@@ -40,7 +40,7 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 
 	@Override
 	public void render(MapView view, MapCanvas canvas, Player player) {
-		if(!hasViewed(player))
+		if(!hasViewed(player)) 
 			subrender(view, canvas, player);
 	}
 	

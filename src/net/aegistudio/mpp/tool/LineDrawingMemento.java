@@ -5,9 +5,13 @@ import java.util.ArrayList;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.Memento;
+import net.aegistudio.mpp.algo.DdaLineGenerator;
+import net.aegistudio.mpp.algo.LineGenerator;
+import net.aegistudio.mpp.algo.Paintable;
 import net.aegistudio.mpp.canvas.Canvas;
 
-public class LineDrawingMemento implements Memento {
+public class LineDrawingMemento implements Memento, Paintable {
+	private final LineGenerator line = new DdaLineGenerator();
 	private final Canvas canvas;
 	private final int x1, y1, x2, y2;
 	private final Color lineColor;
@@ -39,46 +43,7 @@ public class LineDrawingMemento implements Memento {
 	public void exec() {
 		if(subMemoto == null) {
 			this.subMemoto = new ArrayList<PixelTapMemento>();
-			
-			double dy = y2 - y1;
-			double dx = x2 - x1;
-			
-			// Using dda.
-			if(dx != 0 || dy != 0) 
-				if(Math.abs(dy) >= Math.abs(dx)) {
-					int beginX, beginY;
-					
-					if(dy <= 0) {
-						beginX = x2;
-						beginY = y2;
-					}
-					else {
-						beginX = x1;
-						beginY = y1;
-					}
-					
-					double diff = dx / dy;
-					for(int i = 0; i < Math.abs(dy); i ++) 
-						this.subMemoto.add(new PixelTapMemento(canvas, interact.reCoordinate((int) Math.round(beginX + 
-								diff * i), beginY + i), lineColor, null));
-				}
-				else {
-					int beginX, beginY;
-					
-					if(dx <= 0) {
-						beginX = x2;
-						beginY = y2;
-					}
-					else {
-						beginX = x1;
-						beginY = y1;
-					}
-					
-					double diff = dy / dx;
-					for(int i = 0; i < Math.abs(dx); i ++) 
-						this.subMemoto.add(new PixelTapMemento(canvas, interact.reCoordinate(beginX + i,
-								(int) Math.round(beginY + diff * i)), lineColor, null));
-				}
+			line.line(this, x1, x2, y1, y2);
 		}
 		
 		for(Memento memoto : this.subMemoto)
@@ -90,5 +55,21 @@ public class LineDrawingMemento implements Memento {
 		if(this.subMemoto != null)
 			for(Memento memoto : this.subMemoto)
 				memoto.undo();
+	}
+
+	@Override
+	public int size() {
+		return canvas.size();
+	}
+
+	@Override
+	public void set(int x, int y) {
+		this.subMemoto.add(new PixelTapMemento(canvas, 
+				interact.reCoordinate(x, y), lineColor, null));
+	}
+
+	@Override
+	public Color get(int x, int y) {
+		return canvas.look(x, y);
 	}
 }

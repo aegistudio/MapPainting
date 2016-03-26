@@ -9,24 +9,41 @@ import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
 
-public class Graphic {
+import net.aegistudio.mpp.algo.Paintable;
+
+public class Graphic implements Paintable {
 	private ScriptCanvas canvas;
 	public Graphic(ScriptCanvas canvas) {
 		this.canvas = canvas;
 	}
 	
 	public byte[][] pixel = new byte[128][128];
-	public void clear(Color clearColor) {
-		byte value = (byte) canvas.painting.canvas.color.getIndex(clearColor);
+
+	public byte color;
+	public void color(Color color) {
+		this.color = (byte) canvas.painting.canvas.color.getIndex(color);
+	}
+	
+	public void clear() {
 		for(int i = 0; i < 128; i ++)
 			for(int j = 0; j < 128; j ++)
-				pixel[i][j] = value;
+				pixel[i][j] = color;
+	}
+	
+	public void clear(Color clearColor) {
+		this.color(clearColor);
+		this.clear();
+	}
+
+	public void set(int x, int y) {
+		if(x >= 128 || x < 0) return;
+		if(y >= 128 || y < 0) return;
+		pixel[x][y] = color;
 	}
 	
 	public void set(int x, int y, Color color) {
-		if(x >= 128 || x < 0) return;
-		if(y >= 128 || y < 0) return;
-		pixel[x][y] = (byte) canvas.painting.canvas.color.getIndex(color);
+		this.color(color);
+		this.set(x, y);
 	}
 	
 	public Color get(int x, int y) {
@@ -53,5 +70,10 @@ public class Graphic {
 	public void write(DataOutputStream dout) throws IOException {
 		for(int i = 0; i < 128; i ++) dout.write(this.pixel[i]);
 		dout.writeByte(Token.UNDEFINED.ordinal()); // Intended for extension.
+	}
+
+	@Override
+	public int size() {
+		return 128;
 	}
 }

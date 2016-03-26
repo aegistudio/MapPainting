@@ -4,6 +4,9 @@ import java.awt.Color;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.Memento;
+import net.aegistudio.mpp.algo.CanvasAdapter;
+import net.aegistudio.mpp.algo.FillGenerator;
+import net.aegistudio.mpp.algo.ScanFloodFillGenerator;
 import net.aegistudio.mpp.canvas.Canvas;
 
 /**
@@ -14,6 +17,8 @@ import net.aegistudio.mpp.canvas.Canvas;
  */
 
 public class PaintFillMemento implements Memento {
+	private final FillGenerator fill = new ScanFloodFillGenerator();
+	
 	private final Canvas canvas;
 	private final Color fillColor;
 	private final String fillMessage;
@@ -31,7 +36,7 @@ public class PaintFillMemento implements Memento {
 	@Override
 	public void exec() {
 		seedColor = this.canvas.look(interact.x, interact.y);
-		this.seedFill(canvas, interact.x, interact.y, fillColor, seedColor);
+		fill.fill(new CanvasAdapter(interact, fillColor, canvas), interact.x, interact.y, fillColor);
 	}
 
 	public String toString() {
@@ -45,53 +50,6 @@ public class PaintFillMemento implements Memento {
 	
 	@Override
 	public void undo() {
-		Color postColor = this.canvas.look(interact.x, interact.y);
-		this.seedFill(canvas, interact.x, interact.y, seedColor, postColor);
-	}
-	
-	private void seedFill(Canvas canvas, int x, int y, Color fill, Color seed) {
-		if(fill == null || seed == null) return;
-		if(fill.getRGB() == seed.getRGB()) return;
-		if(!inRange(canvas, x, y)) return;
-		
-		canvas.paint(interact.reCoordinate(x, y), fill);
-		
-		int xmin = x - 1;
-		for(; xmin >= 0; xmin --) {
-			Color color = canvas.look(xmin, y);
-			if(color == null) break;
-			if(color.getRGB() != seed.getRGB()) break;
-			canvas.paint(interact.reCoordinate(xmin, y), fill);
-		}
-		
-		int xmax = x + 1;
-		for(; xmax <= canvas.size(); xmax ++) {
-			Color color = canvas.look(xmax, y);
-			if(color == null) break;
-			if(color.getRGB() != seed.getRGB()) break;
-			canvas.paint(interact.reCoordinate(xmax, y), fill);
-		}
-		
-		for(int p = xmin + 1; p < xmax; p ++) {
-			Color up = canvas.look(p, y + 1);
-			if(up != null) {
-				if(up.getRGB() == seed.getRGB()) 
-					seedFill(canvas, p, y + 1, fill, seed);
-			}
-			
-			Color down = canvas.look(p, y - 1);
-			if(down != null) {
-				if(down.getRGB() == seed.getRGB())
-					seedFill(canvas, p, y - 1, fill, seed);
-			}
-		}
-	}
-	
-	private boolean inRange(Canvas c, int i, int j) {
-		if(i < 0) return false;
-		if(j < 0) return false;
-		if(i >= c.size()) return false;
-		if(j >= c.size()) return false;
-		return true;
+		fill.fill(new CanvasAdapter(interact, seedColor, canvas), interact.x, interact.y, seedColor);
 	}
 }
