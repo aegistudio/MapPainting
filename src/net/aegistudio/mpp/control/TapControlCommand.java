@@ -36,7 +36,7 @@ public class TapControlCommand extends ConcreteControlCommand {
 			return;
 		}
 		
-		Interaction interaction = new Interaction(x, y, sender, null, null);
+		Interaction interaction = new Interaction(x, y, sender, null, null, false);
 		canvas.history.add(new PixelTapMemento(canvas.canvas, interaction, new Color(r, g, b), paramList));
 	}
 }

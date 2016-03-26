@@ -125,7 +125,7 @@ public class ScriptCanvas extends Canvas {
 
 	@Override
 	public boolean interact(Interaction interact) {
-		this.callback.tapTrigger(interact.x, interact.y, interact.sender);
+		this.callback.tapTrigger(interact.x, interact.y, interact.sender, interact.rightHanded);
 		return true;
 	}
 

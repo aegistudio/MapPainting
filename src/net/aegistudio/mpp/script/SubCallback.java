@@ -61,10 +61,10 @@ public class SubCallback {
 		} catch(Throwable t) { t.printStackTrace(); }
 	}
 	
-	void tapTrigger(Invocable script, int x, int y, CommandSender who) {
+	void tapTrigger(Invocable script, int x, int y, CommandSender who, boolean rightHanded) {
 		if(script != null) {
 			for(Entry<String, Region> tap : hotspot.entrySet()) try {
-				if(tap.getValue().inside(x, y)) script.invokeFunction(tap.getKey(), x, y, who);
+				if(tap.getValue().inside(x, y)) script.invokeFunction(tap.getKey(), x, y, rightHanded);
 			} catch(Throwable t) { t.printStackTrace(); }
 		}
 	}

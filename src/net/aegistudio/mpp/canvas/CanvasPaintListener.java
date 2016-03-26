@@ -10,6 +10,8 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -23,6 +25,23 @@ public class CanvasPaintListener implements Listener {
 	}
 	
 	@EventHandler
+	public void onAttack(EntityDamageByEntityEvent attack) {
+		if(!(attack.getEntity() instanceof ItemFrame)) return;
+		if(!(attack.getDamager() instanceof Player)) return;
+		
+		ItemFrame itemFrame = (ItemFrame) attack.getEntity();
+		if(itemFrame.getItem().getType() != Material.MAP) return;
+		short mapId = itemFrame.getItem().getDurability();
+		
+		MapCanvasRegistry registry = painting.canvas.idCanvasMap.get(mapId);
+		if(registry == null) return;
+		
+		Player player = (Player) attack.getDamager();
+		if(manipulate(itemFrame, registry, player, false))
+			attack.setCancelled(true);
+	}
+	
+	@EventHandler
 	public void onInteract(PlayerInteractEvent interact) {
 		if(interact.getClickedBlock() == null) return;
 		BlockFace blockFace = interact.getBlockFace();
@@ -32,7 +51,6 @@ public class CanvasPaintListener implements Listener {
 			.getNearbyEntities(interact.getClickedBlock()
 					.getLocation().add(0.5, 0.5, 0.5)
 						.add(blockFace.getModX(), 0, blockFace.getModZ()), 0.5, 0.5, 0.5);
-		
 		for(Entity entity : entities) 
 				if(entity instanceof ItemFrame){
 			ItemFrame itemFrame = (ItemFrame) entity;
@@ -41,7 +59,8 @@ public class CanvasPaintListener implements Listener {
 			MapCanvasRegistry registry = painting.canvas.idCanvasMap.get(mapId);
 			if(registry == null) break;
 			
-			if(manipulate(itemFrame, registry, interact.getPlayer())) 
+			if(manipulate(itemFrame, registry, interact.getPlayer(), 
+					interact.getAction() == Action.RIGHT_CLICK_AIR || interact.getAction() == Action.RIGHT_CLICK_BLOCK)) 
 				interact.setCancelled(true);
 			break;
 		}
@@ -56,13 +75,13 @@ public class CanvasPaintListener implements Listener {
 			MapCanvasRegistry registry = painting.canvas.idCanvasMap.get(mapId);
 			if(registry == null) return;
 			
-			if(manipulate(itemFrame, registry, interact.getPlayer()))
+			if(manipulate(itemFrame, registry, interact.getPlayer(), true))
 				interact.setCancelled(true);
 		}
 	}
 	
 	@SuppressWarnings("deprecation")
-	public boolean manipulate(ItemFrame itemFrameEntity, MapCanvasRegistry registry, Player player) {
+	public boolean manipulate(ItemFrame itemFrameEntity, MapCanvasRegistry registry, Player player, boolean rightClicked) {
 		// Calculate looking direction.
 		Location itemFrame = itemFrameEntity.getLocation();
 		Location playerEyePos = player.getLocation().add(0, player.getEyeHeight(), 0);
@@ -120,7 +139,7 @@ public class CanvasPaintListener implements Listener {
 		// Calculate block location
 		Location blockLocation = itemFrame.clone().add(-A / 2, 0, -C / 2);
 		
-		Interaction interact = new Interaction(x, y, player, blockLocation, itemFrame);
+		Interaction interact = new Interaction(x, y, player, blockLocation, itemFrame, rightClicked);
 		
 		// Paint on canvas.
 		if(player.hasPermission("mpp.paint"))

@@ -122,8 +122,8 @@ public class Callback {
 		this.currentCallback.tickTrigger(script);
 	}
 	
-	void tapTrigger(int x, int y, CommandSender who) {
-		this.currentCallback.tapTrigger(script, x, y, who);
+	void tapTrigger(int x, int y, CommandSender who, boolean rightHanded) {
+		this.currentCallback.tapTrigger(script, x, y, who, rightHanded);
 	}
 	
 	public void read(DataInputStream input) throws Exception {
