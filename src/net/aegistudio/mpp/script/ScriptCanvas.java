@@ -21,6 +21,7 @@ import javax.script.ScriptEngineFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
@@ -38,7 +39,6 @@ public class ScriptCanvas extends Canvas {
 	}
 
 	public String filename;
-	public String language;
 	
 	public Graphic graphic = new Graphic(this);
 	public Callback callback = new Callback();
@@ -47,9 +47,19 @@ public class ScriptCanvas extends Canvas {
 	public static ScriptEngineFactory factory;
 	public ScriptEngine engine;
 	
-	public void setLanguage(String language) {
-		this.language = language;
-		this.engine = ScriptEnginePool.factories.get(language).getScriptEngine();		
+	public BukkitRunnable refresh = new BukkitRunnable() {
+		public void run() {
+			callback.tickTrigger();
+		}
+	};
+	
+	public void setEngine() throws UnsupportedException{
+		if(this.engine == null) {
+			String language = filename.substring(filename.lastIndexOf('.') + 1);
+			ScriptEngineFactory factory = ScriptEnginePool.factories.get(language);
+			if(factory == null) throw new UnsupportedException(language);
+			this.engine = factory.getScriptEngine();
+		}
 	}
 	
 	public void setScript() throws Exception {
@@ -78,8 +88,7 @@ public class ScriptCanvas extends Canvas {
 		DataInputStream din = new DataInputStream(gzip);
 		
 		filename = din.readUTF();
-		language = din.readUTF();
-		this.setLanguage(language);
+		this.setEngine();
 		
 		graphic.read(din);
 		callback.read(din);
@@ -94,7 +103,6 @@ public class ScriptCanvas extends Canvas {
 		DataOutputStream dout = new DataOutputStream(gzip);
 		
 		dout.writeUTF(filename);
-		dout.writeUTF(language);
 		graphic.write(dout);
 		callback.write(dout);
 		Token.COMPOSITE.persist(dout, engine, cassette);
@@ -103,8 +111,8 @@ public class ScriptCanvas extends Canvas {
 		gzip.flush();
 	}
 
-	public void reboot() throws Exception {
-		((Invocable)engine).invokeFunction("main");
+	public void reboot(String[] arguments) throws Exception {
+		((Invocable)engine).invokeFunction("main", (Object[])arguments);
 	}
 	
 	@Override
@@ -130,14 +138,17 @@ public class ScriptCanvas extends Canvas {
 	public Canvas clone() {
 		return null;
 	}
-
-	public void render(MapView view, MapCanvas canvas, Player player) {
-		this.callback.tickTrigger();
-		super.render(view, canvas, player);
-	}
 	
 	@Override
 	protected void subrender(MapView view, MapCanvas canvas, Player player) {
 		this.graphic.subrender(view, canvas, player);
+	}
+	
+	public void add() {
+		refresh.runTaskTimer(painting, 1, 1);
+	}
+	
+	public void remove() {
+		refresh.cancel();
 	}
 }

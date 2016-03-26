@@ -10,6 +10,7 @@ public class ScriptEnginePool {
 	public static final TreeMap<String, ScriptEngineFactory> factories = new TreeMap<String, ScriptEngineFactory>();
 	static {
 		for(ScriptEngineFactory factory : manager.getEngineFactories())
-			factories.put(factory.getLanguageName(), factory);
+			for(String extension : factory.getExtensions())
+				factories.put(extension, factory);
 	}
 }
