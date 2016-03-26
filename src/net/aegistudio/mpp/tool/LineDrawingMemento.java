@@ -43,7 +43,7 @@ public class LineDrawingMemento implements Memento, Paintable {
 	public void exec() {
 		if(subMemoto == null) {
 			this.subMemoto = new ArrayList<PixelTapMemento>();
-			line.line(this, x1, x2, y1, y2);
+			line.line(this, x1, y1, x2, y2);
 		}
 		
 		for(Memento memoto : this.subMemoto)

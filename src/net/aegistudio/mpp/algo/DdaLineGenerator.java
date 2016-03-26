@@ -3,7 +3,7 @@ package net.aegistudio.mpp.algo;
 public class DdaLineGenerator implements LineGenerator {
 	
 	@Override
-	public void line(Paintable p, int x1, int x2, int y1, int y2) {
+	public void line(Paintable p, int x1, int y1, int x2, int y2) {
 		double dy = y2 - y1;
 		double dx = x2 - x1;
 		
@@ -22,7 +22,7 @@ public class DdaLineGenerator implements LineGenerator {
 				}
 				
 				double diff = dx / dy;
-				for(int i = 0; i < Math.abs(dy); i ++) 
+				for(int i = 0; i <= Math.abs(dy); i ++) 
 					p.set((int) Math.round(beginX + diff * i), beginY + i);
 			}
 			else {
@@ -38,7 +38,7 @@ public class DdaLineGenerator implements LineGenerator {
 				}
 				
 				double diff = dy / dx;
-				for(int i = 0; i < Math.abs(dx); i ++) 
+				for(int i = 0; i <= Math.abs(dx); i ++) 
 					p.set(beginX + i, (int) Math.round(beginY + diff * i));
 			}
 	}

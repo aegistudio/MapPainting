@@ -21,10 +21,17 @@ import javax.script.ScriptEngineFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
+import org.bukkit.map.MinecraftFont;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
+import net.aegistudio.mpp.algo.CharacterGenerator;
+import net.aegistudio.mpp.algo.DdaLineGenerator;
+import net.aegistudio.mpp.algo.FillGenerator;
+import net.aegistudio.mpp.algo.LineGenerator;
+import net.aegistudio.mpp.algo.ScanFloodFillGenerator;
+import net.aegistudio.mpp.algo.SpriteCharGenerator;
 import net.aegistudio.mpp.canvas.Canvas;
 
 /**
@@ -64,12 +71,22 @@ public class ScriptCanvas extends Canvas {
 	
 	public void setScript() throws Exception {
 		Bindings binding = engine.createBindings();
+		// Load basics.
 		binding.put("graphic", this.graphic); binding.put("g", this.graphic);
 		binding.put("callback", this.callback); binding.put("i", this.callback);
 		binding.put("casette", this.cassette); binding.put("c", this.cassette);
 		
+		// Load algorithms.
+		TreeMap<String, Object> algorithm = new TreeMap<String, Object>();
+		algorithm.put("line", (LineGenerator)new DdaLineGenerator());
+		algorithm.put("fill", (FillGenerator)new ScanFloodFillGenerator());
+		algorithm.put("char", (CharacterGenerator)new SpriteCharGenerator(MinecraftFont.Font));
+		binding.put("algorihtm", algorithm); binding.put("a", algorithm);
+		
+		// Load others.
 		binding.put("plugin", this.painting);
 		binding.put("server", this.painting.getServer());
+		
 		engine.setBindings(binding, ScriptContext.ENGINE_SCOPE);
 		
 		FileReader reader = new FileReader(new File(painting.getDataFolder(), filename));
