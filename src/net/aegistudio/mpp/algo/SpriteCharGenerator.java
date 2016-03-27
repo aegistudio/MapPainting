@@ -23,9 +23,9 @@ public class SpriteCharGenerator implements CharacterGenerator {
 	}
 
 	@Override
-	public int chargen(Paintable p, int x, int y, char c) {
+	public int chargen(Paintable p, int x, int y, float scale, char c) {
 		CharacterSprite sprite = font.getChar(c);
-		this.chargen(p, x, y, sprite.getWidth(), sprite.getHeight(), c);
-		return sprite.getWidth();
+		this.chargen(p, x, y, (int)(sprite.getWidth() * scale), (int)(sprite.getHeight() * scale), c);
+		return (int) (sprite.getWidth() * scale);
 	}
 }

@@ -114,6 +114,7 @@ public class Callback {
 		if(this.script != null) {
 			this.currentCallback.exitTrigger(script, prestate, poststate);
 			this.currentCallback = this.group(poststate);
+			this.currentState = poststate;
 			this.currentCallback.entryTrigger(script, prestate, poststate);
 		}
 	}
