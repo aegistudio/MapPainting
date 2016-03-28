@@ -2,10 +2,10 @@ package net.aegistudio.mpp.algo;
 
 import org.bukkit.map.MapFont;
 
-public class MidAlignStringGenerator implements StringGenerator {
+public class RightAlignStringGenerator implements StringGenerator {
 	MapFont font;
 	StringLineGenerator generator;
-	public MidAlignStringGenerator(StringLineGenerator lgen, MapFont font) {
+	public RightAlignStringGenerator(StringLineGenerator lgen, MapFont font) {
 		this.font = font;
 		this.generator = lgen;
 	}
@@ -15,7 +15,7 @@ public class MidAlignStringGenerator implements StringGenerator {
 		int totalLength = 0;
 		for(char ch : content.toCharArray())
 			totalLength += ((font.getChar(ch).getWidth() * scale) + 1);
-		generator.string(p, x - (totalLength >> 1), y, scale, content);
+		generator.string(p, x - totalLength, y, scale, content);
 		return totalLength;
 	}
 }

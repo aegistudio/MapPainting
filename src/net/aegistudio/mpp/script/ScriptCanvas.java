@@ -31,6 +31,7 @@ import net.aegistudio.mpp.algo.DdaLineGenerator;
 import net.aegistudio.mpp.algo.FillGenerator;
 import net.aegistudio.mpp.algo.LineGenerator;
 import net.aegistudio.mpp.algo.MidAlignStringGenerator;
+import net.aegistudio.mpp.algo.RightAlignStringGenerator;
 import net.aegistudio.mpp.algo.ScanFloodFillGenerator;
 import net.aegistudio.mpp.algo.SpriteCharGenerator;
 import net.aegistudio.mpp.algo.StringGenerator;
@@ -87,6 +88,8 @@ public class ScriptCanvas extends Canvas {
 		TreeMap<String, StringGenerator> stringGenerators = new TreeMap<String, StringGenerator>();
 		stringGenerators.put("left", (StringGenerator)new StringLineGenerator((CharacterGenerator) algorithm.get("char")));
 		stringGenerators.put("center", (StringGenerator)new MidAlignStringGenerator(
+				(StringLineGenerator) stringGenerators.get("left"), MinecraftFont.Font));
+		stringGenerators.put("right", (StringGenerator)new RightAlignStringGenerator(
 				(StringLineGenerator) stringGenerators.get("left"), MinecraftFont.Font));
 		algorithm.put("string", stringGenerators);
 		
