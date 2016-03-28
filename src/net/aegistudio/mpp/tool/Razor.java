@@ -15,12 +15,7 @@ public class Razor extends Pencil {
 	@Override
 	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, Interaction interact) {
 		if(itemStack.getType() == Material.SHEARS) {
-			PencilTickCounter last = lastStroke.get(canvas);
-			if(last != null) canvas.history.add(new LineDrawingMemento(canvas.canvas,
-					last.x, last.y, interact.x, interact.y, null, this.lineMessage, interact));
-			else canvas.history.add(new PixelTapMemento(canvas.canvas, interact, null, this.tapMessage));
-			this.lastStroke.put(canvas, new PencilTickCounter(interact.x, interact.y, initCount));
-			
+			super.pencilPaint(interact, canvas, null);
 			return true;
 		}
 		return false;

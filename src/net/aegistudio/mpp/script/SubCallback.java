@@ -64,7 +64,7 @@ public class SubCallback {
 	void tapTrigger(Invocable script, int x, int y, CommandSender who, boolean rightHanded) {
 		if(script != null) {
 			for(Entry<String, Region> tap : hotspot.entrySet()) try {
-				if(tap.getValue().inside(x, y)) script.invokeFunction(tap.getKey(), x, y, rightHanded);
+				if(tap.getValue().inside(x, y)) script.invokeFunction(tap.getKey(), x, y, who, rightHanded);
 			} catch(Throwable t) { t.printStackTrace(); }
 		}
 	}

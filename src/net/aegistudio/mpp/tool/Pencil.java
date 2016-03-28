@@ -1,12 +1,13 @@
 package net.aegistudio.mpp.tool;
 
 import java.awt.Color;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.aegistudio.mpp.Interaction;
@@ -15,8 +16,8 @@ import net.aegistudio.mpp.PaintTool;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 
 public class Pencil implements PaintTool {
-	public HashMap<MapCanvasRegistry, PencilTickCounter> lastStroke 
-		= new HashMap<MapCanvasRegistry, PencilTickCounter>();
+	public TreeMap<Integer, PencilTickCounter> lastStroke 
+		= new TreeMap<Integer, PencilTickCounter>();
 	public MapPainting painting;
 	
 	long interval = 1;
@@ -35,10 +36,10 @@ public class Pencil implements PaintTool {
 		painting.getServer().getScheduler().scheduleSyncRepeatingTask(painting, new Runnable() {
 			@Override
 			public void run() {
-				Iterator<Entry<MapCanvasRegistry, PencilTickCounter>> 
+				Iterator<Entry<Integer, PencilTickCounter>> 
 					counter = lastStroke.entrySet().iterator();
 				while(counter.hasNext()) {
-					Entry<MapCanvasRegistry, PencilTickCounter> current = counter.next();
+					Entry<Integer, PencilTickCounter> current = counter.next();
 					current.getValue().count --;
 					if(current.getValue().count <= 0)
 						counter.remove();
@@ -57,14 +58,26 @@ public class Pencil implements PaintTool {
 	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, Interaction interact) {
 		if(itemStack.getType() == Material.INK_SACK) {
 			Color color = painting.palette.dye.getColor(itemStack);
-			PencilTickCounter last = lastStroke.get(canvas);
-			if(last != null) canvas.history.add(new LineDrawingMemento(canvas.canvas,
-					last.x, last.y, interact.x, interact.y, color, this.lineMessage, interact));
-			else canvas.history.add(new PixelTapMemento(canvas.canvas, interact, color, this.tapMessage));
-			this.lastStroke.put(canvas, new PencilTickCounter(interact.x, interact.y, initCount));
-			
+			this.pencilPaint(interact, canvas, color);
 			return true;
 		}
 		return false;
+	}
+	
+	protected void pencilPaint(Interaction interact, MapCanvasRegistry canvas, Color color) {
+		Integer entityId = this.getTickCounterKey(interact);
+		
+		PencilTickCounter last = this.lastStroke.get(entityId);
+		if(last != null && last.canvas == canvas) canvas.history.add(new LineDrawingMemento(canvas.canvas,
+				last.interaction.x, last.interaction.y, interact.x, interact.y, color, this.lineMessage, interact));
+		else canvas.history.add(new PixelTapMemento(canvas.canvas, interact, color, this.tapMessage));
+		
+		if(entityId != null) this.lastStroke.put(entityId, new PencilTickCounter(interact, canvas, initCount));
+	}
+	
+	protected Integer getTickCounterKey(Interaction interact) {
+		if(interact.sender != null && interact.sender instanceof Player)
+			return ((Player)interact.sender).getEntityId();
+		return null;
 	}
 }
