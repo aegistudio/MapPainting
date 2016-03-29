@@ -71,7 +71,7 @@ public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
 			}
 		}
 		else {
-			registry = painting.canvas.nameCanvasMap.get(arguments[1]);
+			registry = painting.getCanvas(arguments[1], sender);
 			if(registry == null) {
 				sender.sendMessage(canvasNotExists.replace("$canvasName", arguments[1]));
 				return true;
@@ -112,6 +112,8 @@ public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
 		sender.sendMessage(ownershipChanged
 				.replace("$canvasName", state.registry.name)
 				.replace("$newOwner", state.newOwner));
+		painting.ackHistory(state.registry, sender);
+		
 		Player newOwner = painting.getServer().getPlayer(state.newOwner);
 		if(newOwner != null) newOwner.sendMessage(ownershipGained
 				.replace("$canvasName", state.registry.name));

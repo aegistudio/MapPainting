@@ -113,6 +113,7 @@ public class ChangeModeCommand extends ActualHandle {
 			}
 		
 		sender.sendMessage(painterModified.replace("$canvasName", registry.name));
+		painting.ackHistory(registry, sender);
 		return true;
 	}
 	

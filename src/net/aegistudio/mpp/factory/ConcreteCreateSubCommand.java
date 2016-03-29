@@ -81,6 +81,7 @@ public abstract class ConcreteCreateSubCommand extends ActualHandle implements H
 		painting.canvas.count ++;
 		
 		sender.sendMessage(painting.create.bound.replace("$canvasName", canvas.name));
+		painting.ackHistory(canvas, sender);
 	}
 	
 	protected abstract Canvas create(MapPainting painting, CommandSender sender, String[] arguments);

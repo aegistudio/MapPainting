@@ -31,7 +31,7 @@ public class CloneSubCommand extends ConcreteCreateSubCommand{
 		}
 		else {
 			String name = arguments[0];
-			MapCanvasRegistry entry = painting.canvas.nameCanvasMap.get(name);
+			MapCanvasRegistry entry = painting.getCanvas(name, sender);
 			if(entry == null) {
 				sender.sendMessage(canvasNotExists.replace("$canvasName", name));
 				return null;

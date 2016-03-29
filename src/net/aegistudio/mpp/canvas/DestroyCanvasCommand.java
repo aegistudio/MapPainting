@@ -53,7 +53,7 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 			sender.sendMessage(prefix + " <name>");
 		}
 		else {
-			MapCanvasRegistry canvas = painting.canvas.nameCanvasMap.get(arguments[0]);
+			MapCanvasRegistry canvas = painting.getCanvas(arguments[0], sender);
 			if(canvas == null) { 
 				sender.sendMessage(canvasNotExists.replace("$canvasName", arguments[0]));
 				return true;
