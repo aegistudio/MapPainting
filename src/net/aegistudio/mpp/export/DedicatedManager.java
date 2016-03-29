@@ -16,10 +16,7 @@ public class DedicatedManager {
 	public final Map<String, PluginCanvasFactory<?>> factory = new TreeMap<String, PluginCanvasFactory<?>>();
 	public final Map<String, Set<CanvasDelegator<?>>> watchlist = new TreeMap<String, Set<CanvasDelegator<?>>>();
 	
-	public <T extends PluginCanvas> void register(String identifier, PluginCanvasFactory<T> factory) throws NamingOccupiedException {
-		if(this.factory.containsKey(identifier)) 
-			throw new NamingOccupiedException("factory", identifier);
-		
+	public <T extends PluginCanvas> void register(String identifier, PluginCanvasFactory<T> factory) {	
 		this.factory.put(identifier, factory);
 		for(CanvasDelegator delegator : 
 			Collections.synchronizedSet(this.watchlist(identifier))) {
@@ -48,7 +45,7 @@ public class DedicatedManager {
 			Collections.synchronizedSet(this.watchlist(identifier))) {
 			
 			if(!delegator.getRegistry().removed())
-				canvases.put(delegator.getRegistry().name, (T) delegator.getDelegatedInstance());
+				canvases.put(delegator.getRegistry().name, (T) delegator.canvasInstance);
 		}
 		return canvases;
 	}

@@ -25,13 +25,23 @@ public class CanvasMppOutputStream extends OutputStream implements AutoCloseable
 	
 	public void writeCanvas(MapPainting painting, Canvas canvas) throws Exception {
 		DataOutputStream dout = new DataOutputStream(outputStream);
-			
-		dout.writeByte('P');
-		dout.writeByte('P');
-		dout.writeByte('M');
-		dout.writeUTF(canvas.getClass().getName());
+		this.writeHeader();
+		this.writeClass(canvas);
 		dout.flush();
 	
 		canvas.save(painting, outputStream);
+	}
+	
+	public void writeHeader() throws IOException {
+		DataOutputStream dout = new DataOutputStream(outputStream);
+		
+		dout.writeByte('P');
+		dout.writeByte('P');
+		dout.writeByte('M');
+	}
+	
+	public void writeClass(Canvas canvas) throws IOException {
+		DataOutputStream dout = new DataOutputStream(outputStream);
+		dout.writeUTF(canvas.getClass().getName());
 	}
 }

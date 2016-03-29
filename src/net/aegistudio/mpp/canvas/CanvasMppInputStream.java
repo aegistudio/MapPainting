@@ -14,18 +14,27 @@ public class CanvasMppInputStream extends InputStream implements AutoCloseable {
 	}
 	
 	public Canvas readCanvas(MapPainting painting) throws Exception {
+		this.readHeader();
+		
+		Canvas canvas = (Canvas)readClass()
+				.getConstructor(MapPainting.class).newInstance(painting);
+		canvas.load(painting, this.inputStream);
+		
+		return canvas;
+	}
+	
+	public void readHeader() throws Exception {
 		DataInputStream din = new DataInputStream(inputStream);
 		
 		if(din.readByte() != 'P') throw new Exception("Wrecked file!");
 		if(din.readByte() != 'P') throw new Exception("Wrecked file!");
 		if(din.readByte() != 'M') throw new Exception("Wrecked file!");
-		
-		String canvasClass = din.readUTF();
-		Canvas canvas = (Canvas) Class.forName(canvasClass)
-				.getConstructor(MapPainting.class).newInstance(painting);
-		canvas.load(painting, this.inputStream);
-		
-		return canvas;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Class<? extends Canvas> readClass() throws Exception {
+		DataInputStream din = new DataInputStream(inputStream);
+		return  (Class<? extends Canvas>) Class.forName(din.readUTF());
 	}
 	
 	@Override

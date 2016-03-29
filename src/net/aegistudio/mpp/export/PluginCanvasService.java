@@ -23,7 +23,7 @@ public interface PluginCanvasService {
 	 * @param factory the canvas factory instance.
 	 * @throws NamingOccupiedException thrown when the identifier has already been registered.
 	 */
-	public <T extends PluginCanvas> void register(Plugin thiz, String identifier, PluginCanvasFactory<T> factory) throws NamingOccupiedException;
+	public <T extends PluginCanvas> void register(Plugin thiz, String identifier, PluginCanvasFactory<T> factory);
 	
 	/**
 	 * Get all canvases that belongs to the same identifier.
@@ -40,10 +40,11 @@ public interface PluginCanvasService {
 	 * @param mapid the id of the map to be bound. Will throw conflict exception when already exists.
 	 * @param owner the owner of the canvas. Only the plugin could manipulate it when null.
 	 * @param name the name of the canvas. Will throw conflict exception when already exists.
-	 * @param canvas the canvas instance.
+	 * 
+	 * @return the canvas instance.
 	 */
-	public <T extends PluginCanvas> void create(Plugin thiz, String identifier, short mapid, 
-			CommandSender owner, String name, T canvas) throws NamingOccupiedException ;
+	public <T extends PluginCanvas> T create(Plugin thiz, String identifier, short mapid, 
+			CommandSender owner, String name) throws NamingOccupiedException ;
 	
 	/**
 	 * Destroy a canvas.

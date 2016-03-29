@@ -25,15 +25,19 @@ public final class PluginCanvasManager implements PluginCanvasService{
 		this.mapPainting = mapPainting;
 	}
 
-	protected DedicatedManager plugin(Plugin plugin) {
-		DedicatedManager manager = pluginMap.get(plugin.getName());
-		if(manager == null) pluginMap.put(plugin.getName(), manager = new DedicatedManager());
+	protected DedicatedManager plugin(String plugin) {
+		DedicatedManager manager = pluginMap.get(plugin);
+		if(manager == null) pluginMap.put(plugin, manager = new DedicatedManager());
 		return manager;
+	}
+	
+	protected DedicatedManager plugin(Plugin plugin) {
+		return this.plugin(plugin.getName());
 	}
 
 	@Override
 	public <T extends PluginCanvas> void register(Plugin thiz, String identifier, 
-			PluginCanvasFactory<T> factory) throws NamingOccupiedException {
+			PluginCanvasFactory<T> factory) {
 		
 		this.plugin(thiz).register(identifier, factory);
 	}
@@ -45,13 +49,15 @@ public final class PluginCanvasManager implements PluginCanvasService{
 		return this.plugin(thiz).getPluginCanvases(identifier, canvasClazz);
 	}
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	@Override
-	public synchronized <T extends PluginCanvas> void create(Plugin thiz, String identifier, short mapid, CommandSender owner,
-			String name, T canvas) throws NamingOccupiedException {
+	public synchronized <T extends PluginCanvas> T create(Plugin thiz, String identifier, short mapid, CommandSender owner,
+			String name) throws NamingOccupiedException {
 		synchronized(this) {
 			if(mapPainting.canvas.idCanvasMap.containsKey(mapid)) throw new NamingOccupiedException("mapid", mapid);
 			if(mapPainting.canvas.nameCanvasMap.containsKey(name)) throw new NamingOccupiedException("name", name);
+			PluginCanvasFactory<T> factory = (PluginCanvasFactory<T>) this.plugin(thiz).factory.get(identifier);
+			if(factory == null) return null;
 			
 			MapCanvasRegistry registry = new MapCanvasRegistry(name);
 			registry.binding = mapid;
@@ -60,9 +66,15 @@ public final class PluginCanvasManager implements PluginCanvasService{
 			
 			CanvasDelegator<T> delegator = new CanvasDelegator<T>(mapPainting);
 			registry.canvas = delegator;
+			delegator.plugin = thiz.getName();
+			delegator.identifier = identifier;
+			delegator.canvasInstance = factory.create(delegator);
+			
 			this.plugin(thiz).place(delegator);
 			
 			mapPainting.canvas.add(registry);
+			
+			return delegator.canvasInstance;
 		}
 	}
 

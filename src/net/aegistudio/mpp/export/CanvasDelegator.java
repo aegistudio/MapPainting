@@ -31,7 +31,7 @@ import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 
 public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements Peripheral {
 	
-	Graphic graphic;
+	public Graphic graphic;
 	public CanvasDelegator(MapPainting painting) {
 		super(painting);
 		this.graphic = new Graphic(this);
@@ -40,8 +40,7 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 	private MapCanvasRegistry registry;
 	public void add(MapCanvasRegistry registry) {
 		this.registry = registry;
-		if(this.canvasInstance == null) {
-		}
+		painting.foreign.plugin(plugin).place(this);
 	}
 	
 	public MapCanvasRegistry getRegistry() {
@@ -50,24 +49,18 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 	
 	public String plugin;
 	public String identifier;
+	public T canvasInstance;
 	
-	private T canvasInstance;
-	public T getDelegatedInstance() {
-		return this.canvasInstance;
-	}
-	
-	/**
-	 * There're two cases. Before the plugin has been loaded, the 
-	 * @param filename
-	 * @param factory
-	 */
 	public void create(PluginCanvasFactory<T> factory) {
 		if(canvasInstance == null) try {
 			canvasInstance = factory.create(this);
 			File file = new File(painting.getDataFolder(), registry.name.concat(".mpp"));
 			try(FileInputStream input = new FileInputStream(file);
-			CanvasMppInputStream cin = new CanvasMppInputStream(input);) {
-				this.load(painting, cin);
+				CanvasMppInputStream mppInput = new CanvasMppInputStream(input);) {
+				mppInput.readHeader();
+				mppInput.readClass();
+				
+				canvasInstance.load(input);
 			}
 		}
 		catch(Exception e) {
