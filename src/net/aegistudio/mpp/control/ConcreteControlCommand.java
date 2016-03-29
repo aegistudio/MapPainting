@@ -13,8 +13,8 @@ public abstract class ConcreteControlCommand extends ActualHandle {
 		if(arguments.length < 1) 
 			sender.sendMessage(prefix + " <name> " + paramList);
 		else {
-			MapCanvasRegistry canvas;
-			if((canvas = painting.canvas.nameCanvasMap.get(arguments[0])) == null) {
+			MapCanvasRegistry canvas = painting.getCanvas(arguments[0], sender);
+			if(canvas == null) {
 				sender.sendMessage(painting.control.canvasNotExists.replace("$canvasName", arguments[0]));
 				return true;
 			}

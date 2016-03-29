@@ -67,6 +67,7 @@ public class WrapControlCommand extends ConcreteControlCommand {
 				}
 			}
 			((CanvasWrapper)(canvas.canvas)).setWrapping(layer, arguments[0]);
+			painting.ackHistory(canvas, sender);
 		}
 	}
 }

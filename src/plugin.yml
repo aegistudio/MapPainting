@@ -8,6 +8,11 @@ commands:
     usage: /mpp <subcommand> [<parameters>]
     permission: mpp.command
     permission-message: You don't have permission to do that!
+  mppctl:
+    description: Control commands provided by map painting.
+    usage: /mppctl <subcommand> <canvas> [<parameters>]
+    permission: mpp.control
+    permission-message: You don't have permission to do that!
 permissions:
   mpp.paint:
     description: Grants player to paint on canvas he owns.

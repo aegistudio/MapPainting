@@ -27,5 +27,7 @@ public class ControlCommand extends CompositeHandle {
 		super.load(painting, section);
 		this.canvasNotExists = painting.getLocale(CANVAS_NOT_EXISTS, canvasNotExists, section);
 		this.invalidFormat = painting.getLocale(INVALID_FORMAT, invalidFormat, section);
+		this.invalidArguments = painting.getLocale(INVALID_ARGUMENTS, invalidArguments, section);
+		this.noControlPermission = painting.getLocale(NO_CONTROL_PERMISSION, noControlPermission, section);
 	}
 }

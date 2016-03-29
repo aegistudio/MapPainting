@@ -15,6 +15,7 @@ import net.aegistudio.mpp.canvas.ChangeOwnerCommand;
 import net.aegistudio.mpp.canvas.CreateCanvasCommand;
 import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
 import net.aegistudio.mpp.canvas.ListCanvasCommand;
+import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 import net.aegistudio.mpp.color.ColorManager;
 import net.aegistudio.mpp.color.ExpertColorParser;
 import net.aegistudio.mpp.color.RgbColorParser;
@@ -84,6 +85,19 @@ public class MapPainting extends JavaPlugin {
 	public static final String PALETTE = "palette";
 	public static final String COLOR = "color";
 	
+	/** Fast when specify canvas name **/
+	public static final String FAST_TARGET = "fastTarget";
+	public String fastTarget = ".";
+	public MapCanvasRegistry getCanvas(String name, CommandSender sender) {
+		if(fastTarget.equals(name)) name = canvas.latest.get(sender.getName());
+		if(name == null) return null;
+		else return canvas.nameCanvasMap.get(name);
+	}
+	
+	public void ackHistory(MapCanvasRegistry registry, CommandSender sender) {
+		canvas.latest.put(sender.getName(), registry.name);
+	}
+	
 	public void onEnable() {
 		try {
 			// Load handle.
@@ -123,6 +137,8 @@ public class MapPainting extends JavaPlugin {
 			if(locale.contains(COMMANDS_PER_PAGE))
 				this.commandsPerPage = locale.getInt(COMMANDS_PER_PAGE);
 			else locale.set(COMMANDS_PER_PAGE, this.commandsPerPage);
+			
+			fastTarget = this.getLocale(FAST_TARGET, fastTarget, locale);
 			
 			// Load paint tools.
 			tool = new PaintToolManager();
@@ -208,6 +224,11 @@ public class MapPainting extends JavaPlugin {
 				hazard.remove(sender);
 			
 			return this.command.handle(this, "/mpp", sender, arguments);
+		}
+		else if(command.getName().equals("mppctl")) {
+			sender.sendMessage("");
+			
+			return this.control.handle(this, "/mppctl", sender, arguments);
 		}
 		return false;
 	}
