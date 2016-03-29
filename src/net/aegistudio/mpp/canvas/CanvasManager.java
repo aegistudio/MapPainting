@@ -15,6 +15,28 @@ public class CanvasManager implements Module {
 	public final TreeMap<String, MapCanvasRegistry> nameCanvasMap = new TreeMap<String, MapCanvasRegistry>();
 	public int count = 0;
 	
+	public void add(MapCanvasRegistry registry) {
+		if(registry.removed()) return;
+		idCanvasMap.put(registry.binding, registry);
+		nameCanvasMap.put(registry.name, registry);
+		count ++;
+		
+		registry.add();
+	}
+	
+	public boolean remove(MapCanvasRegistry registry) {
+		if(registry.removed()) return false;
+		if(!idCanvasMap.containsKey(registry.binding)) return false;
+		if(!nameCanvasMap.containsKey(registry.name)) return false;
+		
+		idCanvasMap.remove(registry.binding);
+		nameCanvasMap.remove(registry.name);
+		count --;
+		
+		registry.remove();
+		return true;
+	}
+	
 	public static final String MAP = "map";
 	public CanvasColor color = new CachedCanvasColor(5);
 	
@@ -33,9 +55,7 @@ public class CanvasManager implements Module {
 			MapCanvasRegistry entry = new MapCanvasRegistry(name);
 			entry.load(painting, canvasValue);
 			
-			idCanvasMap.put(entry.binding, entry);
-			nameCanvasMap.put(entry.name, entry);
-			count ++;
+			this.add(entry);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

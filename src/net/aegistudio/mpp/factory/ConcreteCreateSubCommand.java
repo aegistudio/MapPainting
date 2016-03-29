@@ -74,11 +74,7 @@ public abstract class ConcreteCreateSubCommand extends ActualHandle implements H
 	}
 	
 	protected void commit(MapPainting painting, CommandSender sender, MapCanvasRegistry canvas) {
-		canvas.add();
-		
-		painting.canvas.nameCanvasMap.put(canvas.name, canvas);
-		painting.canvas.idCanvasMap.put(canvas.binding, canvas);
-		painting.canvas.count ++;
+		painting.canvas.add(canvas);
 		
 		sender.sendMessage(painting.create.bound.replace("$canvasName", canvas.name));
 		painting.ackHistory(canvas, sender);

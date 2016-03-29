@@ -5,6 +5,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.mcstats.Metrics;
@@ -22,6 +23,8 @@ import net.aegistudio.mpp.color.RgbColorParser;
 import net.aegistudio.mpp.control.ControlCommand;
 import net.aegistudio.mpp.control.TapControlCommand;
 import net.aegistudio.mpp.control.WrapControlCommand;
+import net.aegistudio.mpp.export.PluginCanvasManager;
+import net.aegistudio.mpp.export.PluginCanvasService;
 import net.aegistudio.mpp.factory.CloneSubCommand;
 import net.aegistudio.mpp.factory.NormalSubCommand;
 import net.aegistudio.mpp.factory.ScriptSubCommand;
@@ -99,6 +102,9 @@ public class MapPainting extends JavaPlugin {
 		canvas.latest.put(sender.getName(), registry.name);
 	}
 	
+	/** Foreign plugins love this most! **/
+	public PluginCanvasManager foreign;
+	
 	public void onEnable() {
 		try {
 			// Load handle.
@@ -161,6 +167,11 @@ public class MapPainting extends JavaPlugin {
 			color.parsers.put("rgb", new RgbColorParser());
 			if(!config.contains(COLOR)) config.createSection(COLOR);
 			color.load(this, config.getConfigurationSection(COLOR));
+			
+			// Load foreign plugin canvas service.
+			this.foreign = new PluginCanvasManager(this);
+			this.getServer().getServicesManager().register(PluginCanvasService.class, 
+					this.foreign, this, ServicePriority.Normal);
 			
 			// Load map.
 			this.canvas = new CanvasManager();

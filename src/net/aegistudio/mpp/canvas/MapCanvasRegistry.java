@@ -64,13 +64,13 @@ public class MapCanvasRegistry implements Module {
 	
 	public void add() {
 		view.addRenderer(this.canvas);
-		this.canvas.add();
+		this.canvas.add(this);
 	}
 	
 	private boolean removed = false;
 	public void remove() {
 		view.removeRenderer(this.canvas);
-		this.canvas.remove();
+		this.canvas.remove(this);
 		this.removed = true;
 	}
 	

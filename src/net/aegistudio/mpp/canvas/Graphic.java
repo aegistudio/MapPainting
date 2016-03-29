@@ -1,4 +1,4 @@
-package net.aegistudio.mpp.script;
+package net.aegistudio.mpp.canvas;
 
 import java.awt.Color;
 import java.io.DataInputStream;
@@ -12,8 +12,8 @@ import org.bukkit.map.MapView;
 import net.aegistudio.mpp.algo.Paintable;
 
 public class Graphic implements Paintable {
-	private ScriptCanvas canvas;
-	public Graphic(ScriptCanvas canvas) {
+	private Canvas canvas;
+	public Graphic(Canvas canvas) {
 		this.canvas = canvas;
 	}
 	
@@ -69,11 +69,16 @@ public class Graphic implements Paintable {
 	
 	public void write(DataOutputStream dout) throws IOException {
 		for(int i = 0; i < 128; i ++) dout.write(this.pixel[i]);
-		dout.writeByte(Token.UNDEFINED.ordinal()); // Intended for extension.
+		dout.writeByte(0); // Intended for extension.
 	}
 
 	@Override
 	public int size() {
 		return 128;
+	}
+	
+	public void copy(Graphic another) {
+		for(int i = 0; i < 128; i ++)
+			System.arraycopy(this.pixel[i], 0, another.pixel[i], 0, 128);
 	}
 }

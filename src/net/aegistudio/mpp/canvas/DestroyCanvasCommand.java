@@ -87,11 +87,7 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 	@Override
 	public void handle(MapPainting painting, CommandSender sender, Object hazardState) {
 		MapCanvasRegistry canvas = (MapCanvasRegistry) hazardState;
-		canvas.remove();
-		
-		painting.canvas.idCanvasMap.remove(canvas.binding);
-		painting.canvas.nameCanvasMap.remove(canvas.name);
-		painting.canvas.count --;
+		painting.canvas.remove(canvas);
 		
 		sender.sendMessage(unbound.replace("$canvasName", canvas.name));
 	}

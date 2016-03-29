@@ -37,6 +37,8 @@ import net.aegistudio.mpp.algo.SpriteCharGenerator;
 import net.aegistudio.mpp.algo.StringGenerator;
 import net.aegistudio.mpp.algo.StringLineGenerator;
 import net.aegistudio.mpp.canvas.Canvas;
+import net.aegistudio.mpp.canvas.Graphic;
+import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 
 /**
  * Oh. I have nothing to say.
@@ -173,11 +175,13 @@ public class ScriptCanvas extends Canvas {
 		this.graphic.subrender(view, canvas, player);
 	}
 	
-	public void add() {
+	@Override
+	public void add(MapCanvasRegistry registry) {
 		refresh.runTaskTimer(painting, 1, 1);
 	}
 	
-	public void remove() {
+	@Override
+	public void remove(MapCanvasRegistry registry) {
 		refresh.cancel();
 	}
 }

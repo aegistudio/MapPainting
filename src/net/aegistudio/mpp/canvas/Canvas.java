@@ -34,9 +34,9 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 	
 	public abstract Canvas clone();
 
-	public void add() {}
+	public void add(MapCanvasRegistry registry) {}
 
-	public void remove() {}
+	public void remove(MapCanvasRegistry registry) {}
 
 	@Override
 	public void render(MapView view, MapCanvas canvas, Player player) {
