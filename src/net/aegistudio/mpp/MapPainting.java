@@ -7,6 +7,8 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import org.mcstats.Metrics;
+
 import net.aegistudio.mpp.canvas.CanvasManager;
 import net.aegistudio.mpp.canvas.ChangeModeCommand;
 import net.aegistudio.mpp.canvas.ChangeOwnerCommand;
@@ -153,6 +155,16 @@ public class MapPainting extends JavaPlugin {
 			e.printStackTrace();
 			this.setEnabled(false);
 		}
+		
+		/**
+		 * Sending metric message to mcstats.
+		 */
+	    try {
+	        Metrics metrics = new Metrics(this);
+	        metrics.start();
+	    } catch (Exception e) {
+	        
+	    }
 	}
 	
 	public String getLocale(String name, String defaultLocale, ConfigurationSection section) {
