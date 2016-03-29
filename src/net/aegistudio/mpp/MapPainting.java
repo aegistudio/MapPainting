@@ -28,6 +28,7 @@ import net.aegistudio.mpp.factory.ScriptSubCommand;
 import net.aegistudio.mpp.factory.WrapSubCommand;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
+import net.aegistudio.mpp.script.ScriptDebugCommand;
 import net.aegistudio.mpp.tool.PaintBucket;
 import net.aegistudio.mpp.tool.Pencil;
 import net.aegistudio.mpp.tool.Razor;
@@ -124,6 +125,7 @@ public class MapPainting extends JavaPlugin {
 			// Load control commands.
 			this.control.add("tap", new TapControlCommand());
 			this.control.add("wrap", new WrapControlCommand());
+			this.control.add("debug", new ScriptDebugCommand());
 			
 			if(!config.contains(COMMAND_LOCALE))
 				config.createSection(COMMAND_LOCALE);
