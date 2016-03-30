@@ -4,7 +4,7 @@ package net.aegistudio.mpp.export;
  * A virtual constructor for the plugin canvas. The plugin canvas
  * factory should be registered before generating any plugin canvas.
  * 
- * @see PluginCanvasRegistry.registry
+ * @see PluginCanvasService.register
  * @author aegistudio
  * 
  * @param <T> which plugin canvas could this factory generate.
