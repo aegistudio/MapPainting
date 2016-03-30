@@ -23,12 +23,12 @@ import net.aegistudio.mpp.color.RgbColorParser;
 import net.aegistudio.mpp.control.ControlCommand;
 import net.aegistudio.mpp.control.TapControlCommand;
 import net.aegistudio.mpp.control.WrapControlCommand;
-import net.aegistudio.mpp.export.PluginCanvasManager;
 import net.aegistudio.mpp.export.PluginCanvasService;
 import net.aegistudio.mpp.factory.CloneSubCommand;
 import net.aegistudio.mpp.factory.NormalSubCommand;
 import net.aegistudio.mpp.factory.ScriptSubCommand;
 import net.aegistudio.mpp.factory.WrapSubCommand;
+import net.aegistudio.mpp.foreign.PluginCanvasManager;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
 import net.aegistudio.mpp.script.ScriptDebugCommand;
@@ -103,7 +103,7 @@ public class MapPainting extends JavaPlugin {
 	}
 	
 	/** Foreign plugins love this most! **/
-	public PluginCanvasManager foreign;
+	public PluginCanvasManager foreign = new PluginCanvasManager(this);
 	
 	public void onEnable() {
 		try {
@@ -169,7 +169,7 @@ public class MapPainting extends JavaPlugin {
 			color.load(this, config.getConfigurationSection(COLOR));
 			
 			// Load foreign plugin canvas service.
-			this.foreign = new PluginCanvasManager(this);
+			this.foreign.reset();
 			this.getServer().getServicesManager().register(PluginCanvasService.class, 
 					this.foreign, this, ServicePriority.Normal);
 			

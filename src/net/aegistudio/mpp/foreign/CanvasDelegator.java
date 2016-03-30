@@ -1,4 +1,4 @@
-package net.aegistudio.mpp.export;
+package net.aegistudio.mpp.foreign;
 
 import java.awt.Color;
 import java.io.DataInputStream;
@@ -21,6 +21,10 @@ import net.aegistudio.mpp.canvas.Canvas;
 import net.aegistudio.mpp.canvas.CanvasMppInputStream;
 import net.aegistudio.mpp.canvas.Graphic;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
+import net.aegistudio.mpp.export.Peripheral;
+import net.aegistudio.mpp.export.PluginCanvas;
+import net.aegistudio.mpp.export.PluginCanvasFactory;
+import net.aegistudio.mpp.export.PluginCanvasRegistry;
 
 /**
  * The delegator has blocked direct access from
@@ -29,7 +33,7 @@ import net.aegistudio.mpp.canvas.MapCanvasRegistry;
  * @author aegistudio
  */
 
-public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements Peripheral {
+public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements Peripheral, PluginCanvasRegistry<T> {
 	
 	public Graphic graphic;
 	public CanvasDelegator(MapPainting painting) {
@@ -43,24 +47,48 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 		painting.foreign.plugin(plugin).place(this);
 	}
 	
+	public void remove(MapCanvasRegistry registry) {
+		painting.foreign.plugin(plugin).watchlist(identifier).remove(this);
+	}
+	
 	public MapCanvasRegistry getRegistry() {
 		return this.registry;
 	}
-	
+
 	public String plugin;
+	@Override
+	public String plugin() {
+		return plugin;
+	}
+
 	public String identifier;
+	@Override
+	public String identifier() {
+		return identifier;
+	}
+
 	public T canvasInstance;
+	@Override
+	public T canvas() {
+		return canvasInstance;
+	}
+	
+	PluginCanvasFactory<T> factory;
+	@Override
+	public PluginCanvasFactory<T> factory() {
+		return factory;
+	}
 	
 	public void create(PluginCanvasFactory<T> factory) {
-		if(canvasInstance == null) try {
+		try {
 			canvasInstance = factory.create(this);
+			this.factory = factory;
 			File file = new File(painting.getDataFolder(), registry.name.concat(".mpp"));
 			try(FileInputStream input = new FileInputStream(file);
 				CanvasMppInputStream mppInput = new CanvasMppInputStream(input);) {
 				mppInput.readHeader();
 				mppInput.readClass();
-				
-				canvasInstance.load(input);
+				this.load(painting, mppInput);
 			}
 		}
 		catch(Exception e) {

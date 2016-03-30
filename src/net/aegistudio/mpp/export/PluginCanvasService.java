@@ -21,7 +21,6 @@ public interface PluginCanvasService {
 	 * @param thiz the caller plugin.
 	 * @param identifier the identifier of the canvas factory.
 	 * @param factory the canvas factory instance.
-	 * @throws NamingOccupiedException thrown when the identifier has already been registered.
 	 */
 	public <T extends PluginCanvas> void register(Plugin thiz, String identifier, PluginCanvasFactory<T> factory);
 	
@@ -31,20 +30,30 @@ public interface PluginCanvasService {
 	 * @param identifier the identifier of the canvas factory.
 	 * @return the canvas name to the canvas instance.
 	 */
-	public <T extends PluginCanvas> Map<String, T> getPluginCanvases(Plugin thiz, String identifier, Class<T> canvasClazz);
+	public <T extends PluginCanvas> Map<String, PluginCanvasRegistry<T>> getPluginCanvases(Plugin thiz, 
+			String identifier, Class<T> canvasClazz);
+
+	/**
+	 * Generate a plugin canvas for this plugin.
+	 * @param thiz the caller plugin.
+	 * @param identifier the identifier of the canvas.
+	 * @param clazz which class does the canvas belongs to.
+	 * @return the generated plugin registry.
+	 * @throws NamingException when the corresponding identifier not registered.
+	 */
+	public <T extends PluginCanvas> PluginCanvasRegistry<T> generate(Plugin thiz, String identifier, 
+			Class<T> clazz) throws NamingException;
 	
 	/**
-	 * Create a canvas.
-	 * @param thiz the caller plugin.
-	 * @param identifier the identifier of the canvas factory.
-	 * @param mapid the id of the map to be bound. Will throw conflict exception when already exists.
-	 * @param owner the owner of the canvas. Only the plugin could manipulate it when null.
-	 * @param name the name of the canvas. Will throw conflict exception when already exists.
 	 * 
-	 * @return the canvas instance.
+	 * @param mapid the map for creating the canvas.
+	 * @param owner the owner of the canvas. only this plugin could manipulate it when set to null.
+	 * @param name the name of the canvas.
+	 * @param registry a suitable creation of the canvas.
+	 * @throws NamingException thrown when the canvas is occupied.
 	 */
-	public <T extends PluginCanvas> T create(Plugin thiz, String identifier, short mapid, 
-			CommandSender owner, String name) throws NamingOccupiedException ;
+	public <T extends PluginCanvas> void create(short mapid, CommandSender owner, 
+			String name, PluginCanvasRegistry<T> registry) throws NamingException ;
 	
 	/**
 	 * Destroy a canvas.

@@ -1,12 +1,17 @@
 package net.aegistudio.mpp.export;
 
-public class NamingOccupiedException extends Exception {
+/**
+ * Throw when the corresponding naming not suitable.
+ * @author aegistudio
+ */
+
+public class NamingException extends Exception {
 	private static final long serialVersionUID = 1L;
 	
 	private final String naming;
 	private final Object value;
-	public NamingOccupiedException(String name, Object value) {
-		super(name);
+	public NamingException(String name, Object value) {
+		super(name + ": " + value);
 		this.naming = name;
 		this.value = value;
 	}
