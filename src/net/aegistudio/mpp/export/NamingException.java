@@ -31,6 +31,11 @@ public class NamingException extends Exception {
 		return this.value;
 	}
 	
+	/**
+	 * 
+	 * @param t the type of the returned value.
+	 * @return the detailed problem of the naming.
+	 */
 	@SuppressWarnings("unchecked")
 	public <T> T getValue(Class<T> t) {
 		return (T) this.value;

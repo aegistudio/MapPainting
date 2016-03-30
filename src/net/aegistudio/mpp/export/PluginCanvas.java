@@ -6,6 +6,14 @@ import java.io.OutputStream;
 
 import net.aegistudio.mpp.Interaction;
 
+/**
+ * The abstract definition of a plugin canvas.
+ * Any plugin that want to display a canvas to
+ * its user should realize this class.
+ * 
+ * @author aegistudio
+ */
+
 public interface PluginCanvas extends Cloneable {
 	/**
 	 * When the user use paint tools to paint
