@@ -49,6 +49,7 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 	
 	public void remove(MapCanvasRegistry registry) {
 		painting.foreign.plugin(plugin).watchlist(identifier).remove(this);
+		canvasInstance.remove();
 	}
 	
 	public MapCanvasRegistry getRegistry() {
@@ -90,6 +91,7 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 				mppInput.readClass();
 				this.load(painting, mppInput);
 			}
+			canvasInstance.add();
 		}
 		catch(Exception e) {
 			e.printStackTrace();

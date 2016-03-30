@@ -37,4 +37,16 @@ public interface PluginCanvas extends Cloneable {
 	 * @param output the stored canvas data.
 	 */
 	public void save(OutputStream output);
+	
+	/**
+	 * Called at the moment when this canvas 
+	 * was added or loaded into the game.
+	 */
+	public void add();
+	
+	/**
+	 * Called at the moment when this canvas
+	 * was removed or unloaded from the game.
+	 */
+	public void remove();
 }

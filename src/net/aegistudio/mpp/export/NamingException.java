@@ -2,6 +2,7 @@ package net.aegistudio.mpp.export;
 
 /**
  * Throw when the corresponding naming not suitable.
+ * Like there's a conflict, or something is missing.
  * @author aegistudio
  */
 
@@ -16,10 +17,16 @@ public class NamingException extends Exception {
 		this.value = value;
 	}
 	
+	/**
+	 * @return at which aspect there's a naming problem.
+	 */
 	public String getNaming() {
 		return this.naming;
 	}
 	
+	/**
+	 * @return the detailed problem of the naming.
+	 */
 	public Object getValue() {
 		return this.value;
 	}
