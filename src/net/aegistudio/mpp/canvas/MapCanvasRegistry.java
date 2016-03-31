@@ -44,7 +44,6 @@ public class MapCanvasRegistry implements Module {
 		CanvasMppInputStream cin = new CanvasMppInputStream(input);) {
 			this.canvas = cin.readCanvas(map);
 		}
-		this.add();
 	}
 	
 	public void save(MapPainting map, ConfigurationSection canvas) throws Exception {

@@ -1,5 +1,6 @@
 package net.aegistudio.mpp.foreign;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
@@ -55,14 +56,9 @@ public class DedicatedManager {
 		if(factory != null) this.create(delegator, factory);
 	}
 	
-	public <T extends PluginCanvas> Map<String, PluginCanvasRegistry<T>> getPluginCanvases(String identifier, Class<T> canvasClazz) {
-		TreeMap<String, PluginCanvasRegistry<T>> canvases = new TreeMap<String, PluginCanvasRegistry<T>>();
-		for(CanvasDelegator delegator : 
-			Collections.synchronizedSet(this.watchlist(identifier))) {
-			
-			if(!delegator.getRegistry().removed())
-				canvases.put(delegator.getRegistry().name, delegator);
-		}
-		return canvases;
+	public <T extends PluginCanvas> Collection<PluginCanvasRegistry<T>> getPluginCanvases(String identifier, Class<T> canvasClazz) {
+		HashSet returnValue = new HashSet<PluginCanvasRegistry<T>>();
+		returnValue.addAll(this.watchlist(identifier));
+		return returnValue;
 	}
 }

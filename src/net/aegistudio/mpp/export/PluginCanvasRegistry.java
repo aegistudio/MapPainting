@@ -29,4 +29,14 @@ public interface PluginCanvasRegistry<T extends PluginCanvas> {
 	 * @return the plugin canvas instance.
 	 */
 	public T canvas();
+	
+	/**
+	 * @return the map id if bound, or -1 if not bound.
+	 */
+	public int mapid();
+	
+	/**
+	 * @return the name if bound, or null if not bound.
+	 */
+	public String name();
 }

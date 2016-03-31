@@ -1,6 +1,6 @@
 package net.aegistudio.mpp.export;
 
-import java.util.Map;
+import java.util.Collection;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
@@ -30,7 +30,7 @@ public interface PluginCanvasService {
 	 * @param identifier the identifier of the canvas factory.
 	 * @return the canvas name to the canvas instance.
 	 */
-	public <T extends PluginCanvas> Map<String, PluginCanvasRegistry<T>> getPluginCanvases(Plugin thiz, 
+	public <T extends PluginCanvas> Collection<PluginCanvasRegistry<T>> getPluginCanvases(Plugin thiz, 
 			String identifier, Class<T> canvasClazz);
 
 	/**
@@ -45,7 +45,6 @@ public interface PluginCanvasService {
 			Class<T> clazz) throws NamingException;
 	
 	/**
-	 * 
 	 * @param mapid the map for creating the canvas.
 	 * @param owner the owner of the canvas. only this plugin could manipulate it when set to null.
 	 * @param name the name of the canvas.
@@ -56,12 +55,38 @@ public interface PluginCanvasService {
 			String name, PluginCanvasRegistry<T> registry) throws NamingException ;
 	
 	/**
-	 * Destroy a canvas.
-	 * @param thiz the caller plugin.
+	 * @param registry the registry to remove.
+	 * @return whether the removal is success.
+	 */
+	public <T extends PluginCanvas> boolean destroy(PluginCanvasRegistry<T> registry);
+	
+	/**
+	 * @param name the canvas name
+	 * @return is the canvas already existsted.
+	 */
+	public boolean has(String name);
+	
+	/**
+	 * @param mapid the mapid.
+	 * @return is the canvas already existed.
+	 */
+	public boolean has(short mapid);
+	
+	/**
+	 * @param thiz the caller plugin
 	 * @param identifier the identifier of the canvas factory.
 	 * @param name the name of the canvas.
-	 * 
-	 * @return does the destroy success?
+	 * @param clazz the canvas class that is assumed.
+	 * @return the corresponding plugin canvas registry.
 	 */
-	public boolean destroy(Plugin thiz, String identifier, String name);
+	public <T extends PluginCanvas> PluginCanvasRegistry<T> get(Plugin thiz, String identifier, String name, Class<T> clazz);
+
+	/**
+	 * @param thiz the caller plugin.
+	 * @param identifier the identifier of the canvas factory.
+	 * @param mapid the id of the map.
+	 * @param clazz the canvas class that is assumed.
+	 * @return the corresponding plugin canvas registry.
+	 */
+	public <T extends PluginCanvas> PluginCanvasRegistry<T> get(Plugin thiz, String identifier, short mapid, Class<T> clazz);
 }

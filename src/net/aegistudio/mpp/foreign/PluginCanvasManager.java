@@ -1,6 +1,6 @@
 package net.aegistudio.mpp.foreign;
 
-import java.util.Map;
+import java.util.Collection;
 import java.util.TreeMap;
 
 import org.bukkit.command.CommandSender;
@@ -48,7 +48,7 @@ public final class PluginCanvasManager implements PluginCanvasService{
 	}
 
 	@Override
-	public <T extends PluginCanvas> Map<String, PluginCanvasRegistry<T>> 
+	public <T extends PluginCanvas> Collection<PluginCanvasRegistry<T>> 
 		getPluginCanvases(Plugin thiz, String identifier, Class<T> canvasClazz) {
 		
 		return this.plugin(thiz).getPluginCanvases(identifier, canvasClazz);
@@ -70,18 +70,6 @@ public final class PluginCanvasManager implements PluginCanvasService{
 		return delegator;
 	}
 
-	@Override
-	public boolean destroy(Plugin thiz, String identifier, String name) {
-		MapCanvasRegistry registry = mapPainting.canvas.nameCanvasMap.get(name);
-		if(registry == null) return false;
-		if(!(registry.canvas instanceof CanvasDelegator)) return false;
-		CanvasDelegator<?> delegator = (CanvasDelegator<?>) registry.canvas;
-		if(!delegator.plugin.equals(thiz.getName())) return false;
-		if(!delegator.identifier.equals(identifier)) return false;
-		
-		return mapPainting.canvas.remove(registry);
-	}
-
 	@SuppressWarnings("deprecation")
 	@Override
 	public <T extends PluginCanvas> void create(short mapid, CommandSender owner, String name,
@@ -98,7 +86,52 @@ public final class PluginCanvasManager implements PluginCanvasService{
 		mapPainting.canvas.add(registry);
 	}
 	
+	@Override
+	public <T extends PluginCanvas> boolean destroy(PluginCanvasRegistry<T> registry) {
+		if(registry == null) return false;
+		if(!(registry instanceof CanvasDelegator)) return false;
+		CanvasDelegator<T> delegator = (CanvasDelegator<T>) registry;
+		MapCanvasRegistry canvasRegistry = delegator.getRegistry();
+		if(canvasRegistry == null) return false;
+		if(canvasRegistry.removed()) return false;
+		
+		return mapPainting.canvas.remove(canvasRegistry);
+	}
+	
 	public void reset() {
 		for(DedicatedManager m : this.pluginMap.values()) m.reset();
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T extends PluginCanvas> PluginCanvasRegistry<T> get(Plugin thiz, String identifier, MapCanvasRegistry registry, Class<T> clazz) {
+		if(registry == null) return null;
+		if(!(registry.canvas instanceof CanvasDelegator)) return null;
+		CanvasDelegator<?> delegator = (CanvasDelegator<?>) registry.canvas;
+		
+		if(delegator.plugin().equals(thiz.getName()) 
+				&& delegator.identifier().equals(identifier))
+			return (PluginCanvasRegistry<T>) delegator;
+		
+		else return null;
+	}
+	
+	@Override
+	public <T extends PluginCanvas> PluginCanvasRegistry<T> get(Plugin thiz, String identifier, String name, Class<T> clazz) {
+		return this.get(thiz, identifier, mapPainting.canvas.nameCanvasMap.get(name), clazz);
+	}
+	
+	@Override
+	public <T extends PluginCanvas> PluginCanvasRegistry<T> get(Plugin thiz, String identifier, short mapid, Class<T> clazz) {
+		return this.get(thiz, identifier, mapPainting.canvas.idCanvasMap.get(mapid), clazz);
+	}
+
+	@Override
+	public boolean has(String name) {
+		return mapPainting.canvas.nameCanvasMap.containsKey(name);
+	}
+
+	@Override
+	public boolean has(short mapid) {
+		return mapPainting.canvas.idCanvasMap.containsKey(mapid);
 	}
 }

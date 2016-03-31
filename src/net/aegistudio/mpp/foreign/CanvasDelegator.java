@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -18,7 +19,6 @@ import org.bukkit.map.MapView;
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.canvas.Canvas;
-import net.aegistudio.mpp.canvas.CanvasMppInputStream;
 import net.aegistudio.mpp.canvas.Graphic;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 import net.aegistudio.mpp.export.Peripheral;
@@ -45,15 +45,31 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 	public void add(MapCanvasRegistry registry) {
 		this.registry = registry;
 		painting.foreign.plugin(plugin).place(this);
+		if(this.canvasInstance != null)
+			this.canvasInstance.add();
 	}
 	
 	public void remove(MapCanvasRegistry registry) {
 		painting.foreign.plugin(plugin).watchlist(identifier).remove(this);
-		canvasInstance.remove();
+		if(canvasInstance != null) canvasInstance.remove();
 	}
 	
 	public MapCanvasRegistry getRegistry() {
 		return this.registry;
+	}
+
+	@Override
+	public int mapid() {
+		if(this.registry == null) return -1;
+		if(this.registry.removed()) return -1;
+		return this.registry.binding;
+	}
+
+	@Override
+	public String name() {
+		if(this.registry == null) return null;
+		if(this.registry.removed()) return null;
+		return this.registry.name;
 	}
 
 	public String plugin;
@@ -81,17 +97,46 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 	}
 	
 	public void create(PluginCanvasFactory<T> factory) {
-		try {
+		if(this.factory != factory) try {
 			canvasInstance = factory.create(this);
 			this.factory = factory;
-			File file = new File(painting.getDataFolder(), registry.name.concat(".mpp"));
-			try(FileInputStream input = new FileInputStream(file);
-				CanvasMppInputStream mppInput = new CanvasMppInputStream(input);) {
-				mppInput.readHeader();
-				mppInput.readClass();
-				this.load(painting, mppInput);
-			}
+			
+			this.loadCanvasInstance();
 			canvasInstance.add();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void loadCanvasInstance() {
+		if(canvasInstance != null) try {
+			File file = new File(painting.getDataFolder(), registry.name.concat(".dat"));
+			if(!file.exists()) return;
+			try(FileInputStream input = new FileInputStream(file);
+				GZIPInputStream gzip = new GZIPInputStream(input);) {
+				
+				canvasInstance.load(gzip);
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void saveCanvasInstance() {
+		if(canvasInstance != null) try {
+			File file = new File(painting.getDataFolder(), registry.name.concat(".dat"));
+			if(!file.exists()) file.createNewFile();
+			
+			try(FileOutputStream output = new FileOutputStream(file);
+				GZIPOutputStream gzip = new GZIPOutputStream(output);) {
+			
+				canvasInstance.save(gzip);
+
+				gzip.finish();
+				gzip.flush();	
+			}
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -107,8 +152,7 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 		identifier = din.readUTF();
 		graphic.read(din);
 		
-		if(this.canvasInstance != null) 
-			canvasInstance.load(din);
+		this.loadCanvasInstance();
 	}
 	
 	@Override
@@ -120,11 +164,10 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 		dout.writeUTF(identifier);
 		graphic.write(dout);
 		
-		if(this.canvasInstance != null)
-			canvasInstance.save(dout);
-		
 		gzip.finish();
 		gzip.flush();
+		
+		this.saveCanvasInstance();
 	}
 
 	@Override
@@ -140,6 +183,7 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 
 	@Override
 	public boolean interact(Interaction interact) {
+		if(canvasInstance == null) return false;
 		return canvasInstance.interact(interact);
 	}
 
