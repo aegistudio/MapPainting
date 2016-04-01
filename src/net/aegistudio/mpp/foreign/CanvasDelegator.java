@@ -43,14 +43,16 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 
 	private MapCanvasRegistry registry;
 	public void add(MapCanvasRegistry registry) {
+		super.add(registry);
 		this.registry = registry;
-		painting.foreign.plugin(plugin).place(this);
+		painting.foreignCanvas.plugin(plugin).place(this);
 		if(this.canvasInstance != null)
 			this.canvasInstance.add();
 	}
 	
 	public void remove(MapCanvasRegistry registry) {
-		painting.foreign.plugin(plugin).watchlist(identifier).remove(this);
+		super.remove(registry);
+		painting.foreignCanvas.plugin(plugin).watchlist(identifier).remove(this);
 		if(canvasInstance != null) canvasInstance.remove();
 	}
 	
@@ -212,5 +214,12 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 	@Override
 	public Graphic getGraphic() {
 		return graphic;
+	}
+	
+	@Override
+	public void tick() {
+		super.tick();
+		if(this.canvasInstance != null)
+			this.canvasInstance.tick();
 	}
 }

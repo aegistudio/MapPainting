@@ -24,11 +24,13 @@ import net.aegistudio.mpp.control.ControlCommand;
 import net.aegistudio.mpp.control.TapControlCommand;
 import net.aegistudio.mpp.control.WrapControlCommand;
 import net.aegistudio.mpp.export.PluginCanvasService;
+import net.aegistudio.mpp.export.PluginCommandService;
 import net.aegistudio.mpp.factory.CloneSubCommand;
 import net.aegistudio.mpp.factory.NormalSubCommand;
 import net.aegistudio.mpp.factory.ScriptSubCommand;
 import net.aegistudio.mpp.factory.WrapSubCommand;
 import net.aegistudio.mpp.foreign.PluginCanvasManager;
+import net.aegistudio.mpp.foreign.PluginCommandManager;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
 import net.aegistudio.mpp.script.ScriptDebugCommand;
@@ -103,7 +105,8 @@ public class MapPainting extends JavaPlugin {
 	}
 	
 	/** Foreign plugins love this most! **/
-	public PluginCanvasManager foreign = new PluginCanvasManager(this);
+	public PluginCanvasManager foreignCanvas = new PluginCanvasManager(this);
+	public PluginCommandManager foreignCommand;
 	
 	public void onEnable() {
 		try {
@@ -169,9 +172,14 @@ public class MapPainting extends JavaPlugin {
 			color.load(this, config.getConfigurationSection(COLOR));
 			
 			// Load foreign plugin canvas service.
-			this.foreign.reset();
+			this.foreignCanvas.reset();
 			this.getServer().getServicesManager().register(PluginCanvasService.class, 
-					this.foreign, this, ServicePriority.Normal);
+					this.foreignCanvas, this, ServicePriority.Normal);
+			
+			// Load foreign command service.
+			this.foreignCommand = new PluginCommandManager(this);
+			this.getServer().getServicesManager().register(PluginCommandService.class, this.foreignCommand,
+					this, ServicePriority.Normal);
 			
 			// Load map.
 			this.canvas = new CanvasManager();

@@ -57,4 +57,9 @@ public interface PluginCanvas extends Cloneable {
 	 * was removed or unloaded from the game.
 	 */
 	public void remove();
+	
+	/**
+	 * Called when the canvas ticked.
+	 */
+	public void tick();
 }

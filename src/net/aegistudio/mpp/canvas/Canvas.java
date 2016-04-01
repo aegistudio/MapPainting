@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
@@ -33,10 +34,25 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 	public abstract void save(MapPainting painting, OutputStream mppFile) throws Exception;
 	
 	public abstract Canvas clone();
+	
+	protected void tick() {
 
-	public void add(MapCanvasRegistry registry) {}
+	}
+	
+	protected BukkitRunnable tickRunnable = new BukkitRunnable() {
+		@Override
+		public void run() {
+			tick();
+		}
+	};
 
-	public void remove(MapCanvasRegistry registry) {}
+	public void add(MapCanvasRegistry registry) {
+		tickRunnable.runTaskTimer(painting, 1, 1);
+	}
+
+	public void remove(MapCanvasRegistry registry) {
+		tickRunnable.cancel();
+	}
 
 	@Override
 	public void render(MapView view, MapCanvas canvas, Player player) {

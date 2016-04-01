@@ -22,7 +22,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
 import org.bukkit.map.MinecraftFont;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
@@ -38,7 +37,6 @@ import net.aegistudio.mpp.algo.StringGenerator;
 import net.aegistudio.mpp.algo.StringLineGenerator;
 import net.aegistudio.mpp.canvas.Canvas;
 import net.aegistudio.mpp.canvas.Graphic;
-import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 
 /**
  * Oh. I have nothing to say.
@@ -60,11 +58,10 @@ public class ScriptCanvas extends Canvas {
 	public static ScriptEngineFactory factory;
 	public ScriptEngine engine;
 	
-	public BukkitRunnable refresh = new BukkitRunnable() {
-		public void run() {
-			callback.tickTrigger();
-		}
-	};
+	protected void tick() {
+		super.tick();
+		callback.tickTrigger();
+	}
 	
 	public void setEngine() throws UnsupportedException{
 		if(this.engine == null) {
@@ -173,15 +170,5 @@ public class ScriptCanvas extends Canvas {
 	@Override
 	protected void subrender(MapView view, MapCanvas canvas, Player player) {
 		this.graphic.subrender(view, canvas, player);
-	}
-	
-	@Override
-	public void add(MapCanvasRegistry registry) {
-		refresh.runTaskTimer(painting, 1, 1);
-	}
-	
-	@Override
-	public void remove(MapCanvasRegistry registry) {
-		refresh.cancel();
 	}
 }
