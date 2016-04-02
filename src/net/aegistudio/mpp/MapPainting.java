@@ -5,11 +5,20 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.map.MinecraftFont;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.mcstats.Metrics;
 
+import net.aegistudio.mpp.algo.Algorithm;
+import net.aegistudio.mpp.algo.CharacterGenerator;
+import net.aegistudio.mpp.algo.DdaLineGenerator;
+import net.aegistudio.mpp.algo.MidAlignStringGenerator;
+import net.aegistudio.mpp.algo.RightAlignStringGenerator;
+import net.aegistudio.mpp.algo.ScanFloodFillGenerator;
+import net.aegistudio.mpp.algo.SpriteCharGenerator;
+import net.aegistudio.mpp.algo.StringLineGenerator;
 import net.aegistudio.mpp.canvas.CanvasManager;
 import net.aegistudio.mpp.canvas.ChangeModeCommand;
 import net.aegistudio.mpp.canvas.ChangeOwnerCommand;
@@ -107,6 +116,18 @@ public class MapPainting extends JavaPlugin {
 	/** Foreign plugins love this most! **/
 	public PluginCanvasManager foreignCanvas = new PluginCanvasManager(this);
 	public PluginCommandManager foreignCommand;
+	public Algorithm algorithm = new Algorithm(); {
+		algorithm.put("line", new DdaLineGenerator());
+		algorithm.put("fill", new ScanFloodFillGenerator());
+		algorithm.put("char", new SpriteCharGenerator(MinecraftFont.Font));
+		
+		algorithm.group("string");
+		algorithm.put("string.left", new StringLineGenerator(algorithm.get("char", CharacterGenerator.class)));
+		algorithm.put("string.center", new MidAlignStringGenerator(
+				algorithm.get("string.left", StringLineGenerator.class), MinecraftFont.Font));
+		algorithm.put("string.right", new RightAlignStringGenerator(
+				algorithm.get("string.left", StringLineGenerator.class), MinecraftFont.Font));
+	}
 	
 	public void onEnable() {
 		try {
@@ -179,6 +200,10 @@ public class MapPainting extends JavaPlugin {
 			// Load foreign command service.
 			this.foreignCommand = new PluginCommandManager(this);
 			this.getServer().getServicesManager().register(PluginCommandService.class, this.foreignCommand,
+					this, ServicePriority.Normal);
+			
+			// Load foregin algorithm service.
+			this.getServer().getServicesManager().register(Algorithm.class, this.algorithm,
 					this, ServicePriority.Normal);
 			
 			// Load map.

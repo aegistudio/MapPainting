@@ -1,6 +1,6 @@
 package net.aegistudio.mpp.algo;
 
-public interface StringGenerator {
+public interface StringGenerator extends Generator {
 	/**
 	 * Draw a string.
 	 * @param p a paintable.

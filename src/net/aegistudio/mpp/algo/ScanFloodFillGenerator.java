@@ -7,6 +7,7 @@ public class ScanFloodFillGenerator implements FillGenerator {
 	@Override
 	public void fill(Paintable p, int x, int y, Color fill) {
 		Color seed = p.get(x, y);
+		p.color(fill);
 		this.seedFill(p, x, y, fill, seed);
 	}
 

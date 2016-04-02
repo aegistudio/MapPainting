@@ -21,20 +21,9 @@ import javax.script.ScriptEngineFactory;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
-import org.bukkit.map.MinecraftFont;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
-import net.aegistudio.mpp.algo.CharacterGenerator;
-import net.aegistudio.mpp.algo.DdaLineGenerator;
-import net.aegistudio.mpp.algo.FillGenerator;
-import net.aegistudio.mpp.algo.LineGenerator;
-import net.aegistudio.mpp.algo.MidAlignStringGenerator;
-import net.aegistudio.mpp.algo.RightAlignStringGenerator;
-import net.aegistudio.mpp.algo.ScanFloodFillGenerator;
-import net.aegistudio.mpp.algo.SpriteCharGenerator;
-import net.aegistudio.mpp.algo.StringGenerator;
-import net.aegistudio.mpp.algo.StringLineGenerator;
 import net.aegistudio.mpp.canvas.Canvas;
 import net.aegistudio.mpp.canvas.Graphic;
 
@@ -80,19 +69,8 @@ public class ScriptCanvas extends Canvas {
 		binding.put("casette", this.cassette); binding.put("c", this.cassette);
 		
 		// Load algorithms.
-		TreeMap<String, Object> algorithm = new TreeMap<String, Object>();
-		algorithm.put("line", (LineGenerator)new DdaLineGenerator());
-		algorithm.put("fill", (FillGenerator)new ScanFloodFillGenerator());
-		algorithm.put("char", (CharacterGenerator)new SpriteCharGenerator(MinecraftFont.Font));
-		TreeMap<String, StringGenerator> stringGenerators = new TreeMap<String, StringGenerator>();
-		stringGenerators.put("left", (StringGenerator)new StringLineGenerator((CharacterGenerator) algorithm.get("char")));
-		stringGenerators.put("center", (StringGenerator)new MidAlignStringGenerator(
-				(StringLineGenerator) stringGenerators.get("left"), MinecraftFont.Font));
-		stringGenerators.put("right", (StringGenerator)new RightAlignStringGenerator(
-				(StringLineGenerator) stringGenerators.get("left"), MinecraftFont.Font));
-		algorithm.put("string", stringGenerators);
-		
-		binding.put("algorihtm", algorithm); binding.put("a", algorithm);
+		binding.put("algorihtm", this.painting.algorithm);
+		binding.put("a", this.painting.algorithm);
 		
 		// Load others.
 		binding.put("plugin", this.painting);

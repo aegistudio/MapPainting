@@ -18,6 +18,9 @@ public class LineDrawingMemento implements Memento, Paintable {
 	private final String undoMessage;
 	private final Interaction interact;
 	
+	@Override
+	public void color(Color c) {}
+	
 	public LineDrawingMemento(Canvas canvas, int x1, int y1, int x2, int y2, 
 			Color c, String undoMessage, Interaction interact) {
 		this.canvas = canvas;

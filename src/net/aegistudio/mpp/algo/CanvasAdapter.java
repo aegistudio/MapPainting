@@ -8,11 +8,11 @@ import net.aegistudio.mpp.canvas.Canvas;
 public class CanvasAdapter implements Paintable {
 	public final Interaction interact;
 	public final Canvas canvas;
-	public final Color color;
-	public CanvasAdapter(Interaction interact, Color color, Canvas canvas) {
+	public Color color;
+	public CanvasAdapter(Interaction interact, Color c, Canvas canvas) {
 		this.interact = interact;
 		this.canvas = canvas;
-		this.color = color;
+		this.color = c;
 	}
 	
 	@Override
@@ -28,5 +28,10 @@ public class CanvasAdapter implements Paintable {
 	@Override
 	public Color get(int x, int y) {
 		return canvas.look(x, y);
+	}
+
+	@Override
+	public void color(Color c) {
+		this.color = c;
 	}
 }

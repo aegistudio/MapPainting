@@ -6,7 +6,7 @@ package net.aegistudio.mpp.algo;
  * @author aegistudio
  */
 
-public interface CharacterGenerator {
+public interface CharacterGenerator extends Generator {
 	public void chargen(Paintable p, int x1, int y1, int x2, int y2, char c);
 	
 	public int chargen(Paintable p, int x, int y, float scale, char c);
