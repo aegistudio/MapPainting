@@ -1,3 +1,8 @@
 package net.aegistudio.mpp;
 
-public interface Asset {	}
+/**
+ * Represents an asset.
+ * @author aegistudio
+ */
+
+public interface Asset { }
