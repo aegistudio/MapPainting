@@ -4,7 +4,7 @@ import org.bukkit.plugin.Plugin;
 
 import net.aegistudio.mpp.CompositeHandle;
 import net.aegistudio.mpp.MapPainting;
-import net.aegistudio.mpp.export.CanvasHandle;
+import net.aegistudio.mpp.export.CanvasCommandHandle;
 import net.aegistudio.mpp.export.CommandHandle;
 import net.aegistudio.mpp.export.NamingException;
 import net.aegistudio.mpp.export.PluginCanvas;
@@ -85,8 +85,15 @@ public class PluginCommandManager implements PluginCommandService{
 
 	@Override
 	public <P extends Plugin, C extends PluginCanvas> void registerCreate(P thiz, String attach, String identifier,
-			CanvasHandle<P, C> create) throws NamingException {
+			CanvasCommandHandle<P, C> create) throws NamingException {
 		QueryResult result = get(thiz, attach);
 		result.handle.add(result.name, new FactoryDelegator<P, C>(thiz, create, identifier));
+	}
+
+	@Override
+	public <P extends Plugin, C extends PluginCanvas> void registerControl(P thiz, String attach, String type,
+			Class<C> canvas, CanvasCommandHandle<P, ? extends C> create) throws NamingException {
+		QueryResult result = get(thiz, attach);
+		result.handle.add(result.name, new ControlDelegator(thiz, type, canvas, create));
 	}
 }

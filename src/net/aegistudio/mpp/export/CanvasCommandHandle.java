@@ -3,7 +3,7 @@ package net.aegistudio.mpp.export;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
-public interface CanvasHandle<P extends Plugin, C extends PluginCanvas> {
+public interface CanvasCommandHandle<P extends Plugin, C extends PluginCanvas> {
 	/**
 	 * @return the description of this command.
 	 */

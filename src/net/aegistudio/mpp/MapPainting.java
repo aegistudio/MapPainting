@@ -11,7 +11,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import org.mcstats.Metrics;
 
-import net.aegistudio.mpp.algo.Algorithm;
 import net.aegistudio.mpp.algo.CharacterGenerator;
 import net.aegistudio.mpp.algo.DdaLineGenerator;
 import net.aegistudio.mpp.algo.MidAlignStringGenerator;
@@ -116,17 +115,17 @@ public class MapPainting extends JavaPlugin {
 	/** Foreign plugins love this most! **/
 	public PluginCanvasManager foreignCanvas = new PluginCanvasManager(this);
 	public PluginCommandManager foreignCommand;
-	public Algorithm algorithm = new Algorithm(); {
-		algorithm.put("line", new DdaLineGenerator());
-		algorithm.put("fill", new ScanFloodFillGenerator());
-		algorithm.put("char", new SpriteCharGenerator(MinecraftFont.Font));
+	public AssetManager asset = new AssetManager(); {
+		asset.put("line", new DdaLineGenerator());
+		asset.put("fill", new ScanFloodFillGenerator());
+		asset.put("char", new SpriteCharGenerator(MinecraftFont.Font));
 		
-		algorithm.group("string");
-		algorithm.put("string.left", new StringLineGenerator(algorithm.get("char", CharacterGenerator.class)));
-		algorithm.put("string.center", new MidAlignStringGenerator(
-				algorithm.get("string.left", StringLineGenerator.class), MinecraftFont.Font));
-		algorithm.put("string.right", new RightAlignStringGenerator(
-				algorithm.get("string.left", StringLineGenerator.class), MinecraftFont.Font));
+		asset.group("string");
+		asset.put("string.left", new StringLineGenerator(asset.get("char", CharacterGenerator.class)));
+		asset.put("string.center", new MidAlignStringGenerator(
+				asset.get("string.left", StringLineGenerator.class), MinecraftFont.Font));
+		asset.put("string.right", new RightAlignStringGenerator(
+				asset.get("string.left", StringLineGenerator.class), MinecraftFont.Font));
 	}
 	
 	public void onEnable() {
@@ -203,7 +202,7 @@ public class MapPainting extends JavaPlugin {
 					this, ServicePriority.Normal);
 			
 			// Load foregin algorithm service.
-			this.getServer().getServicesManager().register(Algorithm.class, this.algorithm,
+			this.getServer().getServicesManager().register(AssetManager.class, this.asset,
 					this, ServicePriority.Normal);
 			
 			// Load map.

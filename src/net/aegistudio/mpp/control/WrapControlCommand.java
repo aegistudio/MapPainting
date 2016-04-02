@@ -12,17 +12,12 @@ import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 
 public class WrapControlCommand extends ConcreteControlCommand {
 	{	description = "change the wrapped canvas of a wrapper.";	paramList = "<newWrapped> [<layer>]";  }
-	public static final String NOT_WRAPPER = "notWrapper";
-	public String notWrapper = ChatColor.RED + "The specified canvas " + ChatColor.AQUA + "$canvasName" 
-			+ ChatColor.RED + " is not a wrapper!";
-	
 	public static final String CANNOT_WRAP = "canontWrap";
 	public String cannotWrap = ChatColor.RED + "Cannot wrap canvas " + ChatColor.AQUA + "$canvasName"
 			+ ChatColor.RED + "! The wrapper will wrap itself!";
 	
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		super.load(painting, section);
-		this.notWrapper = painting.getLocale(NOT_WRAPPER, notWrapper, section);
 		this.cannotWrap = painting.getLocale(CANNOT_WRAP, cannotWrap, section);
 	}
 	
@@ -48,7 +43,8 @@ public class WrapControlCommand extends ConcreteControlCommand {
 		}
 		
 		if(!(canvas.canvas instanceof CanvasWrapper)) {
-			sender.sendMessage(notWrapper.replace("$canvasName", canvas.name));
+			sender.sendMessage(painting.control.mismatchedType.replace("$canvasName", canvas.name)
+					.replace("$canvasType", "wrapper"));
 			return;
 		}
 		else {

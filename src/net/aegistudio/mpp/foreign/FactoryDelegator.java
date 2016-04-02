@@ -6,16 +6,16 @@ import org.bukkit.plugin.Plugin;
 
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.canvas.Canvas;
-import net.aegistudio.mpp.export.CanvasHandle;
+import net.aegistudio.mpp.export.CanvasCommandHandle;
 import net.aegistudio.mpp.export.PluginCanvas;
 import net.aegistudio.mpp.factory.ConcreteCreateSubCommand;
 
 public class FactoryDelegator<P extends Plugin, C extends PluginCanvas> extends ConcreteCreateSubCommand implements Delegated {
 	private final P plugin;
-	private final CanvasHandle<P, C> handle;
+	private final CanvasCommandHandle<P, C> handle;
 	private final String factory;
 	
-	public FactoryDelegator(P plugin, CanvasHandle<P, C> handle, String factory) {
+	public FactoryDelegator(P plugin, CanvasCommandHandle<P, C> handle, String factory) {
 		this.plugin = plugin;
 		this.handle = handle;
 		this.description =  "[" + ChatColor.RED + plugin.getName() 

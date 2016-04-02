@@ -23,11 +23,17 @@ public class ControlCommand extends CompositeHandle {
 	public String noControlPermission = ChatColor.RED + "You don't have control permission on canvas " + ChatColor.AQUA + 
 			"$canvasName" + ChatColor.RED + "!";
 	
+	public static final String MISMATCHED_TYPE = "mismatchedType";
+	public String mismatchedType = ChatColor.RED + "The canvas " + ChatColor.AQUA + "$canvasName" 
+			+ ChatColor.RED + " is of wrong type! A canvas of "
+			+ ChatColor.GREEN + "$canvasType" + ChatColor.RED + " is expected!";
+	
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		super.load(painting, section);
 		this.canvasNotExists = painting.getLocale(CANVAS_NOT_EXISTS, canvasNotExists, section);
 		this.invalidFormat = painting.getLocale(INVALID_FORMAT, invalidFormat, section);
 		this.invalidArguments = painting.getLocale(INVALID_ARGUMENTS, invalidArguments, section);
 		this.noControlPermission = painting.getLocale(NO_CONTROL_PERMISSION, noControlPermission, section);
+		this.mismatchedType = painting.getLocale(MISMATCHED_TYPE, mismatchedType, section);
 	}
 }

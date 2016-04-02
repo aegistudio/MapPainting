@@ -67,10 +67,7 @@ public class ScriptCanvas extends Canvas {
 		binding.put("graphic", this.graphic); binding.put("g", this.graphic);
 		binding.put("callback", this.callback); binding.put("i", this.callback);
 		binding.put("casette", this.cassette); binding.put("c", this.cassette);
-		
-		// Load algorithms.
-		binding.put("algorihtm", this.painting.algorithm);
-		binding.put("a", this.painting.algorithm);
+		binding.put("asset", this.painting.asset); binding.put("a", this.painting.asset);
 		
 		// Load others.
 		binding.put("plugin", this.painting);
