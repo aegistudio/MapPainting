@@ -55,7 +55,7 @@ public class MapPainting extends JavaPlugin {
 	/** Other modules could get canvases from this map. **/
 	public CanvasManager canvas;
 	public PacketSender sender = new CraftPacketSender();
-	
+
 	/** Other modules can register commands to this handle. **/
 	public CompositeHandle command;
 	

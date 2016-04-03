@@ -3,7 +3,10 @@ package net.aegistudio.mpp.canvas;
 import java.awt.Color;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import org.bukkit.entity.Player;
@@ -41,14 +44,19 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 	protected void tick() {
 		if(updateDisplay) {
 			this.subrender(view, context);
-			if(context.dirty) {
-				for(Player p : painting.getServer().getOnlinePlayers()) {
-					painting.sender.sendPacket(p, view, context);
-				}
-				context.clean();
-			}
 			updateDisplay = false;
 		}
+		
+		Iterator<Entry<Player, Integer>> suspector = this.suspector.entrySet().iterator();
+		while(suspector.hasNext()) {
+			Entry<Player,Integer> entry = suspector.next();
+			entry.setValue(entry.getValue() + 1);
+			if(entry.getValue() >= painting.canvas.suspectTimedOut) 
+				suspector.remove();
+			else if(context.dirty) 
+				painting.sender.sendPacket(entry.getKey(), view, context);
+		}
+		context.clean();
 	}
 	
 	protected BukkitRunnable tickRunnable = new BukkitRunnable() {
@@ -73,12 +81,14 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 		if(!hasViewed(player)) 
 			context.subrender(view, 
 					new MapCanvasAdapter(painting.canvas.color, canvas));
+		suspector.put(player, 0);
 	}
 	
 	protected abstract void subrender(MapView view, Paintable canvas);
 	
 	protected final TreeSet<Integer> viewed = new TreeSet<Integer>();
 	protected final HashSet<Object> observers = new HashSet<Object>();
+	protected final HashMap<Player, Integer> suspector = new HashMap<Player, Integer>();
 	
 	public boolean updateDisplay = true;
 	public synchronized void repaint() {

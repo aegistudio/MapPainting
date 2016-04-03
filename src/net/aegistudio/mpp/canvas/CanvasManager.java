@@ -40,6 +40,9 @@ public class CanvasManager implements Module {
 	public static final String MAP = "map";
 	public CanvasColor color = new CachedCanvasColor(5);
 	
+	public static final String SUSPECT_TIMED_OUT = "suspectTimedOut";
+	public int suspectTimedOut = 40;
+	
 	/**
 	 * Stores what the player's latest modification made on which canvas.
 	 */
@@ -47,6 +50,10 @@ public class CanvasManager implements Module {
 	
 	@Override
 	public void load(MapPainting painting, ConfigurationSection canvas) throws Exception {
+		if(canvas.contains(SUSPECT_TIMED_OUT))
+			suspectTimedOut = canvas.getInt(SUSPECT_TIMED_OUT);
+		else canvas.set(SUSPECT_TIMED_OUT, suspectTimedOut);
+		
 		if(!canvas.contains(MAP)) canvas.createSection(MAP);
 		ConfigurationSection map = canvas.getConfigurationSection(MAP);
 		
