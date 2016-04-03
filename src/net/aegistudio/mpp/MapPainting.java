@@ -1,5 +1,9 @@
 package net.aegistudio.mpp;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -279,5 +283,48 @@ public class MapPainting extends JavaPlugin {
 			return this.control.handle(this, "/mppctl", sender, arguments);
 		}
 		return false;
+	}
+	
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] arguments) {
+		CompositeHandle base = null;
+		ArrayList<String> complete = new ArrayList<String>();
+		try {
+			if(command.getName().equals("mpp"))
+				base = this.command;
+			else if(command.getName().equals("mppctl"))
+				base = this.control;
+			if(base == null) return complete;
+			
+			CommandHandle handle = base;
+			for(int i = 0; i < arguments.length - 1; i ++) {
+				int index = base.name.indexOf(arguments[i]);
+				if(index < 0) return complete;
+				handle = base.subcommand.get(index);
+				if(!(handle instanceof CompositeHandle)) break;
+				base = (CompositeHandle) handle;
+			}
+			
+			if(handle instanceof CompositeHandle) {
+				// Complete the command this case.
+				CompositeHandle current = (CompositeHandle) handle;
+				for(int i = 0; i < current.name.size(); i ++)
+					if(current.name.get(i).startsWith(arguments[arguments.length - 1]))
+						complete.add(current.name.get(i));
+			}
+			else {
+				// Complete the canvases this case.
+				for(Entry<String, MapCanvasRegistry> entry : canvas.nameCanvasMap.entrySet()) {
+					if(!sender.hasPermission("mpp.manager"))
+						if(!entry.getValue().owner.contains(sender.getName())) continue;
+					
+					if(entry.getKey().startsWith(arguments[arguments.length - 1]))
+						complete.add(entry.getKey());
+				}
+			}
+			return complete;
+		}
+		catch(Throwable t) {
+			return new ArrayList<String>();
+		}
 	}
 }
