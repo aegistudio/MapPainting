@@ -4,15 +4,17 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 import net.aegistudio.mpp.Interaction;
+import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.Memento;
-import net.aegistudio.mpp.algo.DdaLineGenerator;
 import net.aegistudio.mpp.algo.LineGenerator;
 import net.aegistudio.mpp.algo.Paintable;
 import net.aegistudio.mpp.canvas.Canvas;
+import net.aegistudio.mpp.canvas.CanvasColor;
 
 public class LineDrawingMemento implements Memento, Paintable {
-	private final LineGenerator line = new DdaLineGenerator();
+	private final LineGenerator line;
 	private final Canvas canvas;
+	private final CanvasColor canvasColor;
 	private final int x1, y1, x2, y2;
 	private final Color lineColor;
 	private final String undoMessage;
@@ -21,8 +23,14 @@ public class LineDrawingMemento implements Memento, Paintable {
 	@Override
 	public void color(Color c) {}
 	
-	public LineDrawingMemento(Canvas canvas, int x1, int y1, int x2, int y2, 
+	@Override
+	public void bcolor(byte c) { }
+	
+	public LineDrawingMemento(MapPainting painting, Canvas canvas, int x1, int y1, int x2, int y2, 
 			Color c, String undoMessage, Interaction interact) {
+		this.line = painting.asset.get("line", LineGenerator.class);
+		this.canvasColor = painting.canvas.color;
+		
 		this.canvas = canvas;
 		this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
 		this.lineColor = c;
@@ -74,5 +82,10 @@ public class LineDrawingMemento implements Memento, Paintable {
 	@Override
 	public Color get(int x, int y) {
 		return canvas.look(x, y);
+	}
+	
+	@Override
+	public byte bget(int x, int y) {
+		return (byte) canvasColor.getIndex(canvas.look(x, y));
 	}
 }

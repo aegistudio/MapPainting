@@ -14,6 +14,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
+import net.aegistudio.mpp.algo.MapCanvasAdapter;
+import net.aegistudio.mpp.algo.Paintable;
 
 public abstract class Canvas extends MapRenderer implements Cloneable {
 	public final MapPainting painting;
@@ -35,8 +37,18 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 	
 	public abstract Canvas clone();
 	
+	private Graphic context = new Graphic(this);
 	protected void tick() {
-
+		if(updateDisplay) {
+			this.subrender(view, context);
+			if(context.dirty) {
+				for(Player p : painting.getServer().getOnlinePlayers()) {
+					painting.sender.sendPacket(p, view, context);
+				}
+				context.clean();
+			}
+			updateDisplay = false;
+		}
 	}
 	
 	protected BukkitRunnable tickRunnable = new BukkitRunnable() {
@@ -46,8 +58,10 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 		}
 	};
 
+	protected MapView view;
 	public void add(MapCanvasRegistry registry) {
 		tickRunnable.runTaskTimer(painting, 1, 1);
+		this.view = registry.view;
 	}
 
 	public void remove(MapCanvasRegistry registry) {
@@ -57,16 +71,20 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 	@Override
 	public void render(MapView view, MapCanvas canvas, Player player) {
 		if(!hasViewed(player)) 
-			subrender(view, canvas, player);
+			context.subrender(view, 
+					new MapCanvasAdapter(painting.canvas.color, canvas));
 	}
 	
-	protected abstract void subrender(MapView view, MapCanvas canvas, Player player);
+	protected abstract void subrender(MapView view, Paintable canvas);
 	
 	protected final TreeSet<Integer> viewed = new TreeSet<Integer>();
 	protected final HashSet<Object> observers = new HashSet<Object>();
+	
+	public boolean updateDisplay = true;
 	public synchronized void repaint() {
 		viewed.clear();
 		observers.clear();
+		updateDisplay = true;
 	}
 
 	public synchronized boolean hasViewed(Player player) {

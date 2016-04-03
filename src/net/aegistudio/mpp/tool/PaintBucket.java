@@ -29,7 +29,7 @@ public class PaintBucket implements PaintTool {
 	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, Interaction interact) {
 		Color color = painting.palette.paintBucket.getColor(itemStack);
 		if(color == null) return false;
-		canvas.history.add(new PaintFillMemento(canvas.canvas, interact, color, fillMessage));
+		canvas.history.add(new PaintFillMemento(painting, canvas.canvas, interact, color, fillMessage));
 		return true;
 	}
 }

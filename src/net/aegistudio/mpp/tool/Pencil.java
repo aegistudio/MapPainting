@@ -68,7 +68,7 @@ public class Pencil implements PaintTool {
 		Integer entityId = this.getTickCounterKey(interact);
 		
 		PencilTickCounter last = this.lastStroke.get(entityId);
-		if(last != null && last.canvas == canvas) canvas.history.add(new LineDrawingMemento(canvas.canvas,
+		if(last != null && last.canvas == canvas) canvas.history.add(new LineDrawingMemento(painting, canvas.canvas,
 				last.interaction.x, last.interaction.y, interact.x, interact.y, color, this.lineMessage, interact));
 		else canvas.history.add(new PixelTapMemento(canvas.canvas, interact, color, this.tapMessage));
 		

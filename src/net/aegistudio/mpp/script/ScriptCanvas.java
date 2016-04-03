@@ -18,12 +18,11 @@ import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
 
-import org.bukkit.entity.Player;
-import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
+import net.aegistudio.mpp.algo.Paintable;
 import net.aegistudio.mpp.canvas.Canvas;
 import net.aegistudio.mpp.canvas.Graphic;
 
@@ -143,7 +142,7 @@ public class ScriptCanvas extends Canvas {
 	}
 	
 	@Override
-	protected void subrender(MapView view, MapCanvas canvas, Player player) {
-		this.graphic.subrender(view, canvas, player);
+	protected void subrender(MapView view, Paintable canvas) {
+		this.graphic.subrender(view, canvas);
 	}
 }

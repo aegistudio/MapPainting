@@ -8,12 +8,11 @@ import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.bukkit.entity.Player;
-import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
+import net.aegistudio.mpp.algo.Paintable;
 
 public class BufferedCanvas extends Canvas {
 	public BufferedCanvas(MapPainting painting) {
@@ -33,12 +32,13 @@ public class BufferedCanvas extends Canvas {
 	}
 	
 	@Override
-	public void subrender(MapView view, MapCanvas canvas, Player player) {
+	public void subrender(MapView view, Paintable canvas) {
 		for(int i = 0; i < 128; i ++)
 			for(int j = 0; j < 128; j ++) {
-				canvas.setPixel(i, j, pixel
+				canvas.bcolor(pixel
 						[(int)(1.0 * i / 128 * size)]
 						[(int)(1.0 * j / 128 * size)]);
+				canvas.set(i, 127 - j);
 			}
 	}
 	

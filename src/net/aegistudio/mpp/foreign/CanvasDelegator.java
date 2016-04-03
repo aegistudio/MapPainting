@@ -12,12 +12,11 @@ import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.bukkit.entity.Player;
-import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
+import net.aegistudio.mpp.algo.Paintable;
 import net.aegistudio.mpp.canvas.Canvas;
 import net.aegistudio.mpp.canvas.Graphic;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
@@ -207,8 +206,8 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 	}
 
 	@Override
-	protected void subrender(MapView view, MapCanvas canvas, Player player) {
-		graphic.subrender(view, canvas, player);
+	protected void subrender(MapView view, Paintable canvas) {
+		graphic.subrender(view, canvas);
 	}
 
 	@Override

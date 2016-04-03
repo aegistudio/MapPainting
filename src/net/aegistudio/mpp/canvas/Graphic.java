@@ -5,29 +5,58 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import org.bukkit.entity.Player;
-import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
 
 import net.aegistudio.mpp.algo.Paintable;
 
 public class Graphic implements Paintable {
 	private Canvas canvas;
+	
+	public boolean dirty;
+	public int rowMax, colMax;
+	public int rowMin, colMin;
+	
 	public Graphic(Canvas canvas) {
 		this.canvas = canvas;
+		this.waste();
 	}
 	
-	public byte[][] pixel = new byte[128][128];
+	public void clean() {
+		this.dirty = false;
+		this.colMax = 0;
+		this.rowMax = 0;
+		this.colMin = 127;
+		this.rowMin = 127;
+	}
+	
+	public void waste() {
+		this.dirty = true;
+		this.colMax = 127;
+		this.rowMax = 127;
+		this.colMin = 0;
+		this.rowMin = 0;
+	}
+	
+	public int index(int x, int y) {
+		return (127 - y) * 128 + x;
+	}
+	
+	public final byte[] pixel = new byte[128 * 128];
 
 	public byte color;
+	@Override
+	public void bcolor(byte c) {
+		this.color = c;
+	}
+	
 	public void color(Color color) {
-		this.color = (byte) canvas.painting.canvas.color.getIndex(color);
+		this.bcolor((byte) canvas.painting.canvas.color.getIndex(color));
 	}
 	
 	public void clear() {
-		for(int i = 0; i < 128; i ++)
-			for(int j = 0; j < 128; j ++)
-				pixel[i][j] = color;
+		for(int i = 0; i < 128 * 128; i ++)
+			pixel[i] = color;
+		waste();
 	}
 	
 	public void clear(Color clearColor) {
@@ -38,7 +67,20 @@ public class Graphic implements Paintable {
 	public void set(int x, int y) {
 		if(x >= 128 || x < 0) return;
 		if(y >= 128 || y < 0) return;
-		pixel[x][y] = color;
+		if(pixel[index(x, y)] != color) {
+			pixel[index(x, y)] = color;	
+			modify(x, y);
+		}
+	}
+	
+	public void modify(int x, int y) {
+		int row = 127 - y; int col = x;
+		
+		this.dirty = true;
+		if(col < colMin) colMin = col;
+		if(col > colMin) colMin = col;
+		if(row < rowMin) rowMin = row;
+		if(row > rowMax) rowMax = row;
 	}
 	
 	public void set(int x, int y, Color color) {
@@ -47,15 +89,22 @@ public class Graphic implements Paintable {
 	}
 	
 	public Color get(int x, int y) {
-		if(x >= 128 || x < 0) return null;
-		if(y >= 128 || y < 0) return null;
-		return canvas.painting.canvas.color.getColor(pixel[x][y]);
+		return canvas.painting.canvas.color.getColor(this.bget(x, y));
 	}
 	
-	public void subrender(MapView view, MapCanvas canvas, Player player) {
+	@Override
+	public byte bget(int x, int y) {
+		if(x >= 128 || x < 0) return 0;
+		if(y >= 128 || y < 0) return 0;
+		return pixel[index(x, y)];
+	}
+	
+	public void subrender(MapView view, Paintable canvas) {
 		for(int i = 0; i < 128; i ++)
-			for(int j = 0; j < 128; j ++)
-				canvas.setPixel(i, 127 - j, pixel[i][j]);
+			for(int j = 0; j < 128; j ++) {
+				canvas.bcolor(pixel[index(i, j)]);
+				canvas.set(i, j);
+			}
 	}
 	
 	public void repaint() {
@@ -63,12 +112,20 @@ public class Graphic implements Paintable {
 	}
 	
 	public void read(DataInputStream din) throws IOException {
-		for(int i = 0; i < 128; i ++) din.readFully(this.pixel[i]);
+		byte[] buffer = new byte[128];
+		for(int i = 0; i < 128; i ++) {
+			din.readFully(buffer);
+			System.arraycopy(buffer, 0, this.pixel, 128 * (127 - i), 128);
+		}
 		din.readByte();	// Inteded for extension.
 	}
 	
 	public void write(DataOutputStream dout) throws IOException {
-		for(int i = 0; i < 128; i ++) dout.write(this.pixel[i]);
+		byte[] buffer = new byte[128];
+		for(int i = 0; i < 128; i ++) {
+			System.arraycopy(this.pixel, (127 - i) * 128, buffer, 0, 128);
+			dout.write(buffer);
+		}
 		dout.writeByte(0); // Intended for extension.
 	}
 
@@ -78,7 +135,7 @@ public class Graphic implements Paintable {
 	}
 	
 	public void copy(Graphic another) {
-		for(int i = 0; i < 128; i ++)
-			System.arraycopy(this.pixel[i], 0, another.pixel[i], 0, 128);
+		System.arraycopy(this.pixel, 0, another.pixel, 0, 128 * 128);
+		another.waste();
 	}
 }

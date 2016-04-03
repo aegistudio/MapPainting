@@ -4,15 +4,19 @@ import java.awt.Color;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.canvas.Canvas;
+import net.aegistudio.mpp.canvas.CanvasColor;
 
 public class CanvasAdapter implements Paintable {
 	public final Interaction interact;
 	public final Canvas canvas;
+	public final CanvasColor canvasColor;
 	public Color color;
-	public CanvasAdapter(Interaction interact, Color c, Canvas canvas) {
+	
+	public CanvasAdapter(CanvasColor canvasColor, Interaction interact, Color c, Canvas canvas) {
 		this.interact = interact;
 		this.canvas = canvas;
 		this.color = c;
+		this.canvasColor = canvasColor;
 	}
 	
 	@Override
@@ -33,5 +37,15 @@ public class CanvasAdapter implements Paintable {
 	@Override
 	public void color(Color c) {
 		this.color = c;
+	}
+
+	@Override
+	public void bcolor(byte c) {
+		this.color = canvasColor.getColor(c);
+	}
+
+	@Override
+	public byte bget(int x, int y) {
+		return (byte) canvasColor.getIndex(this.get(x, y));
 	}
 }

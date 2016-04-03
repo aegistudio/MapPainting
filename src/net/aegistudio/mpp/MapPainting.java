@@ -39,6 +39,8 @@ import net.aegistudio.mpp.factory.ScriptSubCommand;
 import net.aegistudio.mpp.factory.WrapSubCommand;
 import net.aegistudio.mpp.foreign.PluginCanvasManager;
 import net.aegistudio.mpp.foreign.PluginCommandManager;
+import net.aegistudio.mpp.intrude.CraftPacketSender;
+import net.aegistudio.mpp.intrude.PacketSender;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
 import net.aegistudio.mpp.script.ScriptDebugCommand;
@@ -52,6 +54,7 @@ import net.aegistudio.mpp.tool.UndoCommand;
 public class MapPainting extends JavaPlugin {
 	/** Other modules could get canvases from this map. **/
 	public CanvasManager canvas;
+	public PacketSender sender = new CraftPacketSender();
 	
 	/** Other modules can register commands to this handle. **/
 	public CompositeHandle command;

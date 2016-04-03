@@ -7,12 +7,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Set;
 
-import org.bukkit.entity.Player;
-import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapView;
 
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
+import net.aegistudio.mpp.algo.Paintable;
 
 /**
  * Provides a pre-implemented interface for wrappers.
@@ -69,15 +68,14 @@ public class WrapCanvas extends Canvas implements CanvasWrapper {
 		return wrappedCanvas.canvas.size();
 	}
 
-	@Override
-	public void render(MapView view, MapCanvas canvas, Player player) {
+	public void tick() {
 		retrieve();
 		if(wrappedCanvas != null) 
 			if(!wrappedCanvas.canvas.hasObserver(this)) 
 				repaint();
-		super.render(view, canvas, player);
+		super.tick();
 	}
-
+	
 	private String wrapping = "";
 	private int currentCount = -1;
 	private MapCanvasRegistry wrappedCanvas;
@@ -123,9 +121,9 @@ public class WrapCanvas extends Canvas implements CanvasWrapper {
 	}
 
 	@Override
-	protected void subrender(MapView view, MapCanvas canvas, Player player) {
+	protected void subrender(MapView view, Paintable canvas) {
 		if(wrappedCanvas == null) return;
-		wrappedCanvas.canvas.subrender(view, canvas, player);
+		wrappedCanvas.canvas.subrender(view, canvas);
 	}
 
 	@Override
