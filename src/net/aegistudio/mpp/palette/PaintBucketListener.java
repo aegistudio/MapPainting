@@ -69,6 +69,7 @@ public class PaintBucketListener implements Listener {
 				}
 			}
 			e.getInventory().setMatrix(matrix);
+			e.getInventory().setResult(result);
 		}
 	}
 	
