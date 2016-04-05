@@ -20,7 +20,7 @@ import net.aegistudio.mpp.algo.Paintable;
 import net.aegistudio.mpp.canvas.Canvas;
 import net.aegistudio.mpp.canvas.Graphic;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
-import net.aegistudio.mpp.export.Peripheral;
+import net.aegistudio.mpp.export.Context;
 import net.aegistudio.mpp.export.PluginCanvas;
 import net.aegistudio.mpp.export.PluginCanvasFactory;
 import net.aegistudio.mpp.export.PluginCanvasRegistry;
@@ -32,7 +32,7 @@ import net.aegistudio.mpp.export.PluginCanvasRegistry;
  * @author aegistudio
  */
 
-public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements Peripheral, PluginCanvasRegistry<T> {
+public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements Context, PluginCanvasRegistry<T> {
 	
 	public Graphic graphic;
 	public CanvasDelegator(MapPainting painting) {

@@ -21,5 +21,5 @@ public interface PluginCanvasFactory <T extends PluginCanvas> {
 	 * @return the created plugin canvas.
 	 */
 	
-	public T create(Peripheral p);
+	public T create(Context p);
 }
