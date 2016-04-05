@@ -69,10 +69,15 @@ public class LineDrawingMemento implements Memento, Paintable {
 	}
 
 	@Override
-	public int size() {
+	public int width() {
 		return canvas.size();
 	}
 
+	@Override
+	public int height() {
+		return canvas.size();
+	}
+	
 	@Override
 	public void set(int x, int y) {
 		this.subMemoto.add(new PixelTapMemento(canvas, 

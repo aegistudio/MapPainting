@@ -130,7 +130,12 @@ public class Graphic implements Paintable {
 	}
 
 	@Override
-	public int size() {
+	public int width() {
+		return 128;
+	}
+	
+	@Override
+	public int height() {
 		return 128;
 	}
 	

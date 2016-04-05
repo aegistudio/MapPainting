@@ -28,7 +28,7 @@ public class ScanFloodFillGenerator implements FillGenerator {
 		}
 		
 		int xmax = x + 1;
-		for(; xmax <= pa.size(); xmax ++) {
+		for(; xmax <= pa.width(); xmax ++) {
 			Color color = pa.get(xmax, y);
 			if(color == null) break;
 			if(color.getRGB() != seed.getRGB()) break;
@@ -53,8 +53,8 @@ public class ScanFloodFillGenerator implements FillGenerator {
 	private boolean inRange(Paintable p, int i, int j) {
 		if(i < 0) return false;
 		if(j < 0) return false;
-		if(i >= p.size()) return false;
-		if(j >= p.size()) return false;
+		if(i >= p.width()) return false;
+		if(j >= p.height()) return false;
 		return true;
 	}
 }

@@ -26,11 +26,6 @@ public class MapCanvasAdapter implements Paintable {
 	}
 
 	@Override
-	public int size() {
-		return 128;
-	}
-
-	@Override
 	public void set(int x, int y) {
 		this.canvas.setPixel(x, 127 - y, color);
 	}
@@ -43,5 +38,15 @@ public class MapCanvasAdapter implements Paintable {
 	@Override
 	public byte bget(int x, int y) {
 		return this.canvas.getPixel(x, 127 - y);
+	}
+
+	@Override
+	public int width() {
+		return 128;
+	}
+
+	@Override
+	public int height() {
+		return 128;
 	}
 }

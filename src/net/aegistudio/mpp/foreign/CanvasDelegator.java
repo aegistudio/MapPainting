@@ -190,7 +190,7 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 
 	@Override
 	public int size() {
-		return graphic.size();
+		return 128;
 	}
 
 	@Override
@@ -209,16 +209,51 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements P
 	protected void subrender(MapView view, Paintable canvas) {
 		graphic.subrender(view, canvas);
 	}
-
-	@Override
-	public Graphic getGraphic() {
-		return graphic;
-	}
 	
 	@Override
 	public void tick() {
 		super.tick();
 		if(this.canvasInstance != null)
 			this.canvasInstance.tick();
+	}
+
+	@Override
+	public void bcolor(byte c) {
+		graphic.bcolor(c);
+	}
+
+	@Override
+	public void color(Color c) {
+		graphic.color(c);
+	}
+
+	@Override
+	public int width() {
+		return graphic.width();
+	}
+
+	@Override
+	public int height() {
+		return graphic.height();
+	}
+
+	@Override
+	public void set(int x, int y) {
+		graphic.set(x, y);
+	}
+
+	@Override
+	public Color get(int x, int y) {
+		return graphic.get(x, y);
+	}
+
+	@Override
+	public byte bget(int x, int y) {
+		return graphic.bget(x, y);
+	}
+
+	@Override
+	public void clear() {
+		graphic.clear();
 	}
 }

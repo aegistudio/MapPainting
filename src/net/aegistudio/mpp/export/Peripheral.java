@@ -1,6 +1,6 @@
 package net.aegistudio.mpp.export;
 
-import net.aegistudio.mpp.canvas.Graphic;
+import net.aegistudio.mpp.algo.Paintable;
 
 /**
  * Peripheral is what the plugin canvas is 
@@ -9,12 +9,14 @@ import net.aegistudio.mpp.canvas.Graphic;
  * @author aegistudio
  */
 
-public interface Peripheral {
+public interface Peripheral extends Paintable {
 	/**
-	 * The plugin canvases can paint on
-	 * graphic instances.
-	 * 
-	 * @return the graphic instance.
+	 * Clear the screen of current context.
 	 */
-	public Graphic getGraphic();
+	public void clear();
+	
+	/**
+	 * Force the context to redraw.
+	 */
+	public void repaint();
 }

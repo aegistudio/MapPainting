@@ -20,11 +20,6 @@ public class CanvasAdapter implements Paintable {
 	}
 	
 	@Override
-	public int size() {
-		return canvas.size();
-	}
-	
-	@Override
 	public void set(int x, int y) {
 		canvas.paint(interact.reCoordinate(x, y), color);
 	}
@@ -47,5 +42,15 @@ public class CanvasAdapter implements Paintable {
 	@Override
 	public byte bget(int x, int y) {
 		return (byte) canvasColor.getIndex(this.get(x, y));
+	}
+
+	@Override
+	public int width() {
+		return canvas.size();
+	}
+
+	@Override
+	public int height() {
+		return canvas.size();
 	}
 }

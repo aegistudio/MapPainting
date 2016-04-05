@@ -7,7 +7,9 @@ public interface Paintable {
 	
 	public void color(Color c);
 	
-	public int size();
+	public int width();
+	
+	public int height();
 	
 	public void set(int x, int y);
 	
