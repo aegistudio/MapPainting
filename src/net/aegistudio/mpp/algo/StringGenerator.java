@@ -1,6 +1,6 @@
 package net.aegistudio.mpp.algo;
 
-import net.aegistudio.mpp.Asset;
+import net.aegistudio.mpp.export.Asset;
 
 public interface StringGenerator extends Asset {
 	/**

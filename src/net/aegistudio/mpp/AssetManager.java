@@ -2,18 +2,10 @@ package net.aegistudio.mpp;
 
 import java.util.TreeMap;
 
-/**
- * Asset manager is a class that manages assets. The common assets are
- * algorithms, fonts/bitmaps, pictures, etc.
- * 
- * Please notice that any canvases can retrieve assets from the asset class, 
- * which means that assets are shared. (So there means you may be sharing
- * variables by asset manager, though it is deprecated.)
- * 
- * @author aegistudio
- */
+import net.aegistudio.mpp.export.Asset;
+import net.aegistudio.mpp.export.AssetService;
 
-public class AssetManager extends TreeMap<String, Asset> implements Asset {
+public class AssetManager extends TreeMap<String, Asset> implements Asset, AssetService {
 	private static final long serialVersionUID = 1L;
 	
 	@SuppressWarnings("unchecked")

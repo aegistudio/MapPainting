@@ -34,7 +34,7 @@ public interface PluginCommandService {
 	 * Register a group to specified command attach point.
 	 * @param thiz the plugin itself.
 	 * @param attach the attach point.
-	 * @param the description.
+	 * @param description the description.
 	 * @throws NamingException path error, element already exist, etc.
 	 */
 	public <P extends Plugin> void registerGroup(P thiz, String attach, String description) throws NamingException;
@@ -54,10 +54,11 @@ public interface PluginCommandService {
 	 * Register a control canvas command to specified command attach point.
 	 * @param thiz the plugin itself.
 	 * @param attach the attach point.
-	 * @param identifier the factory identifier.
+	 * @param type how do we call the canvases that the control command handle?
+	 * @param canvasClazz the most abstract canvas class should this control command handle.
 	 * @param control the control command handle.
 	 * @throws NamingException path error, element already exist, etc.
 	 */
 	public <P extends Plugin, C extends PluginCanvas> void registerControl(P thiz, String attach, String type,
-			Class<C> canvas, CanvasCommandHandle<P, ? extends C> create) throws NamingException;
+			Class<? extends C> canvasClazz, CanvasCommandHandle<P, C> control) throws NamingException;
 }

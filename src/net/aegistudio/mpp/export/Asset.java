@@ -1,4 +1,4 @@
-package net.aegistudio.mpp;
+package net.aegistudio.mpp.export;
 
 /**
  * Represents an asset.

@@ -1,8 +1,11 @@
 package net.aegistudio.mpp.export;
 
 /**
- * Represents a plugin canvas registry, which could be used
- * for creation.
+ * <p>A plugin canvas registry records the registration of a plugin canvas.</p>
+ * 
+ * <p>The registration records which plugin and canvas factory generate this
+ * plugin canvas, the generated canvas itself, and the mapid and name if
+ * the canvas has already been bound.</p>
  * 
  * @author aegistudio
  *
@@ -21,7 +24,7 @@ public interface PluginCanvasRegistry<T extends PluginCanvas> {
 	public String identifier();
 	
 	/**
-	 * @return factory instance that has created this canvas.
+	 * @return the factory instance.
 	 */
 	public PluginCanvasFactory<T> factory();
 	

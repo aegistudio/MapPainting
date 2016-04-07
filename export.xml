@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MapPainting" default="doc">
+	<property name="dir.src" value="src"/>
+	<property name="dir.doc" value="doc"/>
+	
+	<target name="init">
+		<mkdir dir="${dir.doc}"/>
+	</target>
+	
+	<target name="doc" depends="init">
+		<javadoc destdir="${dir.doc}">
+			<fileset dir="${dir.src}/net/aegistudio/mpp" defaultexcludes="yes">
+				<include name="export/**"/>
+				<include name="algo/CharacterGenerator.java"/>
+				<include name="algo/FillGenerator.java"/>
+				<include name="algo/LineGenerator.java"/>
+				<include name="algo/Paintable.java"/>
+				<include name="algo/StringGenerator.java"/>
+			</fileset>
+		</javadoc>
+	</target>
+	
+	<target name="clean" depends="doc">
+		<delete dir="${dir.doc}"/>
+	</target>
+</project>

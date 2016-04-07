@@ -6,8 +6,44 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
 /**
- * This interface shows you what map painting could be used in foreign plugin
- * cases.
+ * <p>Provides services for registering, creating, destroying and maintaining canvases from other plugins.</p>
+ * 
+ * <p>When you want to register a plugin canvas (say <code>MyCanvas</code>), with canvas factory (say <code>MyFactory</code>) to
+ * Map Painting, you should retrieve the plugin canvas service first, and then register it.</p>
+ * 
+ * <p><b><code style="font-family: Courier New;">
+ * &nbsp;&nbsp;//Retrieve plugin canvas service provider first.<br>
+ * &nbsp;&nbsp;PluginCanvasService service = plugin.getServer().getServicesManager()<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;.getRegistration(PluginCanvasService.class).getProvider();<br>
+ * <br>
+ * &nbsp;&nbsp;//Create and configure the factory then.<br> 
+ * &nbsp;&nbsp;PluginCanvasFactory&lt;MyCanvas&gt; factory = new MyFactory();<br>
+ * &nbsp;&nbsp;...//Some configuration for factory.<br>
+ * <br>
+ * &nbsp;&nbsp;//Register factory finally.<br> 
+ * &nbsp;&nbsp;service.register(plugin, "myfactory", factory);<br>
+ * </code></b></p>
+ * 
+ * <p>If you successfully register your canvas factory, and you want to create a canvas of <code>MyCanvas</code>
+ * in some case (like a player issue create canvas command), you should call the generate first, then create.</p>
+ * 
+ * <p><b><code style="font-family: Courier New;">
+ * &nbsp;&nbsp;//Generate the canvas.<br>
+ * &nbsp;&nbsp;PluginCanvasRegistry&lt;MyCanvas&gt; registry = service<br>
+ * &nbsp;&nbsp;&nbsp;&nbsp;.generate(plugin, "myfactory", MyCanvas.class);<br>
+ * <br>
+ * &nbsp;&nbsp;//Do some initial work for MyCanvas.<br> 
+ * &nbsp;&nbsp;MyCanvas canvas = registry.canvas();<br>
+ * &nbsp;&nbsp;...//Some initial work.<br>
+ * <br>
+ * &nbsp;&nbsp;//Create the canvas, assume a player create the canvas.<br> 
+ * &nbsp;&nbsp;short mapid = allocateNextMapId();<br>
+ * &nbsp;&nbsp;Player player = getWhoCreateCanvas();<br>
+ * &nbsp;&nbsp;String name = getCanvasNameToCreate();<br>
+ * &nbsp;&nbsp;service.create(mapid, player, name, registry);<br>
+ * </code></b></p>
+ * 
+ * <p>There're other operations for plugin canvases, read following javadocs for detailed information.</p>
  * 
  * @author aegistudio
  */

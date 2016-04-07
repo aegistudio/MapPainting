@@ -7,8 +7,7 @@ import java.io.OutputStream;
 import net.aegistudio.mpp.Interaction;
 
 /**
- * <p>Plugin canvas defines the interface which generalizing the feature of any plugin-coded
- * canvas. </p>
+ * <p>Generalize the features of any plugin-coded canvas. </p>
  * 
  * <p>Any plugin that want to have its customized canvas should register the factory of the canvas.
  * to <code>PluginCanvasService</code> provided by Map Painting.</p>

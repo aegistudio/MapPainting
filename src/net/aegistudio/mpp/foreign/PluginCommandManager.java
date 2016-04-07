@@ -92,8 +92,8 @@ public class PluginCommandManager implements PluginCommandService{
 
 	@Override
 	public <P extends Plugin, C extends PluginCanvas> void registerControl(P thiz, String attach, String type,
-			Class<C> canvas, CanvasCommandHandle<P, ? extends C> create) throws NamingException {
+			Class<? extends C> canvas, CanvasCommandHandle<P, C> control) throws NamingException {
 		QueryResult result = get(thiz, attach);
-		result.handle.add(result.name, new ControlDelegator(thiz, type, canvas, create));
+		result.handle.add(result.name, new ControlDelegator(thiz, type, canvas, control));
 	}
 }
