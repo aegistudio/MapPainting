@@ -99,6 +99,9 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements C
 	
 	public void create(PluginCanvasFactory<T> factory) {
 		if(this.factory != factory) try {
+			if(canvasInstance != null)
+				canvasInstance.remove();
+			
 			canvasInstance = factory.create(this);
 			this.factory = factory;
 			

@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import net.aegistudio.mpp.export.NamingException;
 import net.aegistudio.mpp.export.PluginCanvas;
 import net.aegistudio.mpp.export.PluginCanvasFactory;
 import net.aegistudio.mpp.export.PluginCanvasRegistry;
@@ -21,7 +22,11 @@ public class DedicatedManager {
 	public final Map<String, PluginCanvasFactory<?>> factory = new TreeMap<String, PluginCanvasFactory<?>>();
 	public final Map<String, Set<CanvasDelegator<?>>> watchlist = new TreeMap<String, Set<CanvasDelegator<?>>>();
 	
-	public <T extends PluginCanvas> void register(String identifier, PluginCanvasFactory<T> factory) {	
+	public <T extends PluginCanvas> void register(String identifier, PluginCanvasFactory<T> factory) throws NamingException {
+		if(this.factory.containsKey(identifier))
+			if(this.factory.get(identifier).getClass() != factory.getClass())
+				throw new NamingException("factoryIdentifier", identifier);
+		
 		this.factory.put(identifier, factory);
 		for(CanvasDelegator delegator : 
 			Collections.synchronizedSet(this.watchlist(identifier))) {

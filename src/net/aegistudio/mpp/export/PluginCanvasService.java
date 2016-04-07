@@ -22,7 +22,7 @@ public interface PluginCanvasService {
 	 * @param identifier the identifier of the canvas factory.
 	 * @param factory the canvas factory instance.
 	 */
-	public <T extends PluginCanvas> void register(Plugin thiz, String identifier, PluginCanvasFactory<T> factory);
+	public <T extends PluginCanvas> void register(Plugin thiz, String identifier, PluginCanvasFactory<T> factory) throws NamingException;
 	
 	/**
 	 * Get all canvases that belongs to the same identifier.

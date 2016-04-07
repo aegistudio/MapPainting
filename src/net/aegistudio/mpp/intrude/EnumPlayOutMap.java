@@ -7,6 +7,13 @@ import org.bukkit.map.MapView;
 
 @SuppressWarnings({"deprecation", "rawtypes"})
 public enum EnumPlayOutMap {
+	IB$B {
+		@Override
+		public Object createPacket(Constructor<?> constructor, MapView mapView, byte[] raster, int columnOffset,
+				int rowOffset, int columnLength, int rowLength) throws Exception {
+			return constructor.newInstance(mapView.getId(), raster, mapView.getScale().getValue());
+		}
+	},
 	IBLCB$IIII {
 		@Override
 		public Object createPacket(Constructor<?> constructor, MapView mapView, byte[] raster, 

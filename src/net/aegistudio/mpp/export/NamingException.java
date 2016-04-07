@@ -1,8 +1,12 @@
 package net.aegistudio.mpp.export;
 
 /**
- * Throw when the corresponding naming not suitable.
- * Like there's a conflict, or something is missing.
+ * <p>Throw when the corresponding naming not suitable, like there's a conflict, 
+ * or something is missing.</p>
+ * 
+ * <p>You could get what is missing by calling <code>NamingException.getNaming()</code>, 
+ * and the detailed value by calling <code>NamingException.getValue()</code>.</p>
+ * 
  * @author aegistudio
  */
 

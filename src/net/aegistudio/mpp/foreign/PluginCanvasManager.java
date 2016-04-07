@@ -42,7 +42,7 @@ public final class PluginCanvasManager implements PluginCanvasService{
 
 	@Override
 	public <T extends PluginCanvas> void register(Plugin thiz, String identifier, 
-			PluginCanvasFactory<T> factory) {
+			PluginCanvasFactory<T> factory) throws NamingException {
 		
 		this.plugin(thiz).register(identifier, factory);
 	}
