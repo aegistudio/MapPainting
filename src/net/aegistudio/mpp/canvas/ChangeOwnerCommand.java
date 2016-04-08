@@ -1,11 +1,9 @@
 package net.aegistudio.mpp.canvas;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.HazardCommand;
@@ -47,7 +45,6 @@ public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
 		this.noChownPermission = painting.getLocale(NO_CHOWN_PERMISSION, noChownPermission, section);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
 		if(arguments.length == 0) {
@@ -61,11 +58,10 @@ public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
 				sender.sendMessage(onlyPlayer);
 				return true;
 			}
-			Player player = (Player) sender;
-			ItemStack item = player.getItemInHand();
 			
-			if(item.getType() != Material.MAP ||
-					null == (registry = painting.canvas.idCanvasMap.get(item.getDurability()))) {
+			Player player = (Player) sender;
+			registry = painting.canvas.holding(player);
+			if(registry == null) {
 				sender.sendMessage(notHolding);
 				return true;
 			}

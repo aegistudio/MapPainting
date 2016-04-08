@@ -1,11 +1,9 @@
 package net.aegistudio.mpp.canvas;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.HazardCommand;
@@ -30,17 +28,12 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 			+ " in your hand. Please confirm if you want to destroy it, or just use " 
 			+ ChatColor.YELLOW + "$prefix <name>" + ChatColor.RESET + " to specify a map.";
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
 		if(arguments.length != 1) {
 			MapCanvasRegistry canvas = null;
-			if(sender instanceof Player) {
-				Player player = (Player)sender;
-				ItemStack item = player.getItemInHand();
-				if(item.getType() == Material.MAP)
-					canvas = painting.canvas.idCanvasMap.get(item.getDurability());
-			}
+			if(sender instanceof Player) 
+				canvas = painting.canvas.holding((Player) sender);
 			
 			if(canvas != null) 
 				if(canvas.hasPermission(sender, "destroy")) {

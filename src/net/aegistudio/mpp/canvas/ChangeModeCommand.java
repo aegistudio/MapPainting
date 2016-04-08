@@ -3,11 +3,9 @@ package net.aegistudio.mpp.canvas;
 import java.util.ArrayList;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
@@ -52,7 +50,6 @@ public class ChangeModeCommand extends ActualHandle {
 		this.noChmodPermission = painting.getLocale(NO_CHMOD_PERMISSION, noChmodPermission, section);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
 		if(arguments.length == 0) {
@@ -76,11 +73,10 @@ public class ChangeModeCommand extends ActualHandle {
 				sender.sendMessage(onlyPlayer);
 				return true;
 			}
-			Player player = (Player) sender;
-			ItemStack item = player.getItemInHand();
 			
-			if(item.getType() != Material.MAP ||
-					null == (registry = painting.canvas.idCanvasMap.get(item.getDurability()))) {
+			Player player = (Player) sender;
+			registry = painting.canvas.holding(player);
+			if(registry == null) {
 				sender.sendMessage(notHolding);
 				return true;
 			}

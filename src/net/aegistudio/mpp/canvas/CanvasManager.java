@@ -3,7 +3,11 @@ package net.aegistudio.mpp.canvas;
 import java.util.TreeMap;
 import java.util.Map.Entry;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.Module;
 
@@ -35,6 +39,14 @@ public class CanvasManager implements Module {
 		
 		registry.remove();
 		return true;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public MapCanvasRegistry holding(Player player) {
+		ItemStack item = player.getItemInHand();
+		if(item.getType() == Material.MAP)
+			return idCanvasMap.get(item.getDurability());
+		return null;
 	}
 	
 	public static final String MAP = "map";

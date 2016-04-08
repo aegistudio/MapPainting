@@ -27,6 +27,7 @@ import net.aegistudio.mpp.canvas.ChangeModeCommand;
 import net.aegistudio.mpp.canvas.ChangeOwnerCommand;
 import net.aegistudio.mpp.canvas.CreateCanvasCommand;
 import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
+import net.aegistudio.mpp.canvas.InfoCommand;
 import net.aegistudio.mpp.canvas.ListCanvasCommand;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 import net.aegistudio.mpp.canvas.RenameCommand;
@@ -149,6 +150,7 @@ public class MapPainting extends JavaPlugin {
 			command.add("chmod", new ChangeModeCommand());
 			command.add("rename", new RenameCommand());
 			command.add("list", new ListCanvasCommand());
+			command.add("info", new InfoCommand());
 			command.add("undo", new UndoCommand());
 			command.add("redo", new RedoCommand());
 			command.add("control", control = new ControlCommand());

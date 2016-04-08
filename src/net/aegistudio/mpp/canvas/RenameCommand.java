@@ -1,11 +1,9 @@
 package net.aegistudio.mpp.canvas;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
@@ -37,7 +35,6 @@ public class RenameCommand extends ActualHandle {
 	public String successfullyRename = ChatColor.WHITE + "You have successfully rename " + ChatColor.AQUA + "$oldname"
 			+ ChatColor.RESET + " to " + ChatColor.AQUA + "$newname" + ChatColor.RESET + "!";
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
 		if(arguments.length == 0) 
@@ -50,14 +47,14 @@ public class RenameCommand extends ActualHandle {
 					sender.sendMessage(onlyPlayer);
 					return true;
 				}
-				Player player = (Player) sender;
-				ItemStack item = player.getItemInHand();
 				
-				if(item.getType() != Material.MAP ||
-						null == (oldcanvas = painting.canvas.idCanvasMap.get(item.getDurability()))) {
+				Player player = (Player) sender;
+				oldcanvas = painting.canvas.holding(player);
+				if(oldcanvas == null) {
 					sender.sendMessage(notHolding);
 					return true;
 				}
+				
 				newname = arguments[0];
 			}
 			else {
