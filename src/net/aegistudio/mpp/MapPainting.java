@@ -132,10 +132,8 @@ public class MapPainting extends JavaPlugin {
 		
 		asset.group("string");
 		asset.put("string.left", new StringLineGenerator(asset.get("char", CharacterGenerator.class)));
-		asset.put("string.center", new MidAlignStringGenerator(
-				asset.get("string.left", StringLineGenerator.class), MinecraftFont.Font));
-		asset.put("string.right", new RightAlignStringGenerator(
-				asset.get("string.left", StringLineGenerator.class), MinecraftFont.Font));
+		asset.put("string.center", new MidAlignStringGenerator(asset.get("char", CharacterGenerator.class)));
+		asset.put("string.right", new RightAlignStringGenerator(asset.get("char", CharacterGenerator.class)));
 	}
 	
 	public void onEnable() {

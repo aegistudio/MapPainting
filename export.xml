@@ -11,11 +11,9 @@
 		<javadoc destdir="${dir.doc}">
 			<fileset dir="${dir.src}/net/aegistudio/mpp" defaultexcludes="yes">
 				<include name="export/**"/>
-				<include name="algo/CharacterGenerator.java"/>
-				<include name="algo/FillGenerator.java"/>
-				<include name="algo/LineGenerator.java"/>
+				<include name="algo/*Generator.java"/>
 				<include name="algo/Paintable.java"/>
-				<include name="algo/StringGenerator.java"/>
+				<include name="Interaction.java"/>
 			</fileset>
 		</javadoc>
 	</target>

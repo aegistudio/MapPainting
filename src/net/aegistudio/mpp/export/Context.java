@@ -7,7 +7,7 @@ import net.aegistudio.mpp.algo.Paintable;
  * <p>You will need the help of asset/algorithm services to paint on the map efficiently.</p>
  * 
  * @see net.aegistudio.mpp.export.Asset
- * @see net.aegistudio.mpp.AssetManager
+ * @see net.aegistudio.mpp.export.AssetService
  * @see net.aegistudio.mpp.algo
  * 
  * @author aegistudio

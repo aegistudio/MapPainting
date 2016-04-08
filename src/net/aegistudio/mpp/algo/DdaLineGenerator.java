@@ -1,5 +1,11 @@
 package net.aegistudio.mpp.algo;
 
+/**
+ * Default implementation of line generating, using DDA(Digital Differential Analyzer) method.
+ * 
+ * @author aegistudio
+ */
+
 public class DdaLineGenerator implements LineGenerator {
 	
 	@Override

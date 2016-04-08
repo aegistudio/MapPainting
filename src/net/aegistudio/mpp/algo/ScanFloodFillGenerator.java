@@ -2,6 +2,12 @@ package net.aegistudio.mpp.algo;
 
 import java.awt.Color;
 
+/**
+ * Default implementation of filling, using scan flood fill algorithm.
+ * 
+ * @author aegistudio
+ */
+
 public class ScanFloodFillGenerator implements FillGenerator {
 
 	@Override

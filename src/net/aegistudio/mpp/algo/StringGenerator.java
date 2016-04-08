@@ -2,6 +2,12 @@ package net.aegistudio.mpp.algo;
 
 import net.aegistudio.mpp.export.Asset;
 
+/**
+ * Draw a string at specified position.
+ * 
+ * @author aegistudio
+ */
+
 public interface StringGenerator extends Asset {
 	/**
 	 * Draw a string.
@@ -12,6 +18,5 @@ public interface StringGenerator extends Asset {
 	 * @param content the string to be displayed.
 	 * @return the length of the string.
 	 */
-	
 	public int string(Paintable p, int x, int y, float scale, String content);
 }
