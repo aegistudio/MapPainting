@@ -43,7 +43,7 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 			}
 			
 			if(canvas != null) 
-				if(this.hasPermission(sender, canvas)) {
+				if(canvas.hasPermission(sender, "destroy")) {
 					sender.sendMessage(holding
 							.replace("$canvasName", canvas.name)
 							.replace("$prefix", prefix));
@@ -59,7 +59,7 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 				return true;
 			}
 
-			if(!this.hasPermission(sender, canvas)) {
+			if(!canvas.hasPermission(sender, "destroy")) {
 				sender.sendMessage(noPermission.replace("$canvasName", arguments[0]));
 				return true;
 			}
@@ -67,13 +67,6 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 			painting.hazard.hazard(sender, this, canvas);
 		}
 		return true;
-	}
-	
-	public boolean hasPermission(CommandSender sender, MapCanvasRegistry canvas) {
-		if(sender.hasPermission("mpp.manager")) return true;
-		if(sender.hasPermission("mpp.destroy"))
-			if(canvas.owner.equals(sender.getName())) return true;
-		return false;
 	}
 	
 	@Override

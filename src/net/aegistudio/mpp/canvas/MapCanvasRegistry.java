@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.map.MapView;
 
@@ -14,7 +15,7 @@ import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.Module;
 
 public class MapCanvasRegistry implements Module {
-	public final String name;
+	public String name;
 	public short binding;
 	public MapView view;
 	public Canvas canvas;
@@ -26,6 +27,13 @@ public class MapCanvasRegistry implements Module {
 		this.name = name;
 		this.painter = new TreeSet<String>();
 		this.history = new History();
+	}
+	
+	public boolean hasPermission(CommandSender sender, String permission) {
+		if(sender.hasPermission("mpp.manager")) return true;
+		if(!sender.hasPermission("mpp." + permission)) return false;
+		if(owner.equals(sender.getName())) return true;
+		return false;
 	}
 	
 	public static final String BINDING = "id";

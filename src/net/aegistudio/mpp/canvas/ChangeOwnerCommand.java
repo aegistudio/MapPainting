@@ -78,7 +78,7 @@ public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
 			}
 		}
 		
-		if(!hasPermission(sender, registry)) {
+		if(!registry.hasPermission(sender, "chown")) {
 			sender.sendMessage(noChownPermission.replace("$canvasName", registry.name));
 			return true;
 		}
@@ -90,14 +90,7 @@ public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
 		painting.hazard.hazard(sender, this, state);
 		return true;
 	}
-
-	public boolean hasPermission(CommandSender sender, MapCanvasRegistry canvas) {
-		if(sender.hasPermission("mpp.manager")) return true;
-		if(!sender.hasPermission("mpp.chown")) return false;
-		if(canvas.owner.equals(sender.getName())) return true;
-		return false;
-	}
-
+	
 	class ChownState {
 		public String newOwner;
 		public MapCanvasRegistry registry;

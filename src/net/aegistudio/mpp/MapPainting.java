@@ -29,12 +29,14 @@ import net.aegistudio.mpp.canvas.CreateCanvasCommand;
 import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
 import net.aegistudio.mpp.canvas.ListCanvasCommand;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
+import net.aegistudio.mpp.canvas.RenameCommand;
 import net.aegistudio.mpp.color.ColorManager;
 import net.aegistudio.mpp.color.ExpertColorParser;
 import net.aegistudio.mpp.color.RgbColorParser;
 import net.aegistudio.mpp.control.ControlCommand;
 import net.aegistudio.mpp.control.TapControlCommand;
 import net.aegistudio.mpp.control.WrapControlCommand;
+import net.aegistudio.mpp.export.AssetService;
 import net.aegistudio.mpp.export.PluginCanvasService;
 import net.aegistudio.mpp.export.PluginCommandService;
 import net.aegistudio.mpp.factory.CloneSubCommand;
@@ -145,6 +147,7 @@ public class MapPainting extends JavaPlugin {
 			command.add("destroy", new DestroyCanvasCommand());
 			command.add("chown", new ChangeOwnerCommand());
 			command.add("chmod", new ChangeModeCommand());
+			command.add("rename", new RenameCommand());
 			command.add("list", new ListCanvasCommand());
 			command.add("undo", new UndoCommand());
 			command.add("redo", new RedoCommand());
@@ -209,7 +212,7 @@ public class MapPainting extends JavaPlugin {
 					this, ServicePriority.Normal);
 			
 			// Load foregin algorithm service.
-			this.getServer().getServicesManager().register(AssetManager.class, this.asset,
+			this.getServer().getServicesManager().register(AssetService.class, this.asset,
 					this, ServicePriority.Normal);
 			
 			// Load map.

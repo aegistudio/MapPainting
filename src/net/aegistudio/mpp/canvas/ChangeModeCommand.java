@@ -93,7 +93,7 @@ public class ChangeModeCommand extends ActualHandle {
 			}
 		}
 		
-		if(!hasPermission(sender, registry)) {
+		if(!registry.hasPermission(sender, "chmod")) {
 			sender.sendMessage(noChmodPermission.replace("$canvasName", registry.name));
 			return true;
 		}
@@ -115,12 +115,5 @@ public class ChangeModeCommand extends ActualHandle {
 		sender.sendMessage(painterModified.replace("$canvasName", registry.name));
 		painting.ackHistory(registry, sender);
 		return true;
-	}
-	
-	public boolean hasPermission(CommandSender sender, MapCanvasRegistry canvas) {
-		if(sender.hasPermission("mpp.manager")) return true;
-		if(!sender.hasPermission("mpp.chmod")) return false;
-		if(canvas.owner.equals(sender.getName())) return true;
-		return false;
 	}
 }
