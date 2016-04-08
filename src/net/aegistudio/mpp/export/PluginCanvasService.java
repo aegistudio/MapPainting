@@ -81,34 +81,41 @@ public interface PluginCanvasService {
 			Class<T> clazz) throws NamingException;
 	
 	/**
+	 * Bind the generated plugin canvas registry to a map id and name.
 	 * @param mapid the map for creating the canvas.
 	 * @param owner the owner of the canvas. only this plugin could manipulate it when set to null.
 	 * @param name the name of the canvas.
 	 * @param registry a suitable creation of the canvas.
 	 * @throws NamingException thrown when the canvas is occupied.
+	 * 
+	 * @see net.aegistudio.mpp.export.PluginCanvasService#generate
 	 */
 	public <T extends PluginCanvas> void create(short mapid, CommandSender owner, 
 			String name, PluginCanvasRegistry<T> registry) throws NamingException ;
 	
 	/**
+	 * Unbind the registry from its bound mapid and name.
 	 * @param registry the registry to remove.
 	 * @return whether the removal is success.
 	 */
 	public <T extends PluginCanvas> boolean destroy(PluginCanvasRegistry<T> registry);
 	
 	/**
+	 * Check the existence of a canvas name.
 	 * @param name the canvas name
 	 * @return is the canvas already existsted.
 	 */
 	public boolean has(String name);
 	
 	/**
+	 * Check the existence of a map id.
 	 * @param mapid the mapid.
 	 * @return is the canvas already existed.
 	 */
 	public boolean has(short mapid);
 	
 	/**
+	 * Retrieve the corresponding registry with specified name.
 	 * @param thiz the caller plugin
 	 * @param identifier the identifier of the canvas factory.
 	 * @param name the name of the canvas.
@@ -118,6 +125,7 @@ public interface PluginCanvasService {
 	public <T extends PluginCanvas> PluginCanvasRegistry<T> get(Plugin thiz, String identifier, String name, Class<T> clazz);
 
 	/**
+	 * Retrieve the corresponding registry with specified map id.
 	 * @param thiz the caller plugin.
 	 * @param identifier the identifier of the canvas factory.
 	 * @param mapid the id of the map.
