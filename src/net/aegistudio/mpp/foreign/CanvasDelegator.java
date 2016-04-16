@@ -46,13 +46,13 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements C
 		this.registry = registry;
 		painting.foreignCanvas.plugin(plugin).place(this);
 		if(this.canvasInstance != null)
-			this.canvasInstance.add();
+			this.canvasInstance.add(this);
 	}
 	
 	public void remove(MapCanvasRegistry registry) {
 		super.remove(registry);
 		painting.foreignCanvas.plugin(plugin).watchlist(identifier).remove(this);
-		if(canvasInstance != null) canvasInstance.remove();
+		if(canvasInstance != null) canvasInstance.remove(this);
 	}
 	
 	public MapCanvasRegistry getRegistry() {
@@ -100,13 +100,13 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements C
 	public void create(PluginCanvasFactory<T> factory) {
 		if(this.factory != factory) try {
 			if(canvasInstance != null)
-				canvasInstance.remove();
+				canvasInstance.remove(this);
 			
 			canvasInstance = factory.create(this);
 			this.factory = factory;
 			
 			this.loadCanvasInstance();
-			canvasInstance.add();
+			canvasInstance.add(this);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

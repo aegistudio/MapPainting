@@ -60,17 +60,21 @@ public interface PluginCanvas extends Cloneable {
 	 * generate a instance of this class but not invoke this method, until you call <code>PluginCanvasService.create</code>
 	 * and successfully bind this canvas to a map.</p>
 	 * 
+	 * @param registry registry that delegates this canvas
+	 * 
 	 * @see net.aegistudio.mpp.export.PluginCanvasService#generate
 	 * @see net.aegistudio.mpp.export.PluginCanvasService#create
 	 */
-	public void add();
+	public void add(PluginCanvasRegistry<? extends PluginCanvas> registry);
 	
 	/**
 	 * Invoked when this canvas was removed or unloaded from the game.
 	 * 
+	 * @param registry registry that delegates this canvas
+	 * 
 	 * @see net.aegistudio.mpp.export.PluginCanvasService#destroy
 	 */
-	public void remove();
+	public void remove(PluginCanvasRegistry<? extends PluginCanvas> registry);
 	
 	/**
 	 * Called when the canvas ticked.
