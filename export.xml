@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="MapPainting" default="doc">
+<project name="MapPainting" default="jar">
 	<property name="dir.src" value="src"/>
 	<property name="dir.doc" value="doc"/>
+	<property name="dir.bin" value="bin"/>
+	<property name="dir.api" value="api"/>
+	<property name="dir.temp" value="temp"/>
+	<property name="spigot" value="/home/luohaoran/spigot-1.9.0/spigot-1.9.jar"/>
+	<property name="version" value="1.5.6-beta"/>
 	
 	<fileset id="exported" dir="${dir.src}/net/aegistudio/mpp" defaultexcludes="yes">
 		<include name="export/**"/>
@@ -13,6 +18,7 @@
 	
 	<target name="init">
 		<mkdir dir="${dir.doc}"/>
+		<mkdir dir="${dir.api}"/>
 	</target>
 	
 	<target name="doc" depends="init">
@@ -21,7 +27,25 @@
 		</javadoc>
 	</target>
 	
-	<target name="clean" depends="doc">
+	<target name="api" depends="init">
+		<mkdir dir="${dir.temp}"/>
+		<copy todir="${dir.temp}/net/aegistudio/mpp">
+			<fileset refid="exported"/>
+		</copy>
+		<javac srcdir="${dir.temp}" destdir="${dir.api}" classpath="${dir.bin}:${spigot}"/>
+		<delete dir="${dir.temp}"/>
+	</target>
+	
+	<target name="jar" depends="doc,api">
+		<mkdir dir="${dir.temp}"/>
+		<copydir src="${dir.doc}" dest="${dir.temp}/doc"/>
+		<copydir src="${dir.api}" dest="${dir.temp}"/>
+		<jar basedir="${dir.temp}" destfile="mappainting-${version}-api.jar"/>
+		<delete dir="${dir.temp}"/>
+	</target>
+	
+	<target name="clean" depends="doc,api">
 		<delete dir="${dir.doc}"/>
+		<delete dir="${dir.api}"/>
 	</target>
 </project>
