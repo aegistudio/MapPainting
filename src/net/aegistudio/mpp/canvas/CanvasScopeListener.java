@@ -79,7 +79,7 @@ public class CanvasScopeListener implements Module, Listener {
 		try {
 			MapCanvasRegistry registry = plugin.canvas.idCanvasMap.get((short)result);
 			if(registry != null && !registry.removed())
-				placeFrame(block, event.getBlockFace(), registry);
+				placeFrame(block.getLocation(), event.getBlockFace(), registry);
 			
 			// Consume map item.
 			if(event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
@@ -94,8 +94,7 @@ public class CanvasScopeListener implements Module, Listener {
 		event.setCancelled(true);
 	}
 	
-	public void placeFrame(Block block, BlockFace blockFace, MapCanvasRegistry registry) {
-		Location blockLocation = block.getLocation();
+	public void placeFrame(Location blockLocation, BlockFace blockFace, MapCanvasRegistry registry) {
 		// Place map item frame.
 		ItemFrame frame = blockLocation.getWorld().spawn(blockLocation.add(
 				blockFace.getModX(), blockFace.getModY(), blockFace.getModZ()), ItemFrame.class);

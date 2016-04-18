@@ -100,7 +100,7 @@ public class CanvasManager implements Module {
 	/**
 	 * Listen for players placing / removing paintings.
 	 */
-	CanvasScopeListener scopeListener;
+	public CanvasScopeListener scopeListener;
 	
 	public MapPainting painting;
 	

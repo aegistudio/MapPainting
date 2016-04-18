@@ -3,6 +3,8 @@ package net.aegistudio.mpp.foreign;
 import java.util.Collection;
 import java.util.TreeMap;
 
+import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -86,6 +88,24 @@ public final class PluginCanvasManager implements PluginCanvasService{
 		mapPainting.canvas.add(registry);
 	}
 	
+	@SuppressWarnings("deprecation")
+	@Override
+	public <T extends PluginCanvas> void create(CommandSender owner, String name, 
+			PluginCanvasRegistry<T> pluginCanvasRegistry) throws NamingException {
+		if(mapPainting.canvas.nameCanvasMap.containsKey(name)) throw new NamingException("name", name);
+		
+		int stored = mapPainting.canvas.allocate();
+		if(stored < 0) throw new NamingException("mapid", stored);
+		
+		MapCanvasRegistry registry = new MapCanvasRegistry(name);
+		registry.canvas = (CanvasDelegator<T>)pluginCanvasRegistry;
+		registry.binding = (short)stored;
+		registry.owner = owner == null? "" : owner.getName();
+		registry.view = mapPainting.getServer().getMap(registry.binding);
+		
+		mapPainting.canvas.add(registry);
+	}
+	
 	@Override
 	public <T extends PluginCanvas> boolean destroy(PluginCanvasRegistry<T> registry) {
 		if(registry == null) return false;
@@ -133,5 +153,14 @@ public final class PluginCanvasManager implements PluginCanvasService{
 	@Override
 	public boolean has(short mapid) {
 		return mapPainting.canvas.idCanvasMap.containsKey(mapid);
+	}
+
+	@Override
+	public <T extends PluginCanvas> void place(Location block, BlockFace blockFace, PluginCanvasRegistry<T> registry)
+			throws NamingException {
+		if(blockFace.equals(BlockFace.UP) || blockFace.equals(BlockFace.DOWN))
+			throw new NamingException("blockFace", blockFace);
+		mapPainting.canvas.scopeListener.placeFrame(block, blockFace, 
+				((CanvasDelegator<T>) registry).getRegistry());
 	}
 }

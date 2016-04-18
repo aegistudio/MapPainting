@@ -2,6 +2,8 @@ package net.aegistudio.mpp.export;
 
 import java.util.Collection;
 
+import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 
@@ -92,6 +94,30 @@ public interface PluginCanvasService {
 	 */
 	public <T extends PluginCanvas> void create(short mapid, CommandSender owner, 
 			String name, PluginCanvasRegistry<T> registry) throws NamingException ;
+	
+	/**
+	 * Bind the generated plugin canvas registry to the name, mapid is picked from pool or auto-generated
+	 * if there's no redundant one.
+	 * 
+	 * @param owner the owner of the canvas. only this plugin could manipulate it when set to null.
+	 * @param name the name of the canvas.
+	 * @param registry a suitable creation of the canvas.
+	 * @throws NamingException thrown when the canvas is occupied.
+	 * 
+	 * @see net.aegistudio.mpp.export.PluginCanvasService#generate
+	 */
+	public <T extends PluginCanvas> void create(CommandSender owner, String name, 
+			PluginCanvasRegistry<T> registry) throws NamingException;
+	
+	/**
+	 * Place a canvas to a face of the block.
+	 * @param block the location of block
+	 * @param blockFace which face will the canvas be placed
+	 * @param registry the registry
+	 * @throws NamingException thrown when face incorrect, or canvas improper.
+	 */
+	public <T extends PluginCanvas> void place(Location block, BlockFace blockFace, 
+			PluginCanvasRegistry<T> registry) throws NamingException;
 	
 	/**
 	 * Unbind the registry from its bound mapid and name.
