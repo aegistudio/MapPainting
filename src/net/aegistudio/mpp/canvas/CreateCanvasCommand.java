@@ -32,6 +32,9 @@ public class CreateCanvasCommand extends CompositeHandle {
 	public static final String BOUND = "bound";
 	public String bound = "You have successfully bound " + ChatColor.AQUA + "$canvasName" + ChatColor.RESET + "!";
 	
+	public static final String PROMPT_CONFIRM = "promptConfirm";
+	public boolean promptConfirm = false;
+	
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception{
 		super.load(painting, section);
@@ -42,5 +45,8 @@ public class CreateCanvasCommand extends CompositeHandle {
 		mapAlreadyBound = painting.getLocale(MAP_ALREADY_BOUND, mapAlreadyBound, section);
 		canvasAlreadyExisted = painting.getLocale(CANVAS_ALREADY_EXISTED, canvasAlreadyExisted, section);
 		bound = painting.getLocale(BOUND, bound, section);
+		
+		if(!section.contains(PROMPT_CONFIRM)) section.set(PROMPT_CONFIRM, promptConfirm);
+		else promptConfirm = section.getBoolean(PROMPT_CONFIRM);
 	}
 }

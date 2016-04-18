@@ -51,15 +51,23 @@ public abstract class ConcreteCreateSubCommand extends ActualHandle implements H
 				
 				ItemStack item = player.getItemInHand();
 				if(item.getType() != Material.MAP) {
-					sender.sendMessage(painting.create.notHoldingMap);
-					painting.hazard.hazard(sender, this, canvas);
+					if(painting.create.promptConfirm) {
+						sender.sendMessage(painting.create.notHoldingMap);
+						painting.hazard.hazard(sender, this, canvas);
+					}
+					else handle(painting, sender, canvas);
+
 					return true;
 				}
 				else {
 					short map = item.getDurability();
 					if(painting.canvas.idCanvasMap.containsKey(map)) {
-						sender.sendMessage(painting.create.mapAlreadyBound);
-						painting.hazard.hazard(sender, this, canvas);
+						if(painting.create.promptConfirm) {
+							sender.sendMessage(painting.create.mapAlreadyBound);
+							painting.hazard.hazard(sender, this, canvas);
+						}
+						else handle(painting, sender, canvas);
+						
 						return true;
 					}
 					
@@ -75,6 +83,11 @@ public abstract class ConcreteCreateSubCommand extends ActualHandle implements H
 	
 	protected void commit(MapPainting painting, CommandSender sender, MapCanvasRegistry canvas) {
 		painting.canvas.add(canvas);
+
+		if(sender instanceof Player) {
+			Player player = (Player) sender;
+			painting.canvas.give(player, canvas);
+		}
 		
 		sender.sendMessage(painting.create.bound.replace("$canvasName", canvas.name));
 		painting.ackHistory(canvas, sender);
@@ -85,20 +98,16 @@ public abstract class ConcreteCreateSubCommand extends ActualHandle implements H
 	@SuppressWarnings("deprecation")
 	public void handle(MapPainting painting, CommandSender sender, Object state) {
 		MapCanvasRegistry registry = (MapCanvasRegistry) state;
-		MapView view = painting.getServer().createMap(painting.getServer().getWorlds().get(0));
-		if(view == null) {
+		int allocated = painting.canvas.allocate();
+		if(allocated < 0) {
 			sender.sendMessage(painting.create.tooManyMap);
 			return;
 		}
+		MapView view = painting.getServer().getMap((short) allocated);
 		
 		registry.binding = view.getId();
 		registry.view = view;
 
-		if(sender instanceof Player) {
-			Player player = (Player) sender;
-			player.getInventory().addItem(new ItemStack(Material.MAP, 1, registry.binding));
-		}
-		
 		this.commit(painting, sender, registry);
 	}
 }
