@@ -1,5 +1,6 @@
 bin
-/mcstat/
-/doc/
-/api/
-mappainting-*-api.jar
+mcstat
+doc
+api
+j7bin
+mappainting-*.jar
