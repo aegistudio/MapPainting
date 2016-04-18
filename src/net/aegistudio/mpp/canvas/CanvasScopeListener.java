@@ -102,9 +102,9 @@ public class CanvasScopeListener implements Module, Listener {
 		
 		// Set some meta for the item.
 		ItemStack mapitem = new ItemStack(Material.MAP, 1, registry.binding);
-		ItemMeta mapitemMeta = mapitem.getItemMeta();
-		mapitemMeta.setDisplayName(registry.name);
-		mapitem.setItemMeta(mapitemMeta);
+		//ItemMeta mapitemMeta = mapitem.getItemMeta();
+		//mapitemMeta.setDisplayName(registry.name);
+		//mapitem.setItemMeta(mapitemMeta);
 		frame.setItem(mapitem);
 		
 		registry.canvas.place(blockLocation, blockFace);
