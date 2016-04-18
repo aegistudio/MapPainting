@@ -12,6 +12,9 @@ import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Item;
 import org.bukkit.map.MapView;
 
 import net.aegistudio.mpp.Interaction;
@@ -21,6 +24,7 @@ import net.aegistudio.mpp.canvas.Canvas;
 import net.aegistudio.mpp.canvas.Graphic;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 import net.aegistudio.mpp.export.Context;
+import net.aegistudio.mpp.export.PlaceSensitive;
 import net.aegistudio.mpp.export.PluginCanvas;
 import net.aegistudio.mpp.export.PluginCanvasFactory;
 import net.aegistudio.mpp.export.PluginCanvasRegistry;
@@ -258,5 +262,17 @@ public class CanvasDelegator<T extends PluginCanvas> extends Canvas implements C
 	@Override
 	public void clear() {
 		graphic.clear();
+	}
+	
+	public void place(Location blockLocation, BlockFace blockFace) {
+		if(this.canvasInstance != null)
+			if(this.canvasInstance instanceof PlaceSensitive)
+				((PlaceSensitive)canvasInstance).place(blockLocation, blockFace);
+	}
+	
+	public void unplace(Item spawnedItem) {
+		if(this.canvasInstance != null)
+			if(this.canvasInstance instanceof PlaceSensitive)
+				((PlaceSensitive)canvasInstance).unplace(spawnedItem);
 	}
 }

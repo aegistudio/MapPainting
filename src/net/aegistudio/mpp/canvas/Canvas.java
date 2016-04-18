@@ -9,6 +9,9 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
+import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
@@ -39,6 +42,10 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 	public abstract void save(MapPainting painting, OutputStream mppFile) throws Exception;
 	
 	public abstract Canvas clone();
+	
+	public void place(Location blockLocation, BlockFace face) {			}
+	
+	public void unplace(Item dropped) {			}
 	
 	private Graphic context = new Graphic(this);
 	protected void tick() {

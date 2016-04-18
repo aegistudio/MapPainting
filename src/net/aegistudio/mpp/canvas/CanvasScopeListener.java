@@ -78,7 +78,7 @@ public class CanvasScopeListener implements Module, Listener {
 		
 		try {
 			MapCanvasRegistry registry = plugin.canvas.idCanvasMap.get((short)result);
-			if(registry != null && !registry.removed())
+			if(registry != null && !registry.removed()) 
 				placeFrame(block.getLocation(), event.getBlockFace(), registry);
 			
 			// Consume map item.
@@ -106,6 +106,8 @@ public class CanvasScopeListener implements Module, Listener {
 		mapitemMeta.setDisplayName(registry.name);
 		mapitem.setItemMeta(mapitemMeta);
 		frame.setItem(mapitem);
+		
+		registry.canvas.place(blockLocation, blockFace);
 	}
 	
 	@EventHandler
@@ -114,10 +116,11 @@ public class CanvasScopeListener implements Module, Listener {
 		if(item.getType() != Material.MAP) return;
 		short mapid = item.getDurability();
 		MapCanvasRegistry registry = plugin.canvas.idCanvasMap.get(mapid);
-		if(registry != null) {
+		if(registry != null && !registry.removed()) {
 			this.make(item, registry);
 			e.getEntity().setItemStack(item);
 			removeNearby(e.getEntity().getLocation(), mapid);
+			registry.canvas.unplace(e.getEntity());
 		}
 		else if(plugin.canvas.pool.contains(mapid)) {
 			e.getEntity().remove();
