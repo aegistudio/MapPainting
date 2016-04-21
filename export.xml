@@ -8,10 +8,7 @@
 	<property name="dir.temp" value="temp"/>
 	
 	<!-- Modify when bukkit API changes -->
-	<property name="spigot" value="/home/luohaoran/spigot-1.9.0/spigot-1.9.jar"/>
-	
-	<!-- Modify when Map Painting version changes -->
-	<property name="version" value="1.5.6-beta"/>
+	<property file="build.properties"/>
 	
 	<!-- Modify when Map Painting API include paths changes -->
 	<fileset id="exported" dir="${dir.src}/net/aegistudio/mpp" defaultexcludes="yes">
@@ -39,7 +36,7 @@
 		<copy todir="${dir.temp}/net/aegistudio/mpp">
 			<fileset refid="exported"/>
 		</copy>
-		<javac srcdir="${dir.temp}" destdir="${dir.api}" classpath="${dir.bin}:${spigot}"/>
+		<javac srcdir="${dir.temp}" destdir="${dir.api}" classpath="${dir.bin}:${bukkit}"/>
 		<delete dir="${dir.temp}"/>
 	</target>
 	
