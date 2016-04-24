@@ -61,7 +61,7 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 			if(entry.getValue() >= painting.canvas.suspectTimedOut) 
 				suspector.remove();
 			else if(context.dirty) 
-				painting.sender.sendPacket(entry.getKey(), view, context);
+				painting.sender.sendMapPacket(entry.getKey(), view, context);
 		}
 		context.clean();
 	}

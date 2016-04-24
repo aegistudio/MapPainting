@@ -68,30 +68,30 @@ public class CanvasScopeListener implements Module, Listener {
 	
 	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void onItemUse(PlayerInteractEvent event) {
-		Block block = event.getClickedBlock();
-		if(block == null) return;
-		if(event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-		
+	public void onItemUse(PlayerInteractEvent event) {		
 		int result = parse(event.getItem());
 		if(result < 0) return;
 		
-		try {
-			MapCanvasRegistry registry = plugin.canvas.idCanvasMap.get((short)result);
-			if(registry != null && !registry.removed()) 
-				placeFrame(block.getLocation(), event.getBlockFace(), registry);
-			
-			// Consume map item.
-			if(event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
-				int newAmount = event.getPlayer().getItemInHand().getAmount() - 1;
-				if(newAmount > 0) event.getPlayer().getItemInHand().setAmount(newAmount);
-				else event.getPlayer().setItemInHand(null);
+		if(event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+			Block block = event.getClickedBlock();
+			if(block == null) return;
+			try {
+				MapCanvasRegistry registry = plugin.canvas.idCanvasMap.get((short)result);
+				if(registry != null && !registry.removed()) 
+					placeFrame(block.getLocation(), event.getBlockFace(), registry);
+				
+				// Consume map item.
+				if(event.getPlayer().getGameMode() == GameMode.SURVIVAL) {
+					int newAmount = event.getPlayer().getItemInHand().getAmount() - 1;
+					if(newAmount > 0) event.getPlayer().getItemInHand().setAmount(newAmount);
+					else event.getPlayer().setItemInHand(null);
+				}
 			}
+			catch(Throwable e) {
+				
+			}
+			event.setCancelled(true);
 		}
-		catch(Throwable e) {
-			
-		}
-		event.setCancelled(true);
 	}
 	
 	public void placeFrame(Location blockLocation, BlockFace blockFace, MapCanvasRegistry registry) {

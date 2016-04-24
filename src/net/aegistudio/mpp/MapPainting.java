@@ -49,8 +49,8 @@ import net.aegistudio.mpp.factory.ScriptSubCommand;
 import net.aegistudio.mpp.factory.WrapSubCommand;
 import net.aegistudio.mpp.foreign.PluginCanvasManager;
 import net.aegistudio.mpp.foreign.PluginCommandManager;
-import net.aegistudio.mpp.intrude.CraftPacketSender;
-import net.aegistudio.mpp.intrude.PacketSender;
+import net.aegistudio.mpp.inject.CraftPacketSender;
+import net.aegistudio.mpp.inject.PacketSender;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
 import net.aegistudio.mpp.script.ScriptDebugCommand;
@@ -64,7 +64,7 @@ import net.aegistudio.mpp.tool.UndoCommand;
 public class MapPainting extends JavaPlugin {
 	/** Other modules could get canvases from this map. **/
 	public CanvasManager canvas;
-	public PacketSender sender = new CraftPacketSender();
+	public PacketSender sender;
 
 	/** Other modules can register commands to this handle. **/
 	public CompositeHandle command;
@@ -224,6 +224,9 @@ public class MapPainting extends JavaPlugin {
 			this.canvas.load(this, config.getConfigurationSection(CANVAS));
 			
 			this.saveConfig();
+			
+			// Load packet sender.
+			this.sender = new CraftPacketSender(this);
 		}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -363,6 +366,7 @@ public class MapPainting extends JavaPlugin {
 				for(Entry<String, MapCanvasRegistry> entry : canvas.nameCanvasMap.entrySet()) {
 					if(!sender.hasPermission("mpp.manager"))
 						if(!entry.getValue().owner.contains(sender.getName())) continue;
+					if(entry.getValue().owner.length() == 0) continue;
 					
 					if(entry.getKey().startsWith(arguments[arguments.length - 1]))
 						complete.add(entry.getKey());
