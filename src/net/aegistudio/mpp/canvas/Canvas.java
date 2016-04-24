@@ -54,14 +54,18 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 			updateDisplay = false;
 		}
 		
+		Object mapPacket = null;
+		if(context.dirty)
+			mapPacket = painting.pomap.newMapPacket(view, context);
+		
 		Iterator<Entry<Player, Integer>> suspector = this.suspector.entrySet().iterator();
 		while(suspector.hasNext()) {
 			Entry<Player,Integer> entry = suspector.next();
 			entry.setValue(entry.getValue() + 1);
 			if(entry.getValue() >= painting.canvas.suspectTimedOut) 
 				suspector.remove();
-			else if(context.dirty) 
-				painting.sender.sendMapPacket(entry.getKey(), view, context);
+			else if(mapPacket != null) 
+				painting.sender.sendPacket(entry.getKey(), mapPacket);
 		}
 		context.clean();
 	}

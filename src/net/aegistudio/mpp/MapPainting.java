@@ -50,6 +50,7 @@ import net.aegistudio.mpp.factory.WrapSubCommand;
 import net.aegistudio.mpp.foreign.PluginCanvasManager;
 import net.aegistudio.mpp.foreign.PluginCommandManager;
 import net.aegistudio.mpp.inject.CraftPacketSender;
+import net.aegistudio.mpp.inject.PacketPOMapFactory;
 import net.aegistudio.mpp.inject.PacketSender;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
@@ -64,6 +65,7 @@ import net.aegistudio.mpp.tool.UndoCommand;
 public class MapPainting extends JavaPlugin {
 	/** Other modules could get canvases from this map. **/
 	public CanvasManager canvas;
+	public PacketPOMapFactory pomap;
 	public PacketSender sender;
 
 	/** Other modules can register commands to this handle. **/
@@ -226,7 +228,8 @@ public class MapPainting extends JavaPlugin {
 			this.saveConfig();
 			
 			// Load packet sender.
-			this.sender = new CraftPacketSender(this);
+			CraftPacketSender sender = new CraftPacketSender(this);	this.sender = sender;
+			this.pomap = new PacketPOMapFactory(sender.minecraftPackage);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

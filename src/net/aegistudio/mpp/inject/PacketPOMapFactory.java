@@ -2,7 +2,6 @@ package net.aegistudio.mpp.inject;
 
 import java.lang.reflect.Constructor;
 
-import org.bukkit.entity.Player;
 import org.bukkit.map.MapView;
 
 import net.aegistudio.mpp.canvas.Graphic;
@@ -31,7 +30,7 @@ public class PacketPOMapFactory {
 		}
 	}
 	
-	public Object newMapPacket(Player player, MapView view, Graphic graphic) {
+	public Object newMapPacket(MapView view, Graphic graphic) {
 		try {
 			constructor.setAccessible(true);
 			return newPacket.createPacket(constructor, view, graphic.pixel, 0,

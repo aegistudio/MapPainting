@@ -4,10 +4,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.bukkit.entity.Player;
-import org.bukkit.map.MapView;
 
 import net.aegistudio.mpp.MapPainting;
-import net.aegistudio.mpp.canvas.Graphic;
 
 /**
  * Specially inteded for CraftBukkit servers, which allow you to
@@ -44,8 +42,6 @@ public class CraftPacketSender implements PacketSender {
 		for(Method m : Class.forName(minecraftPackage + ".PlayerConnection").getDeclaredMethods())
 			if(m.getName().equals("sendPacket")) {	sendPacketMethod = m; break; }
 		if(sendPacketMethod == null) throw new NoSuchFieldException("sendPacket");
-		
-		this.playOutMapFactory = new PacketPOMapFactory(this.minecraftPackage);
 	}
 	
 	public <Packet> void sendPacket(Player player, Packet packet) {
@@ -53,19 +49,6 @@ public class CraftPacketSender implements PacketSender {
 			Object handle = getHandleMethod.invoke(player);
 			Object connection = playerConnectionField.get(handle);
 			sendPacketMethod.invoke(connection, packet);
-		}
-		catch(Exception e) {
-			
-		}
-	}
-	
-	public final PacketPOMapFactory playOutMapFactory;
-	@Override
-	public void sendMapPacket(Player player, MapView view, Graphic graphic){
-		if(!graphic.dirty) return;
-		try {
-			Object packet = playOutMapFactory.newMapPacket(player, view, graphic);
-			sendPacket(player, packet);
 		}
 		catch(Exception e) {
 			
