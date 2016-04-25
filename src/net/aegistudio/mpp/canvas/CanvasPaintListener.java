@@ -1,10 +1,10 @@
 package net.aegistudio.mpp.canvas;
 
 import java.util.Collection;
+import java.util.function.BiFunction;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -43,26 +43,54 @@ public class CanvasPaintListener implements Listener {
 	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent interact) {
-		if(interact.getClickedBlock() == null) return;
-		BlockFace blockFace = interact.getBlockFace();
-		if(blockFace == BlockFace.UP || blockFace == BlockFace.DOWN) return;
+		Collection<Entity> entities = null;
+		Location center = null;
+		Location boxSize = null;
 		
-		Collection<Entity> entities = interact.getClickedBlock().getWorld()
-			.getNearbyEntities(interact.getClickedBlock()
-					.getLocation().add(0.5, 0.5, 0.5)
-						.add(blockFace.getModX(), 0, blockFace.getModZ()), 0.5, 0.5, 0.5);
+		Location playerEyePos = interact.getPlayer().getLocation();
+		double yaw = (playerEyePos.getYaw() + 90) * Math.PI / 180;
+		double pitch = -playerEyePos.getPitch() * Math.PI / 180;
+		
+		double a = Math.cos(yaw) * Math.cos(pitch);
+		double b = Math.sin(pitch);
+		double c = Math.sin(yaw) * Math.cos(pitch);
+		
+		
+		if(interact.getClickedBlock() != null) {
+			Location blockCenter = interact.getClickedBlock().getLocation().add(0.5, 0.5, 0.5).clone();
+			
+			center = playerEyePos.clone().add(blockCenter).multiply(0.5);
+			boxSize = playerEyePos.clone().multiply(-1).add(blockCenter);
+		}
+		else {
+			center = playerEyePos.clone().add(a * 2, b * 2, c * 2);
+			boxSize = new Location(playerEyePos.getWorld(), a * 4, b * 4, c * 4);
+		}
+		
+		entities = center.getWorld().getNearbyEntities(
+				center, Math.abs(boxSize.getX()) + 1, Math.abs(boxSize.getY()) + 1, Math.abs(boxSize.getZ()) + 1);
+		
 		for(Entity entity : entities) 
-				if(entity instanceof ItemFrame){
+				if(entity instanceof ItemFrame) {
+			// Check containing map.
 			ItemFrame itemFrame = (ItemFrame) entity;
-			if(itemFrame.getItem().getType() != Material.MAP) return;
+			if(itemFrame.getItem().getType() != Material.MAP) continue;
+			
+			// Check vector.
+			int vecFrameX = itemFrame.getFacing().getModX();
+			int vecFrameZ = itemFrame.getFacing().getModZ();
+			if(vecFrameX * a +vecFrameZ * c > 0) continue;
+			
 			short mapId = itemFrame.getItem().getDurability();
 			MapCanvasRegistry registry = painting.canvas.idCanvasMap.get(mapId);
-			if(registry == null) break;
+			if(registry == null) continue;
 			
 			if(manipulate(itemFrame, registry, interact.getPlayer(), 
-					interact.getAction() == Action.RIGHT_CLICK_AIR || interact.getAction() == Action.RIGHT_CLICK_BLOCK)) 
+					interact.getAction() == Action.RIGHT_CLICK_AIR ||
+					interact.getAction() == Action.RIGHT_CLICK_BLOCK)) {
 				interact.setCancelled(true);
-			break;
+				break;
+			}
 		}
 	}
 
@@ -86,6 +114,39 @@ public class CanvasPaintListener implements Listener {
 		Location itemFrame = itemFrameEntity.getLocation();
 		Location playerEyePos = player.getLocation().add(0, player.getEyeHeight(), 0);
 		
+		return this.calculateUV(playerEyePos, itemFrame, (u, v) -> {
+			// transform uv.
+			EnumRotation rotation = EnumRotation.valueOf(itemFrameEntity.getRotation().name());
+			double up = rotation.u(u, v);
+			double vp = rotation.v(u, v);
+			double uq = up + 0.5; double vq = vp + 0.5;
+			
+			int x = (int)(uq * registry.canvas.size());
+			if(x >= registry.canvas.size() || x < 0) return false;
+			
+			int y = (int)(vq * registry.canvas.size());
+			if(y >= registry.canvas.size() || y < 0) return false;
+			
+			// Calculate block location
+			Location blockLocation = itemFrame.clone().add(-0.5 * itemFrameEntity.getFacing().getModX(), 
+					0, -0.5 * itemFrameEntity.getFacing().getModZ());
+			
+			Interaction interact = new Interaction(x, y, player, blockLocation, itemFrame, rightClicked);
+			
+			// Paint on canvas.
+			if(player.hasPermission("mpp.paint"))
+				if(registry.painter.contains(player.getName()))
+					if(painting.tool.paint(player.getItemInHand(), registry, interact)) {
+						painting.canvas.latest.put(player.getName(), registry.name);
+						return true;
+					}
+			if(player.hasPermission("mpp.interact"))
+				return registry.canvas.interact(interact);
+			return false;
+		});
+	}
+	
+	public <T> T calculateUV(Location playerEyePos, Location itemFrame, BiFunction<Double, Double, T> function) {
 		double yaw = (playerEyePos.getYaw() + 90) * Math.PI / 180;
 		double pitch = -playerEyePos.getPitch() * Math.PI / 180;
 		
@@ -127,29 +188,6 @@ public class CanvasPaintListener implements Listener {
 			else u = -xLook;
 		}
 		
-		// transform uv.
-		EnumRotation rotation = EnumRotation.valueOf(itemFrameEntity.getRotation().name());
-		double up = rotation.u(u, v);
-		double vp = rotation.v(u, v);
-		u = up + 0.5; v = vp + 0.5;
-		
-		int x = (int)(u * registry.canvas.size());
-		int y = (int)(v * registry.canvas.size());
-		
-		// Calculate block location
-		Location blockLocation = itemFrame.clone().add(-A / 2, 0, -C / 2);
-		
-		Interaction interact = new Interaction(x, y, player, blockLocation, itemFrame, rightClicked);
-		
-		// Paint on canvas.
-		if(player.hasPermission("mpp.paint"))
-			if(registry.painter.contains(player.getName()))
-				if(painting.tool.paint(player.getItemInHand(), registry, interact)) {
-					painting.canvas.latest.put(player.getName(), registry.name);
-					return true;
-				}
-		if(player.hasPermission("mpp.interact"))
-			return registry.canvas.interact(interact);
-		return false;
+		return function.apply(u, v);
 	}
 }
