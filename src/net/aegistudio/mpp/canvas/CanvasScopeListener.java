@@ -41,7 +41,6 @@ public class CanvasScopeListener implements Module, Listener {
 
 	public void make(ItemStack item, MapCanvasRegistry registry) {
 		item.setType(Material.PAINTING);
-		item.setAmount(1);
 		item.setDurability((short)0);
 		
 		ItemMeta meta = item.getItemMeta();

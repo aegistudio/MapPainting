@@ -35,6 +35,7 @@ public class RenameCommand extends ActualHandle {
 	public String successfullyRename = ChatColor.WHITE + "You have successfully rename " + ChatColor.AQUA + "$oldname"
 			+ ChatColor.RESET + " to " + ChatColor.AQUA + "$newname" + ChatColor.RESET + "!";
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
 		if(arguments.length == 0) 
@@ -82,6 +83,11 @@ public class RenameCommand extends ActualHandle {
 				
 				sender.sendMessage(successfullyRename.replace("$oldname", oldname)
 						.replace("$newname", newname));
+				
+				if(sender instanceof Player) {
+					Player player = (Player) sender;
+					painting.canvas.scopeListener.make(player.getItemInHand(), oldcanvas);
+				}
 			}
 		}
 		return true;
