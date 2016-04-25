@@ -19,15 +19,13 @@ public class PacketPOMapFactory {
 	public Class<?> packetClass;
 	
 	public PacketPOMapFactory(String minecraftPackage) throws Exception {
-		if(newPacket == null) {
-			Class<?> packetClass = Class.forName(minecraftPackage + ".PacketPlayOutMap");
-			for(Constructor<?> constructor : packetClass.getConstructors()) {
-				this.newPacket = EnumPlayOutMap.get(constructor);
-				this.constructor = constructor;
-				if(newPacket != null) break;
-			}
-			if(newPacket == null) return;
+		Class<?> packetClass = Class.forName(minecraftPackage + ".PacketPlayOutMap");
+		for(Constructor<?> constructor : packetClass.getConstructors()) {
+			this.newPacket = EnumPlayOutMap.get(constructor);
+			this.constructor = constructor;
+			if(newPacket != null) break;
 		}
+		if(newPacket == null) throw new NoSuchMethodException();
 	}
 	
 	public Object newMapPacket(MapView view, Graphic graphic) {

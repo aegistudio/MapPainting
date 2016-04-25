@@ -44,10 +44,18 @@ public class CraftPacketSender implements PacketSender {
 		if(sendPacketMethod == null) throw new NoSuchFieldException("sendPacket");
 	}
 	
+	public Object getHandle(Player player) {
+		try {
+			return getHandleMethod.invoke(player);
+		}
+		catch(Exception e) {
+			return null;
+		}
+	}
+	
 	public <Packet> void sendPacket(Player player, Packet packet) {
 		try {
-			Object handle = getHandleMethod.invoke(player);
-			Object connection = playerConnectionField.get(handle);
+			Object connection = playerConnectionField.get(getHandle(player));
 			sendPacketMethod.invoke(connection, packet);
 		}
 		catch(Exception e) {

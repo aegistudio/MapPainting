@@ -51,7 +51,9 @@ import net.aegistudio.mpp.foreign.PluginCanvasManager;
 import net.aegistudio.mpp.foreign.PluginCommandManager;
 import net.aegistudio.mpp.inject.CraftPacketSender;
 import net.aegistudio.mpp.inject.PacketPOMapFactory;
+import net.aegistudio.mpp.inject.PacketPOSignFactory;
 import net.aegistudio.mpp.inject.PacketSender;
+import net.aegistudio.mpp.inject.WorldAccess;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
 import net.aegistudio.mpp.script.ScriptDebugCommand;
@@ -66,6 +68,8 @@ public class MapPainting extends JavaPlugin {
 	/** Other modules could get canvases from this map. **/
 	public CanvasManager canvas;
 	public PacketPOMapFactory pomap;
+	public PacketPOSignFactory posign;
+	public WorldAccess world;
 	public PacketSender sender;
 
 	/** Other modules can register commands to this handle. **/
@@ -230,6 +234,8 @@ public class MapPainting extends JavaPlugin {
 			// Load packet sender.
 			CraftPacketSender sender = new CraftPacketSender(this);	this.sender = sender;
 			this.pomap = new PacketPOMapFactory(sender.minecraftPackage);
+			this.posign = new PacketPOSignFactory(sender.minecraftPackage);
+			this.world = new WorldAccess(sender.craftbukkitPackage, sender.minecraftPackage);
 		}
 		catch(Exception e) {
 			e.printStackTrace();

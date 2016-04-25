@@ -24,6 +24,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.Module;
+import net.aegistudio.mpp.view.NamingView;
 
 public class CanvasScopeListener implements Module, Listener {
 	public MapPainting plugin;
@@ -89,6 +90,24 @@ public class CanvasScopeListener implements Module, Listener {
 			}
 			catch(Throwable e) {
 				
+			}
+			event.setCancelled(true);
+		}
+		else if(event.getAction() == Action.RIGHT_CLICK_AIR) {
+			final MapCanvasRegistry registry = plugin.canvas.idCanvasMap.get((short)result);
+			if(registry != null && !registry.removed() && registry.owner.equals(event.getPlayer().getName())) {
+				new NamingView(plugin, "=" + ChatColor.AQUA 
+						+ "Rename Canvas" + ChatColor.RESET + "=", registry.name, 
+						ChatColor.DARK_GRAY + "(Modify Line 2 To", 
+						ChatColor.DARK_GRAY + "Rename Canvas!)", event.getPlayer()) {
+					@Override
+					protected void name(String name) {
+						if(name.length() == 0) return;
+						if(name.equals(registry.name)) return;
+						String[] command = new String[] {"rename", registry.name, name};
+						plugin.command.handle(plugin, "/mpp", event.getPlayer(), command);
+					}
+				}.show();
 			}
 			event.setCancelled(true);
 		}
