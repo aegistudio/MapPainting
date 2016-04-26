@@ -7,6 +7,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.canvas.Canvas;
 import net.aegistudio.mpp.script.ScriptCanvas;
+import net.aegistudio.mpp.script.ScriptEnginePool;
 import net.aegistudio.mpp.script.UnsupportedException;
 
 public class ScriptSubCommand extends ConcreteCreateSubCommand {
@@ -18,6 +19,8 @@ public class ScriptSubCommand extends ConcreteCreateSubCommand {
 	public static final String LANGUAGE_UNSUPPORTED = "languageUnsupported";
 	public String languageUnsupported = ChatColor.RED + "I'm sorry but script engine for " 
 			+ ChatColor.LIGHT_PURPLE + "$language" + ChatColor.RED + " has not yet been installed.";
+	
+	public static final String PROMPT_ENGINE = "promptEngine";
 	
 	@Override
 	protected Canvas create(MapPainting painting, CommandSender sender, String[] arguments) {
@@ -53,5 +56,10 @@ public class ScriptSubCommand extends ConcreteCreateSubCommand {
 		super.load(painting, section);
 		this.noScript = painting.getLocale(NO_SCRIPT, noScript, section);
 		this.languageUnsupported = painting.getLocale(LANGUAGE_UNSUPPORTED, languageUnsupported, section);
+		if(!section.contains(PROMPT_ENGINE)) section.createSection(PROMPT_ENGINE);
+		
+		ConfigurationSection promptEngines = section.getConfigurationSection(PROMPT_ENGINE);
+		for(String key : promptEngines.getKeys(false)) 
+			ScriptEnginePool.replace(key, promptEngines.getString(key));
 	}
 }
