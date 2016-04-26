@@ -135,14 +135,19 @@ public class CanvasPaintListener implements Listener {
 			
 			// Paint on canvas.
 			if(player.hasPermission("mpp.paint"))
-				if(registry.painter.contains(player.getName()))
+				if(registry.canPaint(player)) {
 					if(painting.tool.paint(player.getItemInHand(), registry, interact)) {
 						painting.canvas.latest.put(player.getName(), registry.name);
 						return true;
 					}
+				}
+			
 			if(player.hasPermission("mpp.interact"))
-				return registry.canvas.interact(interact);
-			return false;
+				if(registry.canInteract(player))
+					return registry.canvas.interact(interact);
+				else return true;
+			
+			return true;
 		});
 	}
 	

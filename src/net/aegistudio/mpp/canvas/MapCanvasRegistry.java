@@ -21,12 +21,36 @@ public class MapCanvasRegistry implements Module {
 	public Canvas canvas;
 	public String owner;
 	public TreeSet<String> painter;
+	public TreeSet<String> interactor;
 	public History history;
 	
 	public MapCanvasRegistry(String name) {
 		this.name = name;
 		this.painter = new TreeSet<String>();
 		this.history = new History();
+	}
+	
+	public boolean select(TreeSet<String> set, CommandSender sender) {
+		String who = sender.getName();
+		if(set.contains(who)) return true;
+		if(set.contains("#-" + who)) return false;
+		if(set.contains("#reject:" + who)) return false;
+		if(set.contains("#all")) return true;
+		if(set.contains("#op")) if(sender.isOp()) return true;
+		for(String permissionEntry : set.tailSet("#perm:", false)) {
+			if(!permissionEntry.startsWith("#perm:")) break;
+			if(sender.hasPermission(permissionEntry.substring("#perm:".length())))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean canPaint(CommandSender sender) {
+		return select(painter, sender);
+	}
+	
+	public boolean canInteract(CommandSender sender) {
+		return select(interactor, sender);
 	}
 	
 	public boolean hasPermission(CommandSender sender, String permission) {
@@ -39,13 +63,24 @@ public class MapCanvasRegistry implements Module {
 	public static final String BINDING = "id";
 	public static final String OWNER = "owner";
 	public static final String PAINTER = "painter";
+	public static final String INTERACTOR = "interactor";
 	
 	@SuppressWarnings("deprecation")
 	public void load(MapPainting map, ConfigurationSection canvas) throws Exception {
 		binding = (short) canvas.getInt(BINDING);
 		view = map.getServer().getMap(binding);
 		this.owner = canvas.getString(OWNER);
+		
+		// Read painters.
 		this.painter = new TreeSet<String>(canvas.getStringList(PAINTER));
+		
+		// Read interactors.
+		if(canvas.contains(INTERACTOR))
+			this.interactor = new TreeSet<String>(canvas.getStringList(INTERACTOR));
+		else {
+			this.interactor = new TreeSet<String>();
+			this.interactor.add("#all");
+		}
 		
 		File file = new File(map.getDataFolder(), name.concat(".mpp"));
 		try(FileInputStream input = new FileInputStream(file);
@@ -58,7 +93,14 @@ public class MapCanvasRegistry implements Module {
 		if(removed()) return;
 		canvas.set(BINDING, binding);
 		canvas.set(OWNER, owner);
+		
+		// Write painters.
 		canvas.set(PAINTER, new ArrayList<String>(this.painter));
+		
+		// Writer interactors.
+		if(interactor.contains("#all") && interactor.size() == 1)
+			canvas.set(INTERACTOR, null);
+		else canvas.set(INTERACTOR, new ArrayList<String>(this.painter));
 		
 		File file = new File(map.getDataFolder(), name.concat(".mpp"));
 		if(!file.exists()) file.createNewFile();

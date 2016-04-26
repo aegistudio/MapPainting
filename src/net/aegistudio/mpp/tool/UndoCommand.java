@@ -64,7 +64,7 @@ public class UndoCommand extends ActualHandle {
 				return true;
 			}
 			
-			if(!target.owner.equals(sender.getName()) && !target.painter.contains(sender.getName())) {
+			if(!target.owner.equals(sender.getName()) && !target.canPaint(sender)) {
 				sender.sendMessage(this.noUndoPermission.replace("$canvasName", canvas));
 				return true;
 			}

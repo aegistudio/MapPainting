@@ -42,7 +42,7 @@ public class WrapCanvas extends Canvas implements CanvasWrapper {
 		retrieve();
 		if(wrappedCanvas == null) return;
 		if(interact.sender != null)
-			if(!wrappedCanvas.painter.contains(interact.sender.getName())) return;
+			if(!wrappedCanvas.canPaint(interact.sender)) return;
 		wrappedCanvas.canvas.paint(interact, color);
 	}
 

@@ -64,7 +64,7 @@ public class RedoCommand extends ActualHandle {
 				return true;
 			}
 			
-			if(!target.owner.equals(sender.getName()) && !target.painter.contains(sender.getName())) {
+			if(!target.owner.equals(sender.getName()) && !target.canPaint(sender)) {
 				sender.sendMessage(this.noRedoPermission.replace("$canvasName", canvas));
 				return true;
 			}

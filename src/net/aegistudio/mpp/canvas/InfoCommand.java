@@ -1,5 +1,7 @@
 package net.aegistudio.mpp.canvas;
 
+import java.util.TreeSet;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -23,6 +25,9 @@ public class InfoCommand extends ActualHandle {
 	public static final String PAINTER = "painter";
 	public String painter = ChatColor.BOLD + "Painter: " + ChatColor.RESET + "$painterList";
 	
+	public static final String INTERACTOR = "interactor";
+	public String interactor = ChatColor.BOLD + "Interactor: " + ChatColor.RESET + "$interactorList";
+	
 	public static final String PAINTER_LISTITEM = "painterListitem";
 	public String painterListitem = ChatColor.GREEN + "$painter" + ChatColor.RESET;
 	
@@ -45,16 +50,22 @@ public class InfoCommand extends ActualHandle {
 		
 		sender.sendMessage(owner.replace("$owner", registry.owner));
 		
+		sender.sendMessage(painter.replace("$painterList", list(registry.painter)));
+		
+		sender.sendMessage(interactor.replace("$interactorList", list(registry.interactor)));
+		
+		return true;
+	}
+	
+	public String list(TreeSet<String> set) {
 		StringBuilder painterList = new StringBuilder();
 		boolean first = true;
-		for(String painter : registry.painter) {
+		for(String painter : set) {
 			if(first) first = false;
 			else painterList.append(", ");
 			painterList.append(painterListitem.replace("$painter", painter));
 		}
-		sender.sendMessage(painter.replace("$painterList", new String(painterList)));
-		
-		return true;
+		return new String(painterList);
 	}
 	
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
