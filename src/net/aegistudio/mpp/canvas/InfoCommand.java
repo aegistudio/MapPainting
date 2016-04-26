@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permissible;
 
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
@@ -31,6 +32,10 @@ public class InfoCommand extends ActualHandle {
 	public static final String PAINTER_LISTITEM = "painterListitem";
 	public String painterListitem = ChatColor.GREEN + "$painter" + ChatColor.RESET;
 	
+	public static final String PREVILEGE = "previlege";
+	public String previlege = ChatColor.BOLD + "Previlege (" + ChatColor.GREEN + "$who" 
+			+ ChatColor.WHITE + "): " + ChatColor.RESET + "$previlegeList";
+	
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
 		MapCanvasRegistry registry = null;
@@ -49,10 +54,25 @@ public class InfoCommand extends ActualHandle {
 				.replace("$binding", Short.toString(registry.binding)));
 		
 		sender.sendMessage(owner.replace("$owner", registry.owner));
-		
 		sender.sendMessage(painter.replace("$painterList", list(registry.painter)));
-		
 		sender.sendMessage(interactor.replace("$interactorList", list(registry.interactor)));
+		
+		Permissible testing = null;
+		String testingname = null;
+		if(arguments.length >= 2) {
+			testingname = arguments[1];
+			testing = painting.getServer().getPlayer(testingname);
+		}
+		else {
+			testing = sender;
+			testingname = sender.getName();
+		}
+		
+		TreeSet<String> previlegeList = new TreeSet<String>();
+		if(registry.owner.equals(testingname)) previlegeList.add("owner");
+		if(registry.select(registry.painter, testingname, testing)) previlegeList.add("painter");
+		if(registry.select(registry.interactor, testingname, testing)) previlegeList.add("interact");
+		sender.sendMessage(previlege.replace("$who", testingname).replace("$previlegeList", list(previlegeList)));
 		
 		return true;
 	}
@@ -74,6 +94,7 @@ public class InfoCommand extends ActualHandle {
 		this.name = painting.getLocale(NAME, name, section);
 		this.owner = painting.getLocale(OWNER, owner, section);
 		this.painter = painting.getLocale(PAINTER, painter, section);
+		this.previlege = painting.getLocale(PREVILEGE, previlege, section);
 		this.painterListitem = painting.getLocale(PAINTER_LISTITEM, painterListitem, section);
 	}
 }

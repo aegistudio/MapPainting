@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.map.MapView;
+import org.bukkit.permissions.Permissible;
 
 import net.aegistudio.mpp.History;
 import net.aegistudio.mpp.MapPainting;
@@ -30,12 +31,12 @@ public class MapCanvasRegistry implements Module {
 		this.history = new History();
 	}
 	
-	public boolean select(TreeSet<String> set, CommandSender sender) {
-		String who = sender.getName();
+	public boolean select(TreeSet<String> set, String who, Permissible sender) {
 		if(set.contains(who)) return true;
 		if(set.contains("#-" + who)) return false;
 		if(set.contains("#reject:" + who)) return false;
 		if(set.contains("#all")) return true;
+		if(sender == null) return false;
 		if(set.contains("#op")) if(sender.isOp()) return true;
 		for(String permissionEntry : set.tailSet("#perm:", false)) {
 			if(!permissionEntry.startsWith("#perm:")) break;
@@ -46,11 +47,11 @@ public class MapCanvasRegistry implements Module {
 	}
 	
 	public boolean canPaint(CommandSender sender) {
-		return select(painter, sender);
+		return select(painter, sender.getName(), sender);
 	}
 	
 	public boolean canInteract(CommandSender sender) {
-		return select(interactor, sender);
+		return select(interactor, sender.getName(), sender);
 	}
 	
 	public boolean hasPermission(CommandSender sender, String permission) {
