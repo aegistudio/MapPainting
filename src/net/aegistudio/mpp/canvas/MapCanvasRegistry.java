@@ -111,7 +111,7 @@ public class MapCanvasRegistry implements Module {
 		CanvasMppOutputStream cout = new CanvasMppOutputStream(output);) {
 			cout.writeCanvas(map, this.canvas);
 		}
-		this.remove();
+		this.removeNoMark();
 	}
 	
 	public void add() {
@@ -121,9 +121,13 @@ public class MapCanvasRegistry implements Module {
 	
 	private boolean removed = false;
 	public void remove() {
+		this.removeNoMark();
+		this.removed = true;
+	}
+	
+	public void removeNoMark() {
 		view.removeRenderer(this.canvas);
 		this.canvas.remove(this);
-		this.removed = true;
 	}
 	
 	public boolean removed() {
