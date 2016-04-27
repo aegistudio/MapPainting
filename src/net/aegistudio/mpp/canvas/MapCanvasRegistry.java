@@ -28,6 +28,8 @@ public class MapCanvasRegistry implements Module {
 	public MapCanvasRegistry(String name) {
 		this.name = name;
 		this.painter = new TreeSet<String>();
+		this.interactor = new TreeSet<String>();
+		this.interactor.add("#all");
 		this.history = new History();
 	}
 	
