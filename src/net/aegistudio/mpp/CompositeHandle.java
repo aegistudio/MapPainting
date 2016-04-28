@@ -91,4 +91,10 @@ public class CompositeHandle extends ActualHandle {
 		this.name.add(name);
 		this.subcommand.add(command);
 	}
+	
+	public void save(MapPainting painting, ConfigurationSection section) throws Exception {
+		super.save(painting, section);
+		for(CommandHandle handle : this.subcommand)
+			handle.save(painting, section);
+	}
 }

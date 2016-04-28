@@ -33,6 +33,7 @@ import net.aegistudio.mpp.canvas.DestroyCanvasCommand;
 import net.aegistudio.mpp.canvas.InfoCommand;
 import net.aegistudio.mpp.canvas.ListCanvasCommand;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
+import net.aegistudio.mpp.canvas.PurgeCanvasCommand;
 import net.aegistudio.mpp.canvas.RenameCommand;
 import net.aegistudio.mpp.color.ColorManager;
 import net.aegistudio.mpp.color.ExpertColorParser;
@@ -162,6 +163,7 @@ public class MapPainting extends JavaPlugin {
 			command.add("redo", new RedoCommand());
 			command.add("control", control = new ControlCommand());
 			command.add("pigment", new PigmentCommand());
+			command.add("purge", new PurgeCanvasCommand());
 			command.add(CONFIRM, this.hazard = new ConfirmCommand());
 			
 			// Load create commands.
@@ -320,6 +322,9 @@ public class MapPainting extends JavaPlugin {
 			config.set(CANVAS, null);
 			if(!config.contains(CANVAS)) config.createSection(CANVAS);
 			canvas.save(this, config.getConfigurationSection(CANVAS));
+			
+			if(!config.contains(COMMAND_LOCALE)) config.createSection(COMMAND_LOCALE);
+			this.command.save(this, config.getConfigurationSection(COMMAND_LOCALE));
 			
 			this.saveConfig();
 		}
