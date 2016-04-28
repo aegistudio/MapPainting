@@ -8,7 +8,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.ChatColor;
 
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.Module;
@@ -25,11 +24,10 @@ public class PaintBucketRecipe implements Module {
 	}
 	
 	public static final String FILL_BUCKET = "fillBucket";
-	public String fillBucket = ChatColor.RESET + "Fill Bucket";
+	public String fillBucket = "@palette.fillBucket";
 	
 	public static final String DRINK_PAINT_BUCKET = "drinkPaintBucket";
-	public String drinkPaintBucket = ChatColor.MAGIC + "====" + 
-			ChatColor.RESET + "Is it tasty?" + ChatColor.MAGIC + "=====";
+	public String drinkPaintBucket = "@palette.drinkPaintBucket";
 	
 	public MapPainting painting;
 	@SuppressWarnings("deprecation")

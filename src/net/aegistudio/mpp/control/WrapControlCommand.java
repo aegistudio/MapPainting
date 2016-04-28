@@ -2,7 +2,6 @@ package net.aegistudio.mpp.control;
 
 import java.util.TreeSet;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -11,10 +10,9 @@ import net.aegistudio.mpp.canvas.CanvasWrapper;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 
 public class WrapControlCommand extends ConcreteControlCommand {
-	{	description = "change the wrapped canvas of a wrapper.";	paramList = "<newWrapped> [<layer>]";  }
+	{	description = "@control.wrap.description";	paramList = "<newWrapped> [<layer>]";  }
 	public static final String CANNOT_WRAP = "canontWrap";
-	public String cannotWrap = ChatColor.RED + "Cannot wrap canvas " + ChatColor.AQUA + "$canvasName"
-			+ ChatColor.RED + "! The wrapper will wrap itself!";
+	public String cannotWrap = "@control.wrap.cannotWrap";
 	
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		super.load(painting, section);

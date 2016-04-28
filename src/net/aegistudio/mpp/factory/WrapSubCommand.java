@@ -7,7 +7,7 @@ import net.aegistudio.mpp.canvas.Canvas;
 import net.aegistudio.mpp.canvas.WrapCanvas;
 
 public class WrapSubCommand extends ConcreteCreateSubCommand {
-	{	description = "a wrapping container for canvases.";	 paramList = ""; }
+	{	description = "@create.wrap.description";	 paramList = ""; }
 	
 	@Override
 	protected Canvas create(MapPainting painting, CommandSender sender, String[] arguments) {

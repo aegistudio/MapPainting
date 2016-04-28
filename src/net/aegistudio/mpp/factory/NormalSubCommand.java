@@ -5,21 +5,18 @@ import org.bukkit.configuration.ConfigurationSection;
 
 import java.awt.Color;
 
-import org.bukkit.ChatColor;
-
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.canvas.BufferedCanvas;
 import net.aegistudio.mpp.canvas.Canvas;
 
 public class NormalSubCommand extends ConcreteCreateSubCommand{
-	{ description = "square canvas fully covering the map."; paramList = "[<1~128>] [<background>]"; }
+	{ description = "@create.normal.description"; paramList = "[<1~128>] [<background>]"; }
 	
 	public static final String INVALID_FORMAT = "invalidFormat";
-	public String invalidFormat = ChatColor.RED + "You input is not in valid format!";
+	public String invalidFormat = "@create.normal.invalidFormat";
 	
 	public static final String OUT_OF_RANGE = "outOfRange";
-	public String outOfRange = ChatColor.RED + 
-			"The canvas size you input is either too big or too small.";
+	public String outOfRange = "@create.normal.outOfRange";
 	
 	@Override
 	protected Canvas create(MapPainting painting, CommandSender sender, String[] arguments) {

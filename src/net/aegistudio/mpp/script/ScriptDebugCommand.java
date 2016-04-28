@@ -17,14 +17,13 @@ import net.aegistudio.mpp.control.ConcreteControlCommand;
  */
 
 public class ScriptDebugCommand extends ConcreteControlCommand {
-	{ description = "debug a script canvas."; paramList = "[@<flags> [<argument>...]]";}
+	{ description = "@control.debug.description"; paramList = "[@<flags> [<argument>...]]";}
 	public static final String SPACING = "    ";
 	public static final String FLAG_PREFIX = ChatColor.YELLOW.toString() + ChatColor.BOLD;
 	public static final String DESCRIPTION_PREFIX = ChatColor.RESET.toString();
 	
 	public static final String NOT_SCRIPT = "notScript";
-	public String notScript = ChatColor.RED + "The specified canvas " + ChatColor.AQUA + "$canvasName" 
-			+ ChatColor.RED + " is not a script canvas!";
+	public String notScript = ChatColor.RED + "@control.debug.notScript";
 	
 	@Override
 	protected void subhandle(MapPainting painting, MapCanvasRegistry canvas, CommandSender sender, String[] arguments) {

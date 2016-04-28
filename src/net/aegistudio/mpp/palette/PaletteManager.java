@@ -9,26 +9,22 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.Module;
-import org.bukkit.ChatColor;
 
 public class PaletteManager implements Module {
 	public static final String IDENTIFIER = "identifier";
-	public String identifier = ChatColor.RESET + ChatColor.BOLD.toString() + "Palette Item";
+	public String identifier = "@palette.identifier";
 
 	//public static final String ITEMNAME = "itemName";
 	//public String itemName = ChatColor.RESET + "Palette";
 	
 	public static final String CYAN = "cyan";
-	public String cyan = ChatColor.RESET + ChatColor.AQUA.toString() 
-		+ ChatColor.BOLD.toString() + "Cyan: " + ChatColor.RESET;
+	public String cyan = "@palette.cyan";
 	
 	public static final String MAGENTA = "magenta";
-	public String magenta = ChatColor.RESET + ChatColor.LIGHT_PURPLE.toString() 
-		+ ChatColor.BOLD.toString() + "Magenta: " + ChatColor.RESET;
+	public String magenta = "@palette.magenta";
 	
 	public static final String YELLOW = "yellow";
-	public String yellow = ChatColor.RESET + ChatColor.YELLOW.toString() 
-		+ ChatColor.BOLD.toString() + "Yellow: " + ChatColor.RESET;
+	public String yellow = "@palette.yellow";
 
 	// Open for the call of using dye!
 	public NaivePigmentRecipe dye;
@@ -74,17 +70,10 @@ public class PaletteManager implements Module {
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		// Load configuration.
-		if(section.contains(IDENTIFIER)) identifier = section.getString(IDENTIFIER);
-		else section.set(IDENTIFIER, identifier);
-	
-		if(section.contains(CYAN)) cyan = section.getString(CYAN);
-		else section.set(CYAN, cyan);
-		
-		if(section.contains(MAGENTA)) magenta = section.getString(MAGENTA);
-		else section.set(MAGENTA, magenta);
-		
-		if(section.contains(YELLOW)) yellow = section.getString(YELLOW);
-		else section.set(YELLOW, yellow);
+		identifier = painting.getLocale(IDENTIFIER, identifier, section);
+		cyan = painting.getLocale(CYAN, cyan, section);
+		magenta = painting.getLocale(MAGENTA, magenta, section);
+		yellow = painting.getLocale(YELLOW, yellow, section);
 		
 		// Add naive pigment recipes and listener.
 		this.dye = new NaivePigmentRecipe();

@@ -1,6 +1,5 @@
 package net.aegistudio.mpp.palette;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
@@ -12,15 +11,15 @@ import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.color.PseudoColor;
 
 public class PigmentCommand extends ActualHandle {
-	{ description = "Give the player a pigment of specified color."; }
+	{ description = "@pigment.description"; }
 	public static final String ONLY_PLAYER = "onlyPlayer";
-	public String onlyPlayer = ChatColor.RED + "Only player can use pigment command.";
+	public String onlyPlayer = "@pigment.onlyPlayer";
 	
 	public static final String NO_PIGMENT_PERMISSION = "noPermission";
-	public String noPigmentPermission = ChatColor.RED + "You don't have permission to issue pigment command.";
+	public String noPigmentPermission = "@pigment.noPigmentPermission";
 	
 	public static final String INVALID_FORMAT = "invalidFormat";
-	public String invalidFormat = ChatColor.RED + "The color you input is undefined!";
+	public String invalidFormat = "@pigment.invalidFormat";
 	
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception{

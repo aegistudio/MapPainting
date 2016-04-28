@@ -9,7 +9,7 @@ import net.aegistudio.mpp.color.PseudoColor;
 import net.aegistudio.mpp.tool.PixelTapMemento;
 
 public class TapControlCommand extends ConcreteControlCommand {
-	{	description = "tap on a pixel with a color.";	paramList = "<x> <y> <color>";  }
+	{	description = "@control.tap.description";	paramList = "<x> <y> <color>";  }
 	
 	@Override
 	protected void subhandle(MapPainting painting, MapCanvasRegistry canvas, CommandSender sender, String[] arguments) {

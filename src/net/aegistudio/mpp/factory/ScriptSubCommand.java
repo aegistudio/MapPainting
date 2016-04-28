@@ -1,6 +1,5 @@
 package net.aegistudio.mpp.factory;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -11,14 +10,13 @@ import net.aegistudio.mpp.script.ScriptEnginePool;
 import net.aegistudio.mpp.script.UnsupportedException;
 
 public class ScriptSubCommand extends ConcreteCreateSubCommand {
-	{ description = "a incredible canvas run on a script."; paramList = "<script> [<argument>...]"; }
+	{ description = "@create.script.description"; paramList = "<script> [<argument>...]"; }
 	
 	public static final String NO_SCRIPT = "noScript";
-	public String noScript = ChatColor.RED + "You would need a script file to empower this canvas.";
+	public String noScript = "@create.script.noScript";
 	
 	public static final String LANGUAGE_UNSUPPORTED = "languageUnsupported";
-	public String languageUnsupported = ChatColor.RED + "I'm sorry but script engine for " 
-			+ ChatColor.LIGHT_PURPLE + "$language" + ChatColor.RED + " has not yet been installed.";
+	public String languageUnsupported = "@create.script.languageUnsupported";
 	
 	public static final String PROMPT_ENGINE = "promptEngine";
 	
