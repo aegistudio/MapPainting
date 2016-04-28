@@ -2,7 +2,6 @@ package net.aegistudio.mpp.canvas;
 
 import java.io.File;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
@@ -17,13 +16,13 @@ import net.aegistudio.mpp.MapPainting;
  */
 
 public class PurgeCanvasCommand extends ActualHandle {
-	{	description = "Purge any useless canvases."; 	}
+	{	description = "@purge.description"; 	}
 	
 	public static final String NO_PURGE_PERMISSION = "noPurgePermission";
-	public String noPurgePermission = ChatColor.RED + "You don't have permission to purge canvases.";
+	public String noPurgePermission = "@purge.noPurgePermission";
 
 	public static final String PURGE_RESULT = "purgeResult";
-	public String purgeResult = "Finished clean up! You have succesfully purged $count files.";
+	public String purgeResult = "@purge.result";
 	
 	public static final String PURGE_ON_UNLOAD = "purgeOnUnload";
 	public boolean purgeOnUnload = true;

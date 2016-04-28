@@ -323,7 +323,8 @@ public class MapPainting extends JavaPlugin {
 			return section.getString(name);
 		else {
 			if(defaultLocale.charAt(0) == '@' && this.defaultLocale != null) {
-				defaultLocale = this.defaultLocale.getProperty(defaultLocale.substring(1));
+				String fetchedLocale = this.defaultLocale.getProperty(defaultLocale.substring(1));
+				defaultLocale = fetchedLocale == null? defaultLocale : fetchedLocale;
 				for(ChatColor chat : ChatColor.values())
 					defaultLocale = defaultLocale.replace("${" + chat.name() + "}", chat.toString());
 			}

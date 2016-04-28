@@ -1,6 +1,5 @@
 package net.aegistudio.mpp.canvas;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -10,23 +9,19 @@ import net.aegistudio.mpp.HazardCommand;
 import net.aegistudio.mpp.MapPainting;
 
 public class DestroyCanvasCommand extends ActualHandle implements HazardCommand {
-	{ description = "Destroy a canvas, making bound map normal."; }
+	{ description = "@destroy.description"; }
 	
 	public static final String CANVAS_NOT_EXISTS = "canvasNotExists";
-	public String canvasNotExists = ChatColor.RED + "Cannot destroy " + ChatColor.AQUA + "$canvasName" + ChatColor.RED + 
-			"! Specified canvas " + ChatColor.AQUA + "$canvasName" + ChatColor.RED + " doesn't exist!";
+	public String canvasNotExists = "@destroy.canvasNotExists";
 	
 	public static final String NO_PERMISSION = "noPermission";
-	public String noPermission = ChatColor.RED + "You are neither the owner of the painting " 
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RED + " nor the manager!";
+	public String noPermission = "@destroy.noDestroyPermission";
 	
 	public static final String UNBOUND = "unbound";
-	public String unbound = "The canvas " + ChatColor.AQUA + "$canvasName" + ChatColor.RESET + " has been unbound.";
+	public String unbound = "@destroy.unbound";
 	
 	public static final String HOLDING = "holding";
-	public String holding = "You're holding the canvas " + ChatColor.AQUA + "$canvasName" + ChatColor.RESET 
-			+ " in your hand. Please confirm if you want to destroy it, or just use " 
-			+ ChatColor.YELLOW + "$prefix <name>" + ChatColor.RESET + " to specify a map.";
+	public String holding = "@destroy.holding";
 	
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {

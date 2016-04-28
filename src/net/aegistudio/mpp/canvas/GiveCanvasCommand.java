@@ -1,6 +1,5 @@
 package net.aegistudio.mpp.canvas;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -9,21 +8,19 @@ import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
 
 public class GiveCanvasCommand extends ActualHandle {
-	{ description = "Give you the canvas you want."; }
+	{ description = "@give.description"; }
 	
 	public static final String ONLY_PLAYER = "onlyPlayer";
-	public String onlyPlayer = ChatColor.RED + "Only player can use give command.";
+	public String onlyPlayer = "@give.onlyPlayer";
 	
 	public static final String CANVAS_NOT_EXISTS = "canvasNotExists";
-	public String canvasNotExists = ChatColor.RED + "Cannot give " + ChatColor.AQUA + "$canvasName" + ChatColor.RED + 
-			"to you! Specified canvas " + ChatColor.AQUA + "$canvasName" + ChatColor.RED + " doesn't exist!";
+	public String canvasNotExists = "@give.canvasNotExists";
 	
 	public static final String NO_PERMISSION = "noPermission";
-	public String noPermission = ChatColor.RED + "You are neither the owner of the painting " 
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RED + " nor the manager!";
+	public String noPermission = "@give.noGivePermission";
 	
 	public static final String HERE_YOU_ARE = "hereYouAre";
-	public String hereYouAre = "Here you are! The canvas " + ChatColor.AQUA + "$canvasName" + ChatColor.RESET + "!";
+	public String hereYouAre = "@give.hereYouAre";
 	
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {

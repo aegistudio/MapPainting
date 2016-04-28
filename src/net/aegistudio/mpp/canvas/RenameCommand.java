@@ -1,6 +1,5 @@
 package net.aegistudio.mpp.canvas;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -9,31 +8,25 @@ import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
 
 public class RenameCommand extends ActualHandle {
-	{	description = "Rename an existing canvas."; 	}
+	{	description = "@rename.description"; 	}
 
 	public static final String ONLY_PLAYER = "onlyPlayer";
-	public String onlyPlayer = ChatColor.RED + "Only player can use rename command without specifying old canvas name!";
+	public String onlyPlayer = "@rename.onlyPlayer";
 	
 	public static final String CANVAS_NOT_EXISTS = "canvasNotExists";
-	public String canvasNotExists = ChatColor.RED + "Cannot rename canvas " + ChatColor.AQUA 
-			+ "$canvasName" + ChatColor.RED + "! Specified canvas " + ChatColor.AQUA + "$canvasName"
-			+ ChatColor.RED + " doesn't exist!";
+	public String canvasNotExists = "@rename.canvasNotExists";
 
 	public static final String CANVAS_ALREADY_EXIST = "canvasAlreadyExist";
-	public String canvasAlreadyExist = ChatColor.RED + "Cannot rename canvas to " + ChatColor.AQUA 
-			+ "$canvasName" + ChatColor.RED + "! Canvas of name " + ChatColor.AQUA + "$canvasName"
-			+ ChatColor.RED + " already exists!";
+	public String canvasAlreadyExist = "@rename.canvasAlreadyExist";
 	
 	public static final String NOT_HOLDING = "notHolding";
-	public String notHolding = ChatColor.RED + "You should either hold a canvas in hand or specify the canvas name!";
+	public String notHolding = "@rename.notHolding";
 	
 	public static final String NO_RENAME_PERMISSION = "noRenamePermission";
-	public String noRenamePermission = ChatColor.RED + "You don't have permission to rename " 
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RED + "!";
+	public String noRenamePermission = "@rename.noRenamePermission";
 	
 	public static final String SUCCESSFULLY_RENAME = "successfullyRename";
-	public String successfullyRename = ChatColor.WHITE + "You have successfully rename " + ChatColor.AQUA + "$oldname"
-			+ ChatColor.RESET + " to " + ChatColor.AQUA + "$newname" + ChatColor.RESET + "!";
+	public String successfullyRename = "@rename.successfullyRename";
 	
 	@SuppressWarnings("deprecation")
 	@Override

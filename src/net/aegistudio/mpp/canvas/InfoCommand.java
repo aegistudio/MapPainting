@@ -2,7 +2,6 @@ package net.aegistudio.mpp.canvas;
 
 import java.util.TreeSet;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -12,29 +11,28 @@ import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
 
 public class InfoCommand extends ActualHandle {
-	{		description = "get detailed information of a canvas.";	}
+	{		description = "@info.description";	}
 	
 	public static final String NOT_HOLDING = "notHolding";
-	public String notHolding = ChatColor.RED + "You should either hold a canvas in hand or specify the canvas name!";
+	public String notHolding = "@info.notHolding";
 	
 	public static final String NAME = "name";
-	public String name = ChatColor.BOLD + "Name: " + ChatColor.RESET + ChatColor.AQUA + "$name" + ChatColor.RESET + "($binding)";
+	public String name = "@info.name";
 	
 	public static final String OWNER = "owner";
-	public String owner = ChatColor.BOLD + "Owner: " + ChatColor.RESET + ChatColor.GREEN + "$owner";
+	public String owner = "@info.owner";
 	
 	public static final String PAINTER = "painter";
-	public String painter = ChatColor.BOLD + "Painter: " + ChatColor.RESET + "$painterList";
+	public String painter = "@info.painter";
 	
 	public static final String INTERACTOR = "interactor";
-	public String interactor = ChatColor.BOLD + "Interactor: " + ChatColor.RESET + "$interactorList";
+	public String interactor = "@info.interactor";
 	
 	public static final String PAINTER_LISTITEM = "painterListitem";
-	public String painterListitem = ChatColor.GREEN + "$painter" + ChatColor.RESET;
+	public String painterListitem = "@info.painterListItem";
 	
-	public static final String PREVILEGE = "previlege";
-	public String previlege = ChatColor.BOLD + "Previlege (" + ChatColor.GREEN + "$who" 
-			+ ChatColor.WHITE + "): " + ChatColor.RESET + "$previlegeList";
+	public static final String PREVILEGE = "privilege";
+	public String privilege = "@info.privilege";
 	
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
@@ -72,7 +70,7 @@ public class InfoCommand extends ActualHandle {
 		if(registry.owner.equals(testingname)) previlegeList.add("owner");
 		if(registry.select(registry.painter, testingname, testing)) previlegeList.add("painter");
 		if(registry.select(registry.interactor, testingname, testing)) previlegeList.add("interact");
-		sender.sendMessage(previlege.replace("$who", testingname).replace("$previlegeList", list(previlegeList)));
+		sender.sendMessage(privilege.replace("$who", testingname).replace("$privilegeList", list(previlegeList)));
 		
 		return true;
 	}
@@ -94,7 +92,7 @@ public class InfoCommand extends ActualHandle {
 		this.name = painting.getLocale(NAME, name, section);
 		this.owner = painting.getLocale(OWNER, owner, section);
 		this.painter = painting.getLocale(PAINTER, painter, section);
-		this.previlege = painting.getLocale(PREVILEGE, previlege, section);
+		this.privilege = painting.getLocale(PREVILEGE, privilege, section);
 		this.painterListitem = painting.getLocale(PAINTER_LISTITEM, painterListitem, section);
 	}
 }

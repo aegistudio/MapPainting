@@ -2,22 +2,21 @@ package net.aegistudio.mpp.canvas;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.ChatColor;
 
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
 
 public class ListCanvasCommand extends ActualHandle {
-	{	 description = "Listing all canvases you possess."; 	}
+	{	 description = "@list.description"; 	}
 	
 	public static final String NO_POSSESS = "noPossess";
-	public String noPossess = ChatColor.RED + "You don't possess any canvas.";
+	public String noPossess = "@list.noPossess";
 	
 	public static final String ENTRY = "entry";
-	public String entry = ChatColor.AQUA + "$name" + ChatColor.RESET;
+	public String entry = "@list.entry";
 	
 	public static final String POSSESS = "possess";
-	public String possess = "You possess these canvas(es): $list.";
+	public String possess = "@list.possess";
 	
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
