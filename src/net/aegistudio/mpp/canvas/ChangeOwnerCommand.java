@@ -1,6 +1,5 @@
 package net.aegistudio.mpp.canvas;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -10,30 +9,25 @@ import net.aegistudio.mpp.HazardCommand;
 import net.aegistudio.mpp.MapPainting;
 
 public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
-	{	description = "Transfer the ownership of a canvas."; 	}
+	{	description = "@chown.description"; 	}
 	
 	public static final String ONLY_PLAYER = "onlyPlayer";
-	public String onlyPlayer = ChatColor.RED + "Only player can use tranfer ownership command without specifying canvas name!";
+	public String onlyPlayer = "@chown.onlyPlayer";
 	
 	public static final String CANVAS_NOT_EXISTS = "canvasNotExists";
-	public String canvasNotExists = ChatColor.RED + "Cannot transfer ownership of " + ChatColor.AQUA 
-			+ "$canvasName" + ChatColor.RED + "! Specified canvas " + ChatColor.AQUA + "$canvasName"
-			+ ChatColor.RED + " doesn't exist!";
+	public String canvasNotExists = "@chown.canvasNotExists";
 	
 	public static final String OWNERSHIP_CHANGED = "ownershipChanged";
-	public String ownershipChanged = "You have successfully transfer the ownership of " + ChatColor.AQUA 
-			+ "$canvasName" + ChatColor.RESET + " to " + ChatColor.BLUE + "$newOwner" + ChatColor.RESET + "!";
+	public String ownershipChanged = "@chown.ownershipChanged";
 	
 	public static final String OWNERSHIP_GAINED = "ownershipGained";
-	public String ownershipGained = "You have just gained the ownership of " 
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RESET + "!";
+	public String ownershipGained = "@chown.ownershipGained";
 	
 	public static final String NOT_HOLDING = "notHolding";
-	public String notHolding = ChatColor.RED + "You should either hold a canvas in hand or specify the canvas name!";
+	public String notHolding = "@chown.notHolding";
 	
 	public static final String NO_CHOWN_PERMISSION = "noChownPermission";
-	public String noChownPermission = ChatColor.RED + "You don't have permission to transfer ownership of " 
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RED + "!";
+	public String noChownPermission = "@chown.noChownPermission";
 	
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		super.load(painting, section);

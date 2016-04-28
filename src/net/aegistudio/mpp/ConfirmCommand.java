@@ -2,21 +2,19 @@ package net.aegistudio.mpp;
 
 import java.util.HashMap;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class ConfirmCommand extends ActualHandle {
-	{	 description = "Confirm before using a hazardous command."; 		}
+	{	 description = "@confirm.description"; 		}
 	public HashMap<CommandSender, Object> status = new HashMap<CommandSender, Object>();
 	public HashMap<CommandSender, HazardCommand> command = new HashMap<CommandSender, HazardCommand>();
 	
 	public static final String NOTHING_TO_CONFIRM = "nothingToConfirm";
-	public String nothingToConfirm = ChatColor.RED + "You have nothing to confirm! Only use when you're executing a hazardous command.";
+	public String nothingToConfirm = "@confirm.nothingToConfirm";
 	
 	public static final String PLEASE_CONFIRM = "pleaseConfirm";
-	public String pleaseConfirm = "You are executing a hazardous command! Please issue " + ChatColor.YELLOW + 
-			"/mpp confirm" + ChatColor.RESET + " if you want to continue.";
+	public String pleaseConfirm = "@confirm.pleaseConfirm";
 	
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {

@@ -3,7 +3,6 @@ package net.aegistudio.mpp.canvas;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,10 +29,19 @@ public class CanvasScopeListener implements Module, Listener {
 	public MapPainting plugin;
 	
 	public static final String IDENTIFIER = "identifier";
-	public String identifier = ChatColor.RESET + ChatColor.BOLD.toString() + "Canvas Item";
+	public String identifier = "@canvas.identifier";
 	
 	public static final String ID_STRING = "mapIdString";
-	public String mapIdString = ChatColor.MAGIC + "===========";
+	public String mapIdString = "@canvas.mapIdString";
+	
+	public static final String RENAME_TITLE = "renameTitle";
+	public String renameTitle = "@canvas.renameTitle";
+	
+	public static final String RENAME_LN3 = "renameLn3";
+	public String renameLn3 = "@canvas.renameLn3";
+	
+	public static final String RENAME_LN4 = "renameLn4";
+	public String renameLn4 = "@canvas.renameLn4";
 	
 	public CanvasScopeListener(MapPainting painting) {
 		this.plugin = painting;
@@ -95,10 +103,7 @@ public class CanvasScopeListener implements Module, Listener {
 		else if(event.getAction() == Action.RIGHT_CLICK_AIR) {
 			final MapCanvasRegistry registry = plugin.canvas.idCanvasMap.get((short)result);
 			if(registry != null && !registry.removed() && registry.owner.equals(event.getPlayer().getName())) {
-				new NamingView(plugin, "=" + ChatColor.AQUA 
-						+ "Rename Canvas" + ChatColor.RESET + "=", registry.name, 
-						ChatColor.DARK_GRAY + "(Modify Line 2 To", 
-						ChatColor.DARK_GRAY + "Rename Canvas!)", event.getPlayer()) {
+				new NamingView(plugin, this.renameTitle, registry.name, this.renameLn3, this.renameLn4, event.getPlayer()) {
 					@Override
 					protected void name(String name) {
 						if(name.length() == 0) return;
@@ -166,11 +171,12 @@ public class CanvasScopeListener implements Module, Listener {
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		identifier = painting.getLocale(IDENTIFIER, identifier, section);
 		mapIdString = painting.getLocale(ID_STRING, mapIdString, section);
+		renameTitle = painting.getLocale(RENAME_TITLE, renameTitle, section);
+		renameLn3 = painting.getLocale(RENAME_LN3, renameLn3, section);
+		renameLn4 = painting.getLocale(RENAME_LN4, renameLn4, section);
 	}
 
 	@Override
-	public void save(MapPainting painting, ConfigurationSection section) throws Exception {
-		section.set(IDENTIFIER, identifier);
-		section.set(ID_STRING, mapIdString);
+	public void save(MapPainting painting, ConfigurationSection section) throws Exception {	
 	}
 }

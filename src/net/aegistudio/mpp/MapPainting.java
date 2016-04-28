@@ -1,8 +1,10 @@
 package net.aegistudio.mpp;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Map.Entry;
 
@@ -17,6 +19,8 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.mcstats.Metrics;
+
+import com.google.common.collect.Lists;
 
 import net.aegistudio.mpp.algo.CharacterGenerator;
 import net.aegistudio.mpp.algo.DdaLineGenerator;
@@ -79,17 +83,13 @@ public class MapPainting extends JavaPlugin {
 	
 	/** These configurations are used when composite commands need. **/
 	public static final String LISTING_TITLE = "listing";
-	public String listing = "Listing " + ChatColor.BOLD + "subcommands" + ChatColor.RESET 
-			+ " for " + ChatColor.YELLOW + "$prefix" + ChatColor.RESET + ":";
+	public String listing = "@composite.listing";
 	
 	public static final String NEXT_PAGE = "nextPage";
-	public String nextPage = "Please issue " + ChatColor.YELLOW + "$prefix $nextPage"
-			+ ChatColor.RESET + " for more " + ChatColor.BOLD + "subcommands" + ChatColor.RESET + ".";
+	public String nextPage = "@composite.nextPage";
 	
 	public static final String LAST_PAGE = "lastPage";
-	public String lastPage = "This is the last page of " + ChatColor.BOLD 
-			+ "subcommands" + ChatColor.RESET + " for " + ChatColor.YELLOW 
-			+ "$prefix" + ChatColor.RESET + ".";
+	public String lastPage = "@composite.lastPage";
 	
 	public static final String COMMANDS_PER_PAGE = "commandsPerPage";
 	public int commandsPerPage = 5;
@@ -133,6 +133,8 @@ public class MapPainting extends JavaPlugin {
 		canvas.latest.put(sender.getName(), registry.name);
 	}
 	
+	public Properties defaultLocale;
+	
 	/** Foreign plugins love this most! **/
 	public PluginCanvasManager foreignCanvas = new PluginCanvasManager(this);
 	public PluginCommandManager foreignCommand;
@@ -147,8 +149,24 @@ public class MapPainting extends JavaPlugin {
 		asset.put("string.right", new RightAlignStringGenerator(asset.get("char", CharacterGenerator.class)));
 	}
 	
+	public static final ArrayList<String> supportedLocale = Lists.newArrayList("en_US");
+	
 	public void onEnable() {
 		try {
+			String locale = Locale.getDefault().toString();
+			if(supportedLocale.indexOf(locale) < 0) locale = supportedLocale.get(0);
+			
+			InputStream inputStream = getClass().getResourceAsStream(locale + ".properties");
+			defaultLocale = new Properties();
+			defaultLocale.load(inputStream);
+		}
+		catch(Exception e) {
+			
+		}
+		
+		try {
+
+			
 			// Load handle.
 			Configuration config = this.getConfig();
 			this.command = new CompositeHandle();
@@ -291,6 +309,8 @@ public class MapPainting extends JavaPlugin {
 		    	sendConsole("Cannot fetch information of the newest version, I'm sorry. :-(");
 		    }
 		}).start();
+		
+		defaultLocale = null;
 	}
 	
 	private void sendConsole(String data) {
@@ -302,6 +322,12 @@ public class MapPainting extends JavaPlugin {
 		if(section.contains(name))
 			return section.getString(name);
 		else {
+			if(defaultLocale.charAt(0) == '@' && this.defaultLocale != null) {
+				defaultLocale = this.defaultLocale.getProperty(defaultLocale.substring(1));
+				for(ChatColor chat : ChatColor.values())
+					defaultLocale = defaultLocale.replace("${" + chat.name() + "}", chat.toString());
+			}
+			
 			section.set(name, defaultLocale);
 			return defaultLocale;
 		}

@@ -1,5 +1,8 @@
 package net.aegistudio.mpp.recipe;
 
-public class DummyCanvasItem {
+import net.aegistudio.mpp.MapPainting;
 
+public class DummyCanvasItem {
+	public DummyCanvasItem(MapPainting painting) {
+	}
 }

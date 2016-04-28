@@ -2,7 +2,6 @@ package net.aegistudio.mpp.canvas;
 
 import java.util.ArrayList;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -11,40 +10,32 @@ import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
 
 public class ChangeModeCommand extends ActualHandle {
-	{	description = "Manage the painters of a canvas."; 	}
+	{	description = "@chmod.description"; 	}
 
 	public static final String ONLY_PLAYER = "onlyPlayer";
-	public String onlyPlayer = ChatColor.RED + "Only player can use change mode command without specifying canvas name!";
+	public String onlyPlayer = "@chmod.onlyPlayer";
 	
 	public static final String CANVAS_NOT_EXISTS = "canvasNotExists";
-	public String canvasNotExists = ChatColor.RED + "Cannot add or remove painters of " + ChatColor.AQUA 
-			+ "$canvasName" + ChatColor.RED + "! Specified canvas " + ChatColor.AQUA + "$canvasName"
-			+ ChatColor.RED + " doesn't exist!";
+	public String canvasNotExists = "@chmod.canvasNotExists";
 	
 	public static final String PAINTER_MODIFIED = "painterModified";
-	public String painterModified = "You have successfully manages painters of " + ChatColor.AQUA 
-			+ "$canvasName" + ChatColor.RESET + "!";
+	public String painterModified = "@chmod.painterModified";
 	
 	public static final String PAINTER_ADDED = "painterAdded";
-	public String painterAdded = "You are added as the painter of " 
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RESET + "!";
+	public String painterAdded = "@chmod.painterAdded";
 	public static final String PAINTER_REMOVED = "painterRemoved";
-	public String painterRemoved = "You are no longer the painter of " 
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RESET + "!";
+	public String painterRemoved = "@chmod.painterRemoved";
 	
 	public static final String INTERACTOR_ADDED = "interactorAdded";
-	public String interactorAdded = "You can now interact with " 
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RESET + "!";
+	public String interactorAdded = "@chmod.interactorAdded";
 	public static final String INTERACTOR_REMOVED = "interactorRemoved";
-	public String interactorRemoved = "You can no longer interact with " 
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RESET + "!";
+	public String interactorRemoved = "@chmod.interactorRemoved";
 	
 	public static final String NOT_HOLDING = "notHolding";
-	public String notHolding = ChatColor.RED + "You should either hold a canvas in hand or specify the canvas name!";
+	public String notHolding = "@chmod.notHolding";
 	
 	public static final String NO_CHMOD_PERMISSION = "noChmodPermission";
-	public String noChmodPermission = ChatColor.RED + "You don't have permission to manage painters of " 
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RED + "!";
+	public String noChmodPermission = "@chmod.noChmodPermission";
 	
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		super.load(painting, section);
