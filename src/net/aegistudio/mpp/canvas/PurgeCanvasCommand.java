@@ -19,8 +19,8 @@ import net.aegistudio.mpp.MapPainting;
 public class PurgeCanvasCommand extends ActualHandle {
 	{	description = "Purge any useless canvases."; 	}
 	
-	public static final String NO_RENAME_PERMISSION = "noRenamePermission";
-	public String noRenamePermission = ChatColor.RED + "You don't have permission to purge canvases.";
+	public static final String NO_PURGE_PERMISSION = "noPurgePermission";
+	public String noPurgePermission = ChatColor.RED + "You don't have permission to purge canvases.";
 
 	public static final String PURGE_RESULT = "purgeResult";
 	public String purgeResult = "Finished clean up! You have succesfully purged $count files.";
@@ -30,8 +30,8 @@ public class PurgeCanvasCommand extends ActualHandle {
 	
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
-		if(!sender.hasPermission("mpp.purge")) {
-			sender.sendMessage(noRenamePermission);
+		if(!sender.hasPermission("mpp.manager")) {
+			sender.sendMessage(noPurgePermission);
 			return true;
 		}
 		
@@ -55,7 +55,7 @@ public class PurgeCanvasCommand extends ActualHandle {
 	
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		super.load(painting, section);
-		this.noRenamePermission = painting.getLocale(NO_RENAME_PERMISSION, noRenamePermission, section);
+		this.noPurgePermission = painting.getLocale(NO_PURGE_PERMISSION, noPurgePermission, section);
 		this.purgeResult = painting.getLocale(PURGE_RESULT, purgeResult, section);
 		
 		if(section.contains(PURGE_ON_UNLOAD))	this.purgeOnUnload = section.getBoolean(PURGE_ON_UNLOAD);

@@ -1,6 +1,6 @@
 name: MapPainting
 main: net.aegistudio.mpp.MapPainting
-version: 1.5.8-beta
+version: 1.5.9-beta
 author: aegistudio
 commands:
   mpp:
