@@ -8,8 +8,8 @@ import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 
 public class Razor extends Pencil {
 	{
-		tapMessage = "Razored pixel [$x, $y].";
-		lineMessage = "Razored a line from [$x1, $y1] to [$x2, $y2].";
+		tapMessage = "@memento.razorTap";
+		lineMessage = "@memento.razorLine";
 	}
 	
 	@Override

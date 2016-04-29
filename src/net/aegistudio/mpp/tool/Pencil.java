@@ -24,10 +24,10 @@ public class Pencil implements PaintTool {
 	int initCount = 7;
 	
 	public static final String TAP_MESSAGE = "tapMessage";
-	public String tapMessage = "Tap on pixel [$x, $y] with color ($r, $g, $b).";
+	public String tapMessage = "@memento.tap";
 	
 	public static final String LINE_MESSAGE = "lineMessage";
-	public String lineMessage = "Draw a line from [$x1, $y1] to [$x2, $y2] with color ($r, $g, $b).";
+	public String lineMessage = "@memento.line";
 	
 	@Override
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {

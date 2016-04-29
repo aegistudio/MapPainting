@@ -2,33 +2,28 @@ package net.aegistudio.mpp.tool;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.ChatColor;
 
 import net.aegistudio.mpp.ActualHandle;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 
 public class UndoCommand extends ActualHandle {
-	{ description = "Undo a unexpected action when you regret."; }
+	{ description = "@undo.description"; }
 	
 	public static final String NO_MODIFIED_CANVAS = "noModifiedCanvas";
-	public String noModifiedCanvas = ChatColor.RED + "You should specify a canvas or paint on some canvas before undoing.";
+	public String noModifiedCanvas = "@undo.noModifiedCanvas";
 	
 	public static final String CANVAS_NOT_EXISTS = "canvasNotExists";
-	public String canvasNotExists = ChatColor.RED + "Cannot undo on " + ChatColor.AQUA + "$canvasName" + ChatColor.RED + 
-			"! Specified canvas " + ChatColor.AQUA + "$canvasName" + ChatColor.RED + " doesn't exist!";
+	public String canvasNotExists = "@undo.canvasNotExists";
 	
 	public static final String NOTHING_TO_UNDO = "nothingToUndo";
-	public String nothingToUndo = ChatColor.RED + "You have nothing to undo on canvas " 
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RED + "!";
+	public String nothingToUndo = "@undo.nothingToUndo";
 	
 	public static final String NO_UNDO_PERMISSION = "noUndoPermission";
-	public String noUndoPermission = ChatColor.RED + "You don't have permission to undo on canvas "
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RED + "!";
+	public String noUndoPermission = "@undo.noUndoPermission";
 	
 	public static final String UNDO_FINISH = "undoFinish";
-	public String undoFinish = "You have undone " + ChatColor.UNDERLINE + "$memoto" + ChatColor.RESET + " on canvas "
-			+ ChatColor.AQUA + "$canvasName" + ChatColor.RESET + "!";
+	public String undoFinish = "@undo.undoFinish";
 	
 	public void load(MapPainting painting, ConfigurationSection section) throws Exception {
 		super.load(painting, section);

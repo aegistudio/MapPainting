@@ -20,7 +20,7 @@ public class PaintBucket implements PaintTool {
 	}
 
 	public static final String FILL_MESSAGE = "fillMessage";
-	public String fillMessage = "Fill starting from [$x, $y] with color ($r, $g, $b).";
+	public String fillMessage = "@memento.fill";
 	
 	@Override
 	public void save(MapPainting painting, ConfigurationSection section) throws Exception {		}
