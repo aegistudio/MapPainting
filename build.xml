@@ -9,14 +9,6 @@
 	<!-- Local properties, modify that instead of this file! -->
 	<property file="${basedir}/build.properties"/>
 	
-	<target name="builddep">
-		<mkdir dir="${dir.dep}"/>
-		<get src="${bukkit}" dest="${dir.dep}/bukkit.jar" verbose="true"/>
-		<get src="${retrolambda}" dest="${dir.dep}/retrolambda.jar" verbose="true"/>
-		<get src="${googlecollect}" dest="${dir.dep}/googlecollect.jar" verbose="true"/>
-		<get src="${ebeanorm}" dest="${dir.dep}/ebeanorm.jar" verbose="true"/>
-	</target>
-	
 	<target name="j8jar">
 		<jar basedir="${dir.bin}" destfile="mappainting-${version}-java8.jar"/>
 	</target>
