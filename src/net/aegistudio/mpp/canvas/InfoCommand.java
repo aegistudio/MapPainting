@@ -92,6 +92,7 @@ public class InfoCommand extends ActualHandle {
 		this.name = painting.getLocale(NAME, name, section);
 		this.owner = painting.getLocale(OWNER, owner, section);
 		this.painter = painting.getLocale(PAINTER, painter, section);
+		this.interactor = painting.getLocale(INTERACTOR, interactor, section);
 		this.privilege = painting.getLocale(PREVILEGE, privilege, section);
 		this.painterListitem = painting.getLocale(PAINTER_LISTITEM, painterListitem, section);
 	}
