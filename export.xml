@@ -5,6 +5,7 @@
 	<property name="dir.doc" value="doc"/>
 	<property name="dir.bin" value="bin"/>
 	<property name="dir.api" value="api"/>
+	<property name="dir.dep" value="dep"/>
 	<property name="dir.temp" value="temp"/>
 	
 	<!-- Modify when bukkit API changes -->
@@ -36,7 +37,7 @@
 		<copy todir="${dir.temp}/net/aegistudio/mpp">
 			<fileset refid="exported"/>
 		</copy>
-		<javac srcdir="${dir.temp}" destdir="${dir.api}" classpath="${dir.bin}:${bukkit}"/>
+		<javac srcdir="${dir.temp}" destdir="${dir.api}" classpath="${dir.bin}:${dir.dep}/bukkit.jar"/>
 		<delete dir="${dir.temp}"/>
 	</target>
 	
