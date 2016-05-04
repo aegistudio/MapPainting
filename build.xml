@@ -13,6 +13,8 @@
 		<mkdir dir="${dir.dep}"/>
 		<get src="${bukkit}" dest="${dir.dep}/bukkit.jar" verbose="true"/>
 		<get src="${retrolambda}" dest="${dir.dep}/retrolambda.jar" verbose="true"/>
+		<get src="${googlecollect}" dest="${dir.dep}/googlecollect.jar" verbose="true"/>
+		<get src="${ebeanorm}" dest="${dir.dep}/ebeanorm.jar" verbose="true"/>
 	</target>
 	
 	<target name="j8jar">
@@ -24,7 +26,7 @@
 		<java fork="true" jar="${dir.dep}/retrolambda.jar">
 			<jvmarg value="-Dretrolambda.inputDir=${dir.bin}"/>
 			<jvmarg value="-Dretrolambda.outputDir=${dir.j7bin}"/>
-			<jvmarg value="-Dretrolambda.classpath=${dir.bin}:${dir.dep}/bukkit.jar"/>
+			<jvmarg value="-Dretrolambda.classpath=${dir.bin}:${dir.dep}/bukkit.jar:${dir.dep}/googlecollect.jar:${dir.dep}/ebeanorm.jar"/>
 		</java>
 	</target>
 	

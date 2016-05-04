@@ -124,6 +124,7 @@ public class ChangeModeCommand extends ActualHandle {
 		return true;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void tell(MapPainting painting, String who, String totell, MapCanvasRegistry registry) {
 		Player target = painting.getServer().getPlayer(who);
 		if(target != null) target.sendMessage(totell.replace("$canvasName", registry.name));

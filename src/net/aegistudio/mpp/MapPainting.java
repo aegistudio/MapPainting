@@ -19,7 +19,6 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import org.mcstats.Metrics;
-
 import com.google.common.collect.Lists;
 
 import net.aegistudio.mpp.algo.CharacterGenerator;

@@ -86,6 +86,7 @@ public class ChangeOwnerCommand extends ActualHandle implements HazardCommand {
 		public MapCanvasRegistry registry;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void handle(MapPainting painting, CommandSender sender, Object hazardState) {
 		ChownState state = (ChownState) hazardState;

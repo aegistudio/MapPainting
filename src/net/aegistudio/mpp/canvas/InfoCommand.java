@@ -34,6 +34,7 @@ public class InfoCommand extends ActualHandle {
 	public static final String PREVILEGE = "privilege";
 	public String privilege = "@info.privilege";
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean handle(MapPainting painting, String prefix, CommandSender sender, String[] arguments) {
 		MapCanvasRegistry registry = null;
