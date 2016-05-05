@@ -18,6 +18,8 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import net.aegistudio.mcinject.network.PacketPlayOutMap;
+import net.aegistudio.mcinject.network.PlayerConnection;
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.algo.MapCanvasAdapter;
@@ -54,9 +56,10 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 			updateDisplay = false;
 		}
 		
-		Object mapPacket = null;
+		PacketPlayOutMap mapPacket = null;
 		if(context.dirty)
-			mapPacket = painting.pomap.newMapPacket(view, context);
+			mapPacket = new PacketPlayOutMap(painting.inject, view, context.pixel, 0,
+					context.rowMin, 128, context.rowMax - context.rowMin + 1);
 		
 		Iterator<Entry<Player, Integer>> suspector = this.suspector.entrySet().iterator();
 		while(suspector.hasNext()) {
@@ -65,7 +68,7 @@ public abstract class Canvas extends MapRenderer implements Cloneable {
 			if(entry.getValue() >= painting.canvas.suspectTimedOut) 
 				suspector.remove();
 			else if(mapPacket != null) 
-				painting.sender.sendPacket(entry.getKey(), mapPacket);
+				new PlayerConnection(painting.inject, entry.getKey()).sendPacket(mapPacket);
 		}
 		context.clean();
 	}

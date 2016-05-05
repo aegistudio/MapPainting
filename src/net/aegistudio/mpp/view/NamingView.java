@@ -9,6 +9,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
+import net.aegistudio.mcinject.network.PacketPlayOutBlockChange;
+import net.aegistudio.mcinject.network.PacketPlayOutOpenSignEditor;
+import net.aegistudio.mcinject.network.PlayerConnection;
+import net.aegistudio.mcinject.tileentity.TileEntitySign;
+import net.aegistudio.mcinject.world.BlockPosition;
 import net.aegistudio.mpp.MapPainting;
 
 /**
@@ -33,31 +38,31 @@ public abstract class NamingView implements Listener {
 		this.player = player;
 	}
 	
-	World world;
-	Object blockPosition = null;
-	Object tileEntitySign = null;
+	net.aegistudio.mcinject.world.World world;
+	BlockPosition blockPosition = null;
+	TileEntitySign tileEntitySign = null;
 	public void show() {
 		try {
 			Block block = findPlacableBlock(player);
 			block.setType(Material.WALL_SIGN);
 			block.getState().update(true, false);
 			
-			world = player.getWorld();
-			blockPosition = plugin.posign.newBlockLocation(block.getX(), block.getY(), block.getZ());
-			tileEntitySign = plugin.posign.newTileEntitySign(plugin.sender.getHandle(player));
-			plugin.posign.setText(tileEntitySign, 0, title);
-			plugin.posign.setText(tileEntitySign, 1, initNaming);
-			plugin.posign.setText(tileEntitySign, 2, tip1);
-			plugin.posign.setText(tileEntitySign, 3, tip2);
+			world = new net.aegistudio.mcinject.world.World(plugin.inject, block.getWorld());
+			blockPosition = new BlockPosition(plugin.inject, block.getLocation());
 			
-			plugin.world.setTileEntity(world, blockPosition, tileEntitySign);
+			tileEntitySign = new TileEntitySign(plugin.inject);
+			tileEntitySign.setOwner(player);
+			tileEntitySign.setLine(0, title);
+			tileEntitySign.setLine(1, initNaming);
+			tileEntitySign.setLine(2, tip1);
+			tileEntitySign.setLine(3, tip2);
 			
-			plugin.sender.sendPacket(player, 
-					plugin.world.updateBlock(world, blockPosition));
-			plugin.sender.sendPacket(player, 
-					plugin.posign.newSignUpdatePacket(tileEntitySign));
-			plugin.sender.sendPacket(player, 
-					plugin.posign.newSignEditPacket(blockPosition));
+			world.setTileEntity(blockPosition, tileEntitySign);
+			PlayerConnection connection = new PlayerConnection(plugin.inject, player);
+			
+			connection.sendPacket(new PacketPlayOutBlockChange(plugin.inject, block.getLocation()));
+			connection.sendPacket(tileEntitySign.getUpdatePacket());
+			connection.sendPacket(new PacketPlayOutOpenSignEditor(plugin.inject, blockPosition));
 			
 			this.plugin.getServer().getPluginManager()
 				.registerEvents(this, plugin);
@@ -88,8 +93,8 @@ public abstract class NamingView implements Listener {
 		int x = block.getX();
 		int y = block.getY();
 		int z = block.getZ();
-		if(plugin.world.getTileEntity(block.getWorld(), 
-				plugin.posign.newBlockLocation(x, y, z)) != null) return false;
+		if(new net.aegistudio.mcinject.world.World(plugin.inject, block.getWorld()).
+				getTileEntity(new BlockPosition(plugin.inject, x, y, z), null) != null) return false;
 		if(block.getType() != Material.AIR) return false;
 		
 		if(block.getWorld().getBlockAt(x, y + 1, z)
@@ -111,7 +116,7 @@ public abstract class NamingView implements Listener {
 	public void onSignEdit(SignChangeEvent event) {
 		if(event.getPlayer() == player) {
 			event.getBlock().setType(Material.AIR);
-			plugin.world.setTileEntity(world, blockPosition, null);
+			world.setTileEntity(blockPosition, null);
 			event.setCancelled(true);
 			try { name(event.getLine(1));} catch(Throwable t) {}
 			SignChangeEvent.getHandlerList().unregister(this);

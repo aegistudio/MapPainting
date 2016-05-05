@@ -21,6 +21,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import com.google.common.collect.Lists;
 
+import net.aegistudio.mcinject.CraftMinecraftServer;
+import net.aegistudio.mcinject.MinecraftServer;
 import net.aegistudio.mpp.algo.CharacterGenerator;
 import net.aegistudio.mpp.algo.DdaLineGenerator;
 import net.aegistudio.mpp.algo.MidAlignStringGenerator;
@@ -54,11 +56,6 @@ import net.aegistudio.mpp.factory.ScriptSubCommand;
 import net.aegistudio.mpp.factory.WrapSubCommand;
 import net.aegistudio.mpp.foreign.PluginCanvasManager;
 import net.aegistudio.mpp.foreign.PluginCommandManager;
-import net.aegistudio.mpp.inject.CraftPacketSender;
-import net.aegistudio.mpp.inject.PacketPOMapFactory;
-import net.aegistudio.mpp.inject.PacketPOSignFactory;
-import net.aegistudio.mpp.inject.PacketSender;
-import net.aegistudio.mpp.inject.WorldAccess;
 import net.aegistudio.mpp.palette.PaletteManager;
 import net.aegistudio.mpp.palette.PigmentCommand;
 import net.aegistudio.mpp.script.ScriptDebugCommand;
@@ -72,11 +69,8 @@ import net.aegistudio.mpp.tool.UndoCommand;
 public class MapPainting extends JavaPlugin {
 	/** Other modules could get canvases from this map. **/
 	public CanvasManager canvas;
-	public PacketPOMapFactory pomap;
-	public PacketPOSignFactory posign;
-	public WorldAccess world;
-	public PacketSender sender;
-
+	public MinecraftServer inject;
+	
 	/** Other modules can register commands to this handle. **/
 	public CompositeHandle command;
 	
@@ -253,10 +247,7 @@ public class MapPainting extends JavaPlugin {
 			this.saveConfig();
 			
 			// Load packet sender.
-			CraftPacketSender sender = new CraftPacketSender(this);	this.sender = sender;
-			this.pomap = new PacketPOMapFactory(sender.minecraftPackage);
-			this.posign = new PacketPOSignFactory(sender.minecraftPackage);
-			this.world = new WorldAccess(sender.craftbukkitPackage, sender.minecraftPackage);
+			this.inject = new CraftMinecraftServer(getServer());
 		}
 		catch(Exception e) {
 			e.printStackTrace();
