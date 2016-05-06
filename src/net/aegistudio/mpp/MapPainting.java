@@ -21,8 +21,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 import com.google.common.collect.Lists;
 
-import net.aegistudio.mcinject.CraftMinecraftServer;
-import net.aegistudio.mcinject.MinecraftServer;
+import net.aegistudio.mpp.mcinject.CraftMinecraftServer;
+import net.aegistudio.mpp.mcinject.MinecraftServer;
 import net.aegistudio.mpp.algo.CharacterGenerator;
 import net.aegistudio.mpp.algo.DdaLineGenerator;
 import net.aegistudio.mpp.algo.MidAlignStringGenerator;

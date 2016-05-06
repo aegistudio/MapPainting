@@ -57,15 +57,24 @@
 		<get src="${ebeanorm}" dest="${ebeanorm.path}" verbose="true"/>
 	</target>
 	
+	
+	<property name="mcinject.repdir" value="net${fs}aegistudio${fs}mpp"/>
+	<property name="mcinject.reppkg" value="net.aegistudio.mpp"/>
+	
 	<target name="fetch.mcinjector" unless="mcinjector.exists">
 		<get src="${mcinjector}" dest="${mcinjector.path}" verbose="true"/>
 		<delete dir="${dir.mcinject}"/>
 		<mkdir dir="${dir.mcinject}"/>
 		<mkdir dir="${dir.mcinject}${fs}temp"/>
 		<unzip src="${dir.dep}${fs}mcinjector.zip" dest="${dir.mcinject}${fs}temp"/>
-		<copy todir="${dir.mcinject}">
-			<fileset dir="${dir.mcinject}${fs}temp${fs}MinecraftInjector-master${fs}src"/>
+		<copy todir="${dir.mcinject}${fs}${mcinject.repdir}">
+			<fileset dir="${dir.mcinject}${fs}temp${fs}MinecraftInjector-master${fs}src${fs}net${fs}aegistudio"/>
 		</copy>
 		<delete dir="${dir.mcinject}${fs}temp"/>
+        <replaceregexp byline="true">
+			<regexp pattern="net.aegistudio" />
+			<substitution expression="${mcinject.reppkg}"/>
+			<fileset dir="${dir.mcinject}"/>
+		</replaceregexp>
 	</target>
 </project>

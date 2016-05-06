@@ -18,8 +18,8 @@ import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import net.aegistudio.mcinject.network.PacketPlayOutMap;
-import net.aegistudio.mcinject.network.PlayerConnection;
+import net.aegistudio.mpp.mcinject.network.PacketPlayOutMap;
+import net.aegistudio.mpp.mcinject.network.PlayerConnection;
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.algo.MapCanvasAdapter;

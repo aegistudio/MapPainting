@@ -9,11 +9,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
-import net.aegistudio.mcinject.network.PacketPlayOutBlockChange;
-import net.aegistudio.mcinject.network.PacketPlayOutOpenSignEditor;
-import net.aegistudio.mcinject.network.PlayerConnection;
-import net.aegistudio.mcinject.tileentity.TileEntitySign;
-import net.aegistudio.mcinject.world.BlockPosition;
+import net.aegistudio.mpp.mcinject.network.PacketPlayOutBlockChange;
+import net.aegistudio.mpp.mcinject.network.PacketPlayOutOpenSignEditor;
+import net.aegistudio.mpp.mcinject.network.PlayerConnection;
+import net.aegistudio.mpp.mcinject.tileentity.TileEntitySign;
+import net.aegistudio.mpp.mcinject.world.BlockPosition;
 import net.aegistudio.mpp.MapPainting;
 
 /**
@@ -38,7 +38,7 @@ public abstract class NamingView implements Listener {
 		this.player = player;
 	}
 	
-	net.aegistudio.mcinject.world.World world;
+	net.aegistudio.mpp.mcinject.world.World world;
 	BlockPosition blockPosition = null;
 	TileEntitySign tileEntitySign = null;
 	public void show() {
@@ -47,7 +47,7 @@ public abstract class NamingView implements Listener {
 			block.setType(Material.WALL_SIGN);
 			block.getState().update(true, false);
 			
-			world = new net.aegistudio.mcinject.world.World(plugin.inject, block.getWorld());
+			world = new net.aegistudio.mpp.mcinject.world.World(plugin.inject, block.getWorld());
 			blockPosition = new BlockPosition(plugin.inject, block.getLocation());
 			
 			tileEntitySign = new TileEntitySign(plugin.inject);
@@ -93,7 +93,7 @@ public abstract class NamingView implements Listener {
 		int x = block.getX();
 		int y = block.getY();
 		int z = block.getZ();
-		if(new net.aegistudio.mcinject.world.World(plugin.inject, block.getWorld()).
+		if(new net.aegistudio.mpp.mcinject.world.World(plugin.inject, block.getWorld()).
 				getTileEntity(new BlockPosition(plugin.inject, x, y, z), null) != null) return false;
 		if(block.getType() != Material.AIR) return false;
 		
