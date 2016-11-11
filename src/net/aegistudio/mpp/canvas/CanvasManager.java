@@ -136,6 +136,7 @@ public class CanvasManager implements Module {
 			pool.addAll(canvas.getShortList(POOL));
 		
 		painting.getServer().getPluginManager().registerEvents(new CanvasPaintListener(painting), painting);
+		painting.getServer().getPluginManager().registerEvents(new CanvasSwitchListener(painting), painting);
 	}
 	
 	@Override

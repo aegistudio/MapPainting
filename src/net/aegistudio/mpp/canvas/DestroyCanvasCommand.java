@@ -62,6 +62,7 @@ public class DestroyCanvasCommand extends ActualHandle implements HazardCommand 
 		super.load(painting, section);
 		canvasNotExists = painting.getLocale(CANVAS_NOT_EXISTS, canvasNotExists, section);
 		noPermission = painting.getLocale(NO_PERMISSION, noPermission, section);
+		holding = painting.getLocale(HOLDING, holding, section);
 		unbound = painting.getLocale(UNBOUND, unbound, section);
 	}
 	
