@@ -5,3 +5,6 @@ j7bin
 dep
 mcinject
 mappainting-*.jar
+/target/
+/mcinject.properties
+/mcinject.xml
