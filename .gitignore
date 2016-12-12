@@ -8,3 +8,8 @@ mappainting-*.jar
 /target/
 /mcinject.properties
 /mcinject.xml
+
+.classpath
+.project
+.settings
+.wtpmodules
