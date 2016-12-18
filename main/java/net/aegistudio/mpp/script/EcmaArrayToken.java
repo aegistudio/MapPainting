@@ -16,7 +16,14 @@ public class EcmaArrayToken implements ArrayToken {
 	@Override
 	public long length(ScriptEngine engine, Object array) throws Exception {
 		Method getMember = array.getClass().getMethod("getMember", String.class);
-		return (long)(Long)getMember.invoke(array, "length");
+		Object result = getMember.invoke(array, "length");
+		if(result instanceof Integer)
+			return (int)(Integer)result;
+		else if(result instanceof Long)
+			return (long)(Long)result;
+		else if(result instanceof Float)
+			return (long)(float)(Float)result;
+		throw new Exception("Unrecognized type " + result.getClass());
 	}
 
 	@SuppressWarnings("unchecked")
