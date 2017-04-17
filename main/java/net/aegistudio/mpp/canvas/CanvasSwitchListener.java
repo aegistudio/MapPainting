@@ -32,6 +32,5 @@ public class CanvasSwitchListener implements Listener {
 			new PlayerConnection(painting.inject, event.getPlayer())
 				.sendPacket(new PacketPlayOutSetSlot(painting.inject, 0, 
 						event.getNewSlot() + 36, pseudoItem)), 3);
-		System.out.println("packet send" + event.getNewSlot());
 	}
 }
