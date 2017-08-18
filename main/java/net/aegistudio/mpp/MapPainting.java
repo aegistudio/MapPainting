@@ -142,7 +142,7 @@ public class MapPainting extends JavaPlugin {
 		asset.put("string.right", new RightAlignStringGenerator(asset.get("char", CharacterGenerator.class)));
 	}
 	
-	public static final ArrayList<String> supportedLocale = Lists.newArrayList("en_US");
+	public static final ArrayList<String> supportedLocale = Lists.newArrayList("en");
 	
 	public void onEnable() {
 		try {
@@ -150,11 +150,13 @@ public class MapPainting extends JavaPlugin {
 			if(supportedLocale.indexOf(locale) < 0) locale = supportedLocale.get(0);
 			
 			InputStream inputStream = getClass().getResourceAsStream(locale + ".properties");
+			if(inputStream == null) inputStream = getClass()
+					.getResourceAsStream("/" + locale + ".properties");
 			defaultLocale = new Properties();
 			defaultLocale.load(inputStream);
 		}
 		catch(Exception e) {
-			
+			e.printStackTrace();
 		}
 		
 		try {
