@@ -1,15 +1,15 @@
 # MapPainting
-A Minecraft plugin for painting on maps inside the game.\n
-Updated for improved version independence.\n
-Fork focus is on removing feature creep back to core plugin functionality\n
+A Minecraft plugin for painting on maps inside the game.  
+Updated for improved version independence.  
+Fork focus is on removing feature creep back to core plugin functionality.  
 
 # Configuration
-Config.yml in MapPainting plugin folder. Values fairly obvious.\n
+Config.yml in MapPainting plugin folder. Values fairly obvious.  
 
 # Supports
-Vault based economy charges\n
-Worldguard region control\n
-Towny region control\n
+Vault based economy charges.  
+Worldguard region control.  
+Towny region control.  
 
 # Commands
 
