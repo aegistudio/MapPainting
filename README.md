@@ -1,3 +1,6 @@
+# THIS ARCHIVE IS NOT READY FOR USE. 
+DO NOT USE THIS ON 1.16.5+ SERVERS
+
 # MapPainting
 A Minecraft plugin for painting on maps inside the game.  
 Updated for improved version independence.  
