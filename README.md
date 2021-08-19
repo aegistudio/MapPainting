@@ -1,13 +1,16 @@
 # MapPainting
-A bukkit (minecraft server) plugin which allow players to paint on map.
+A Minecraft plugin for painting on maps inside the game.
+Updated for improved version independence.
+Fork focus is on removing feature creep back to core plugin functionality
 
-## Contact Author
-  Twitter: https://twitter.com/aegistudio<br/>
-  QQ: 1910567646<br/>
-  MCBBS: [CustomStuff](http://www.mcbbs.net/home.php?mod=space&uid=356989)<br/>
-  SpigotMc: [Mukiu](https://www.spigotmc.org/members/mukiu.177904/)<br/>
-  
-## Build
-  Before importing it into eclipse (if you are using eclipse.)
-  You should execute `mvn eclipse:myeclipse` to generate such files.
-  For other ide, there're should be similar commands.
+# Configuration
+Config.yml in MapPainting plugin folder. Values fairly obvious.
+
+# Supports
+Vault based economy charges
+Worldguard region control
+Towny region control
+
+# Commands
+
+# Permission Nodes
