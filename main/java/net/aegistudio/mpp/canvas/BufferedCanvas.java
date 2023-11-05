@@ -1,3 +1,9 @@
+/*
+ * Decompiled with CFR 0.145.
+ * 
+ * Could not load the following classes:
+ *  org.bukkit.map.MapView
+ */
 package net.aegistudio.mpp.canvas;
 
 import java.awt.Color;
@@ -7,102 +13,124 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
-import org.bukkit.map.MapView;
-
 import net.aegistudio.mpp.Interaction;
 import net.aegistudio.mpp.MapPainting;
 import net.aegistudio.mpp.algo.Paintable;
 
-public class BufferedCanvas extends Canvas {
-	public BufferedCanvas(MapPainting painting) {
-		super(painting);
-	}
+import org.bukkit.map.MapPalette;
+import org.bukkit.map.MapView;
 
-	public byte[][] pixel;
-	public int size;
-	
-	public BufferedCanvas clone() {
-		BufferedCanvas canvas = new BufferedCanvas(this.painting);
-		canvas.size = this.size;
-		canvas.pixel = new byte[size][size];
-		for(int i = 0; i < size; i ++)
-			System.arraycopy(this.pixel[i], 0, canvas.pixel[i], 0, size);
-		return canvas;
-	}
-	
-	@Override
-	public void subrender(MapView view, Paintable canvas) {
-		for(int i = 0; i < 128; i ++)
-			for(int j = 0; j < 128; j ++) {
-				canvas.bcolor(pixel
-						[(int)(1.0 * i / 128 * size)]
-						[(int)(1.0 * j / 128 * size)]);
-				canvas.set(i, 127 - j);
-			}
-	}
-	
-	@Override
-	public void paint(Interaction interact, Color color) {
-		int x = interact.x;
-		if(x >= size || x < 0) return;
-		int y = size - 1 - interact.y;
-		if(y >= size || y < 0) return;
-		
-		byte precolor = pixel[x][y];
-		
-		if(color == null) pixel[x][y] = 0;
-		else pixel[x][y] = (byte) painting.canvas.color.getIndex(color);
-		
-		if(pixel[x][y] != precolor)
-			repaint();
-	}
-	
-	@Override
-	public Color look(int x, int y) {
-		if(x >= size || x < 0) return null;
-		y = size - 1 - y;
-		if(y >= size || y < 0) return null;
-		
-		if(pixel[x][y] == 0) return null;
-		return painting.canvas.color.getColor(pixel[x][y]);
-	}
+public class BufferedCanvas
+extends Canvas {
+    public byte[][] pixel;
+    public int size;
 
-	@Override
-	public int size() {
-		return size;
-	}
-	
-	@Override
-	public void load(MapPainting painting, InputStream file) throws Exception {
-		DataInputStream din = new DataInputStream(file);
-		this.size = din.readShort();
-		
-		this.pixel = new byte[size][size];
-		GZIPInputStream input = new GZIPInputStream(file);
-		for(int i = 0; i < size; i ++)
-			for(int j = 0; j < size; j ++) {
-				int next = input.read();
-				if(next == -1) break;
-				this.pixel[i][j] = (byte) next;
-			}
-	}
+    public BufferedCanvas(MapPainting painting) {
+        super(painting);
+    }
 
-	@Override
-	public void save(MapPainting painting, OutputStream file) throws Exception {
-		DataOutputStream dout = new DataOutputStream(file);
-		dout.writeShort(size);
-		
-		GZIPOutputStream output = new GZIPOutputStream(file);
-		for(int i = 0; i < size; i ++) 
-			output.write(this.pixel[i], 0, size);
-		
-		output.finish();
-		output.flush();
-	}
+    @Override
+    public BufferedCanvas clone() {
+        BufferedCanvas canvas = new BufferedCanvas(this.painting);
+        canvas.size = this.size;
+        canvas.pixel = new byte[this.size][this.size];
+        for (int i = 0; i < this.size; ++i) {
+            System.arraycopy(this.pixel[i], 0, canvas.pixel[i], 0, this.size);
+        }
+        return canvas;
+    }
 
-	@Override
-	public boolean interact(Interaction info) {
-		return false;
-	}
+    @Override
+    public void subrender(MapView view, Paintable canvas) {
+        for (int i = 0; i < 128; ++i) {
+            for (int j = 0; j < 128; ++j) {
+                canvas.bcolor(this.pixel[(int)(1.0 * (double)i / 128.0 * (double)this.size)][(int)(1.0 * (double)j / 128.0 * (double)this.size)]);
+                canvas.set(i, 127 - j);
+            }
+        }
+    }
+
+    
+    /**
+     * The most common update location for paint clicks on common canvas objects. 
+     * Changes the color of a pixel on the canvas based on the interaction properties.
+     * @param interact - The change details being implemented
+     * @param color - The new pixel color
+     */
+    @Override
+    public void paint(Interaction interact, Color color) {
+    	
+    	// Guard against the interaction point being outside the canvas bounds
+        int x = interact.x;
+        if (x >= this.size || x < 0) {
+            return;
+        }
+        int y = this.size - 1 - interact.y;
+        if (y >= this.size || y < 0) {
+            return;
+        }
+        
+        // Store the current pixel color so we don't update it unless the color is changing
+        byte precolor = this.pixel[x][y];
+        
+        // Assign the new color byte, translating null color to transparent
+        byte colorByte = color == null ? (byte)0 : (byte)this.painting.m_canvasManager.color.getIndex(color);
+        this.pixel[x][y] = colorByte;
+        
+        // If the color has actually changed, refresh the image
+        if (this.pixel[x][y] != precolor) {
+            this.repaint();
+        }
+    }
+
+    @Override
+    public Color look(int x, int y) {
+        if (x >= this.size || x < 0) {
+            return null;
+        }
+        if ((y = this.size - 1 - y) >= this.size || y < 0) {
+            return null;
+        }
+        if (this.pixel[x][y] == 0) {
+            return null;
+        }
+        return this.painting.m_canvasManager.color.getColor(this.pixel[x][y]);
+    }
+
+    @Override
+    public int size() {
+        return this.size;
+    }
+
+    @Override
+    public void load(MapPainting painting, InputStream file) throws Exception {
+        DataInputStream din = new DataInputStream(file);
+        this.size = din.readShort();
+        this.pixel = new byte[this.size][this.size];
+        GZIPInputStream input = new GZIPInputStream(file);
+        for (int i = 0; i < this.size; ++i) {
+            int next;
+            for (int j = 0; j < this.size && (next = input.read()) != -1; ++j) {
+                this.pixel[i][j] = (byte)next;
+            }
+        }
+    }
+
+    @Override
+    public void save(MapPainting painting, OutputStream file) throws Exception {
+        DataOutputStream dout = new DataOutputStream(file);
+        dout.writeShort(this.size);
+        GZIPOutputStream output = new GZIPOutputStream(file);
+        for (int i = 0; i < this.size; ++i) {
+            output.write(this.pixel[i], 0, this.size);
+        }
+        output.finish();
+        output.flush();
+    }
+
+    @Override
+    public boolean interact(Interaction info) {
+        return false;
+    }
 }
+

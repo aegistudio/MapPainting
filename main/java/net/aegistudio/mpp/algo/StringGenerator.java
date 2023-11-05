@@ -1,22 +1,12 @@
+/*
+ * Decompiled with CFR 0.145.
+ */
 package net.aegistudio.mpp.algo;
 
 import net.aegistudio.mpp.export.Asset;
 
-/**
- * Draw a string at specified position.
- * 
- * @author aegistudio
- */
-
-public interface StringGenerator extends Asset {
-	/**
-	 * Draw a string.
-	 * @param p a paintable.
-	 * @param x the x position of the string.
-	 * @param y the y position of the string.
-	 * @param scale the font size of the string.
-	 * @param content the string to be displayed.
-	 * @return the length of the string.
-	 */
-	public int string(Paintable p, int x, int y, float scale, String content);
+public interface StringGenerator
+extends Asset {
+    public int string(Paintable var1, int var2, int var3, float var4, String var5);
 }
+

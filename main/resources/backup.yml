@@ -1,0 +1,79 @@
+name: MapPainting
+main: net.aegistudio.mpp.MapPainting
+version: 3.0 (1.17)
+api-version: '1.13'
+author: aegistudio, MrDarkness462, psiber
+depend:
+  - WorldEdit
+  - WorldGuard
+commands:
+  palette:
+    description: Give someone a color
+    usage: /palette <player> <red> <green> <blue> <optional-amount>
+  paint:
+    description: Command service provided by map painting.
+    usage: /paint <subcommand> [<parameters>]
+    permission: mpp.command
+    permission-message: You don't have permission to do that!
+  mppctl:
+    description: Control commands provided by map painting.
+    usage: /mppctl <subcommand> <canvas> [<parameters>]
+    permission: mpp.control
+    permission-message: You don't have permission to do that!
+permissions:
+  mpp.paint:
+    description: Grants player to paint on canvas he owns.
+    default: true
+  mpp.interact:
+    description: Grants player to interact with a canvas.
+    default: true
+  mpp.command:
+    description: Grants player to issue map painting command.
+    default: true
+  mpp.create.*:
+    description: Grants player to create any canvas.
+    children:
+      mpp.create.normal: true
+      mpp.create.clone: true
+  mpp.create.normal:
+    description: Grants player to create canvas of type "normal".
+    default: true
+  mpp.create.clone:
+    description: Grants player to create a canvas by cloning existed one.
+    default: true
+  mpp.chown:
+    description: Grants player to change ownership of canvas he owns.
+    default: true
+  mpp.chmod:
+    description: Grants player to add or remove painters of his canvas.
+    default: true
+  mpp.destroy:
+    description: Grants player to destroy the canvas he owns.
+    default: true
+  mpp.pigment:
+    description: Grants player to obtain a pigment by RGB color directly.
+    default: op
+  mpp.undo:
+    description: Grants player to perform undo on his canvas.
+    default: true
+  mpp.redo:
+    description: Grants player to perform redo on his canvas.
+    default: true
+  mpp.control.*:
+    description: Grants player to issue any control command.
+    children:
+      mpp.control.tap: true
+      mpp.control.line: true
+      mpp.control.wrap: true
+  mpp.control.tap:
+    description: Grants player to issue tap control command.
+    default: op
+  mpp.control.line:
+    description: Grants player to issue line control command.
+    default: op
+  mpp.control.wrap:
+    description: Grants player to issue wrap control command.
+    default: op
+  mpp.manager:
+    description: Grants player to manage canvas.
+    default: op

@@ -1,11 +1,18 @@
 name: MapPainting
 main: net.aegistudio.mpp.MapPainting
-version: 1.5.9-beta
-author: aegistudio
+version: 4.0 (1.20)
+api-version: '1.20'
+author: aegistudio, MrDarkness462, psiber
+depend:
+  - WorldEdit
+  - WorldGuard
 commands:
-  mpp:
+  palette:
+    description: Give someone a color
+    usage: /palette <player> <red> <green> <blue> <optional-amount>
+  paint:
     description: Command service provided by map painting.
-    usage: /mpp <subcommand> [<parameters>]
+    usage: /paint <subcommand> [<parameters>]
     permission: mpp.command
     permission-message: You don't have permission to do that!
   mppctl:

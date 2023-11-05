@@ -1,8 +1,8 @@
+/*
+ * Decompiled with CFR 0.145.
+ */
 package net.aegistudio.mpp.export;
 
-/**
- * Represents an asset.
- * @author aegistudio
- */
+public interface Asset {
+}
 
-public interface Asset { }

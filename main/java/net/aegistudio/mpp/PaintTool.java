@@ -1,14 +1,16 @@
+/*
+ * Decompiled with CFR 0.145.
+ * 
+ * Could not load the following classes:
+ *  org.bukkit.inventory.ItemStack
+ */
 package net.aegistudio.mpp;
 
+import net.aegistudio.mpp.canvas.MapCanvasRegistry;
 import org.bukkit.inventory.ItemStack;
 
-import net.aegistudio.mpp.canvas.MapCanvasRegistry;
-
-/**
- * Use responsible chain to handle this plz.
- * @author aegistudio
- */
-
-public interface PaintTool extends Module {
-	public boolean paint(ItemStack itemStack, MapCanvasRegistry canvas, Interaction interact);
+public interface PaintTool
+extends Module {
+    public boolean paint(ItemStack var1, MapCanvasRegistry var2, Interaction var3);
 }
+
